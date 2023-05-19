@@ -1,0 +1,27 @@
+.container-right {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Create 3 equal-width columns */
+  grid-template-areas: "card card text";
+  width: 90vw;
+  margin: 0 0 30vh 0;
+}
+.container-left {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Create 3 equal-width columns */
+  grid-template-areas: "text card card";
+  width: 90vw;
+  margin: 0 0 30vh 0;
+}
+.card {
+  grid-area: card;
+  border-radius: 10px;
+  background-color: #ffffff;
+  width: 50vw;
+  height: 50vh;
+  justify-self: center;
+}
+
+.text {
+  grid-area: text;
+  justify-self: center;
+}
