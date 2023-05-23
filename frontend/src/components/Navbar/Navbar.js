@@ -22,7 +22,7 @@ function Navbar() {
           </Button>
         </Box>
         <Box>
-          <Button variant="ghost">Login</Button>
+          <Button variant="ghost" href="/login">Login</Button>
         </Box>
       </Box>
     </Box>

@@ -54,13 +54,13 @@ function Landing() {
       lobortis finibus tincidunt. Duis eget dapibus neque.`,
   }
   return (
-    <div>
+    <div className="landing-body">
       <Box className="hero">
-        <Typography variant="h1">TITLE</Typography>
+        <Typography variant="h1">MYAUTOLOG</Typography>
       </Box>
       <section
         id="section1"
-        className={`hidden ${isVisible["section1"] ? "show" : ""}`}
+        className={`section hidden ${isVisible["section1"] ? "show" : ""}`}
         ref={sectionRefs[0]}
       >
         <FeatureShowcase
@@ -71,7 +71,7 @@ function Landing() {
       </section>
       <section
         id="section2"
-        className={`hidden ${isVisible["section2"] ? "show" : ""}`}
+        className={`section hidden ${isVisible["section2"] ? "show" : ""}`}
         ref={sectionRefs[1]}
       >
         <FeatureShowcase
@@ -82,7 +82,7 @@ function Landing() {
       </section>
       <section
         id="section3"
-        className={`hidden ${isVisible["section3"] ? "show" : ""}`}
+        className={`section hidden ${isVisible["section3"] ? "show" : ""}`}
         ref={sectionRefs[2]}
       >
         <FeatureShowcase
@@ -93,7 +93,7 @@ function Landing() {
       </section>
       <section
         id="section4"
-        className={`hidden ${isVisible["section4"] ? "show" : ""}`}
+        className={`section hidden ${isVisible["section4"] ? "show" : ""}`}
         ref={sectionRefs[3]}
       >
         <FeatureShowcase

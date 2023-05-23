@@ -1,4 +1,4 @@
-body {
+.landing-body {
   background-color: #131316;
   color: #ffffff;
   font-family: "Poppins", sans-serif;
@@ -6,7 +6,7 @@ body {
   margin: 0;
 }
 
-section {
+.section {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -22,13 +22,7 @@ section {
   align-items: center;
 }
 
-.navbar {
-  display: none;
-}
 
-.footer {
-  display: none;
-}
 
 .hidden {
   opacity: 0;
