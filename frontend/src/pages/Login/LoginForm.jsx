@@ -8,7 +8,6 @@ import {
   TextField,
   Typography,
 } from "@mui/material"
-import Cookies from "js-cookie"
 import axios from "axios"
 
 function LoginForm() {
