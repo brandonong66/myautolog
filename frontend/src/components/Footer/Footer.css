@@ -2,5 +2,5 @@
     background-color: #507DBC;
     display: flex;
     justify-content: space-evenly;
-    padding: 1em;
+    padding: 1em 0 1em 0;
 }

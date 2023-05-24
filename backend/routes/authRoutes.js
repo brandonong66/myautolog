@@ -44,7 +44,7 @@ router.post("/login", (req, res) => {
             expiresIn: "1h",
           })
           res.cookie("accessToken", accessToken, {
-            httpOnly: true,
+            httpOnly: false,
             secure: true,
             sameSite: "strict",
           })

@@ -9,10 +9,15 @@ import "./Expenses.css"
 function Expenses() {
   const [expenseData, setExpenseData] = useState()
   useEffect(() => {
-    axios.get("http://localhost:3001/expenses").then((res) => {
-      setExpenseData(res.data)
-      console.log(res.data)
-    })
+    axios
+      .get("http://localhost:3001/expenses")
+      .then((res) => {
+        setExpenseData(res.data)
+        console.log(res.data)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
   }, [])
 
   return (
@@ -30,6 +35,7 @@ function Expenses() {
           </p>
         </Card> */}
         <MainExpenseTable className="data-table" />
+        
       </div>
     </Container>
   )
