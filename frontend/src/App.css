@@ -1,0 +1,6 @@
+.main-container {
+    margin-left: 5rem;
+    padding: 1rem;
+    background-color: var(--background-color);
+    height: 100vh;
+}

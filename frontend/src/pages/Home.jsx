@@ -3,7 +3,7 @@ import { Container, Typography } from "@mui/material"
 
 function Home() {
   return (
-    <Container className="page-body" sx={{outline: "solid black 1px"}}>
+    <Container className="page-body">
       <Typography variant="h1">Home</Typography>
     </Container>
   )
