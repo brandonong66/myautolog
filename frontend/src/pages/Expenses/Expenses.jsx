@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react"
 import axios from "axios"
 import { Box, Container, Typography } from "@mui/material"
-import Card from "../../components/Card.jsx"
+import Card from "../../components/Card"
 import DataTable from "../../components/Table/DataTable.jsx"
 import MainExpenseTable from "../../components/Table/MainExpenseTable.jsx"
+import Page from "../../components/Page"
 
 import "./Expenses.css"
 function Expenses() {

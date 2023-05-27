@@ -13,8 +13,16 @@ code {
 }
 
 :root {
-  --primary-color: #dae3e5;
-  --secondary-color: #507dbc;
+  --primary-color: #1b32a1;
+  --secondary-color: #82acf2;
   --tertiary-color: #5950bc;
-  --background-color: #bbd1ea;
+  --background-color: #f8f9fa;
+  --accent-color: #481ba1;
+  /* --text-color: #04131a; */
+  --text-color:#2c424f;
+}
+
+.page-body{
+  display: flex;
+  justify-content: center;
 }

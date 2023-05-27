@@ -6,6 +6,7 @@ import AttachMoneyIcon from "@mui/icons-material/AttachMoney"
 import FolderIcon from "@mui/icons-material/Folder"
 import LoginIcon from "@mui/icons-material/Login"
 import LogoutIcon from "@mui/icons-material/Logout"
+import GarageIcon from "@mui/icons-material/Garage"
 
 import Cookies from "js-cookie"
 import "./Navbar.css"
@@ -21,7 +22,7 @@ function Navbar() {
   }
   return (
     <Box className="navbar">
-      <a className="nav-link" href="/" underline="none" color="black">
+      <a className="nav-link" href="/">
         <div className="nav-item">
           <div>
             <HomeIcon className="nav-icon" />
@@ -60,7 +61,7 @@ function Navbar() {
         </div>
       </a>
 
-      <a className="nav-link" href="/tasks" underline="none" color="black">
+      <a className="nav-link" href="/tasks">
         {" "}
         <div className="nav-item">
           <div>
@@ -69,6 +70,18 @@ function Navbar() {
           <div>
             <Typography className="nav-text" variant="h6" underline="none">
               Tasks
+            </Typography>
+          </div>
+        </div>
+      </a>
+      <a className="nav-link" href="/garage">
+        <div className="nav-item">
+          <div>
+            <GarageIcon className="nav-icon" />
+          </div>
+          <div>
+            <Typography className="nav-text" variant="h6" underline="none">
+              Garage
             </Typography>
           </div>
         </div>

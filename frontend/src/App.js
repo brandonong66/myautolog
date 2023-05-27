@@ -1,14 +1,16 @@
 import "./App.css"
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
-import Home from "./pages/Home"
-import Navbar from "./components/Navbar/Navbar"
-import Footer from "./components/Footer/Footer"
-import Expenses from "./pages/Expenses/Expenses"
-import Resources from "./pages/Resources"
-import Tasks from "./pages/Tasks"
-import Landing from "./pages/Landing/Landing"
-import Login from "./pages/Login/Login"
-import Signup from "./pages/Signup/Signup"
+import { Navbar } from "./components"
+import {
+  Expenses,
+  Home,
+  Garage,
+  Landing,
+  Login,
+  Resources,
+  Signup,
+  Tasks,
+} from "./pages"
 
 function App() {
   return (
@@ -27,6 +29,7 @@ function App() {
               path="/resources"
               element={<Resources className="page-body" />}
             />
+            <Route path="/garage" element={<Garage />} />
             <Route path="/tasks" element={<Tasks className="page-body" />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />

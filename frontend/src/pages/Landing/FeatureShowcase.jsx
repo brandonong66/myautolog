@@ -8,7 +8,7 @@ function FeatureShowcase(props) {
         <Typography variant="h1">{props?.title}</Typography>
         <Typography variant="body1">{props?.description}</Typography>
       </Box>
-      <Box className="card">
+      <Box className="feature-card">
         <p>test</p>
       </Box>
     </div>
