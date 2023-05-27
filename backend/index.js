@@ -1,11 +1,10 @@
 require("dotenv").config()
 var express = require("express")
 const bodyParser = require("body-parser")
+const cookieParser = require("cookie-parser")
+
 var app = express()
 var cors = require("cors")
-const sqlite3 = require("sqlite3").verbose()
-const db = new sqlite3.Database("./data/.testdb")
-const corsAuthMiddleware = require("./middleware/corsAuthMiddleware")
 
 var corsOptions = {
   origin: "http://localhost:3000",
@@ -14,11 +13,17 @@ var corsOptions = {
 }
 app.use(cors(corsOptions))
 app.use(bodyParser.json())
+app.use(cookieParser())
 
 const authRoutes = require("./routes/authRoutes")
 const userRoutes = require("./routes/userRoutes")
-app.use("/auth", corsAuthMiddleware, authRoutes)
+const carRoutes = require("./routes/carRoutes")
+
+app.use("/auth", authRoutes)
 app.use("/user", userRoutes)
+app.use("/car", carRoutes)
+
+
 
 app.listen(3001, function () {
   console.log("Server running on port 3001")

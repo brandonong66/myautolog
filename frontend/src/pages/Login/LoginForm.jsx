@@ -9,6 +9,7 @@ import {
   Typography,
 } from "@mui/material"
 import axios from "axios"
+import { authenticateUser } from "../../lib/authFunctions"
 
 function LoginForm() {
   const [loginInfo, setLoginInfo] = useState({})
@@ -19,19 +20,16 @@ function LoginForm() {
   })
   const handleSubmit = async (e) => {
     e.preventDefault()
-    // try {
-    axios
-      .post("http://localhost:3001/auth/login", loginInfo, {
-        withCredentials: true,
+
+    authenticateUser(loginInfo)
+      .then((res) => {
+        window.location.assign("/")
       })
-      .then((response) => {
-        window.location.assign("/home")
-      })
-      .catch((error) => {
+      .catch((err) => {
         setLoginStatus({
           success: false,
           error: true,
-          message: error.response.data.error,
+          message: err.error,
         })
       })
   }

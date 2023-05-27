@@ -3,6 +3,7 @@ import Card from "../../components/Card"
 import { Button, MenuItem, TextField, Typography } from "@mui/material"
 import { getMakes } from "../../lib/vehicleAPI"
 import "./CarForm.css"
+import { addCar } from "../../lib/carFunctions"
 
 const commonMakes = [
   { name: "Acura", value: "acura" },
@@ -57,15 +58,25 @@ for (let i = new Date().getFullYear(); i >= 1940; i--) {
   years.push(i)
 }
 function CarForm() {
-  const [year, setYear] = useState(null)
-  const [make, setMake] = useState(null)
-  const [model, setModel] = useState(null)
-  const [vin, setVin] = useState(null)
-  const [notes, setNotes] = useState(null)
+  const [formData, setFormData] = useState({})
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value })
+  }
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    addCar(formData)
+      .then((res) => {
+        console.log(res)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
 
   return (
     <Card title="add a new car">
-      <form className="car-form__form">
+      <form className="car-form__form" onSubmit={handleSubmit}>
         <div className="car-form__content-container">
           <div className="car-form__label-container">
             <TextField
@@ -75,6 +86,7 @@ function CarForm() {
               label="label"
               type="text"
               variant="outlined"
+              onChange={handleChange}
             />
           </div>
           <div className="car-form__required-container">
@@ -82,8 +94,9 @@ function CarForm() {
               id="year"
               label="year"
               required
-              type="tel"
+              type="number"
               variant="outlined"
+              onChange={handleChange}
             />
             <TextField
               id="make"
@@ -91,6 +104,7 @@ function CarForm() {
               required
               type="text"
               variant="outlined"
+              onChange={handleChange}
             />
             <TextField
               id="model"
@@ -98,14 +112,16 @@ function CarForm() {
               required
               type="text"
               variant="outlined"
+              onChange={handleChange}
             />
           </div>
           <div className="car-form__optional-container">
             <TextField
               id="mileage"
               label="mileage"
-              type="tel"
+              type="number"
               variant="outlined"
+              onChange={handleChange}
             />
             <TextField id="vin" label="vin" type="text" variant="outlined" />
             <TextField
@@ -113,6 +129,7 @@ function CarForm() {
               label="license plate"
               type="text"
               variant="outlined"
+              onChange={handleChange}
             />
           </div>
           <div className="car-form__notes-container">
@@ -125,6 +142,7 @@ function CarForm() {
               rows={4}
               type="text"
               variant="outlined"
+              onChange={handleChange}
             />
           </div>
           <Button
