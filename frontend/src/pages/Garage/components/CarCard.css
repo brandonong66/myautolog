@@ -1,5 +1,14 @@
 .car-card:hover .edit-icon-container {
-  display: block;
+    display: block;
+  }
+  
+.car-card__content-container {
+  display: flex;
+  min-width: 600px;
+  display: grid;
+  grid-template-areas:
+    "left right"
+    "notes notes";
 }
 
 .car-card__title-container {
@@ -26,9 +35,9 @@
   display: none;
 }
 
-.edit-button {
-  color: var(--tertiary-color);
+.edit-button{
+    color: var(--tertiary-color);
 }
-.edit-button:hover .edit-icon {
-  color: var(--accent-color);
+.edit-button:hover .edit-icon{
+    color: var(--accent-color);
 }

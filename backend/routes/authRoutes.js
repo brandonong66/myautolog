@@ -40,14 +40,24 @@ router.post("/login", (req, res) => {
         const match = await bcrypt.compare(password, user.password)
         if (match) {
           const payload = { userId: user.userId }
-          const accessToken = jwt.sign(payload, process.env.JWT_SECRET, {
+          const authToken = jwt.sign(payload, process.env.JWT_SECRET, {
             expiresIn: "1h",
           })
-          res.cookie("accessToken", accessToken, {
+          res.cookie("authToken", authToken, {
+            httpOnly: true,
+            secure: true,
+            sameSite: "strict",
+          })
+
+          const clientAuthToken = jwt.sign(payload, process.env.JWT_SECRET, {
+            expiresIn: "1h",
+          })
+          res.cookie("clientAuthToken", clientAuthToken, {
             httpOnly: false,
             secure: true,
             sameSite: "strict",
           })
+
           res.json({ message: "Login successful" })
         } else {
           res.status(401).json({ error: "Invalid email or password" })

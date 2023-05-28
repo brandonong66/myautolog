@@ -1,4 +1,5 @@
 import axios from "axios"
+import Cookies from "js-cookie"
 
 export function authenticateUser(params = {}) {
   return new Promise((resolve, reject) => {
@@ -19,4 +20,30 @@ export function authenticateUser(params = {}) {
         }
       })
   })
+}
+
+export function validateToken() {
+  // if no token, return false
+  const clientAuthToken = Cookies.get("clientAuthToken")
+  if (clientAuthToken === undefined) {
+    return false
+  }
+
+  // if token, check if expired
+  else {
+    const jwtPayload = JSON.parse(window.atob(clientAuthToken.split(".")[1]))
+    const isValid = Date.now() < jwtPayload.exp * 1000
+
+    //if expired, logout
+    if (!isValid) {
+      logout()
+    }
+    
+    return isValid
+  }
+}
+
+export function logout() {
+  Cookies.remove("clientAuthToken")
+  window.location.href = "/"
 }

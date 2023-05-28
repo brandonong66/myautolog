@@ -36,4 +36,6 @@ Document colors:
   * columbia-blue: #BBD1EA
   * platinum: #DAE3E5
 
+- animejs after functionality is done
+
 
