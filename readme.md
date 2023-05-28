@@ -18,6 +18,7 @@
  - BMW API integration for vin decoding
  - BMW parts API
  - web scrape part numbers for possible sellers
+ - torque spec lookup
 ## Architecture
  - Frontend: React
    - UI: MUI

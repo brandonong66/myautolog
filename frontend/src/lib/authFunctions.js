@@ -10,7 +10,13 @@ export function authenticateUser(params = {}) {
         resolve(response.data)
       })
       .catch((error) => {
-        reject(error.response.data)
+        if (error.response) {
+          reject(error.response.data)
+        } else {
+          reject({
+            error: "Unable to connect to the server. Please try again later.",
+          })
+        }
       })
   })
 }

@@ -5,11 +5,13 @@ import "./Card.css"
 function Card(props) {
   return (
     <Box component={Paper} className="card">
-      <div className="card-title">
-        <Typography variant="h5" component="h2">
-          {props.title}
-        </Typography>
-      </div>
+      {props.title && (
+        <div className="card-title">
+          <Typography variant="h5" component="h2">
+            {props.title}
+          </Typography>
+        </div>
+      )}
       {props.children}
     </Box>
   )

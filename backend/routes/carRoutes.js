@@ -18,14 +18,32 @@ db.connect((err) => {
   }
 })
 
-router.get("/getusercars", async (req, res) => {
-  // to do
+router.get("/getCars", authenticateToken, async (req, res) => {
+  try {
+    if (!req.userId) {
+      res.status(422).json({ error: "bad login token" })
+    } else {
+      const query = "SELECT * FROM Car WHERE userId = ?"
+      const queryValues = [req.userId]
+
+      db.query(query, queryValues, (err, result) => {
+        if (err) {
+          res.status(500).json({ err: err.message })
+        } else {
+          res.json(result)
+        }
+      })
+    }
+  } catch (error) {
+    console.error(error.message)
+    res.status(500).json({ error: "Internal Server Error" })
+  }
 })
 
 router.post("/add", authenticateToken, async (req, res) => {
   try {
     if (!req.userId) {
-      res.status(422).json({ error: "Missing userId" })
+      res.status(422).json({ error: "bad login token" })
     } else if (!req.body.year) {
       res.status(422).json({ error: "Missing year" })
     } else if (!req.body.make) {
@@ -33,15 +51,23 @@ router.post("/add", authenticateToken, async (req, res) => {
     } else if (!req.body.model) {
       res.status(422).json({ error: "Missing model" })
     } else {
-      const query = "INSERT INTO Car (userId, userLabel, year, make, model, vin, notes) VALUES (?, ?, ?, ?, ?, ?, ?)"
-      const queryValues = [req.userId, req.body.userLabel, req.body.year, req.body.make, req.body.model, req.body.vin, req.body.notes]
+      const query =
+        "INSERT INTO Car (userId, userLabel, year, make, model, vin, notes) VALUES (?, ?, ?, ?, ?, ?, ?)"
+      const queryValues = [
+        req.userId,
+        req.body.userLabel,
+        req.body.year,
+        req.body.make,
+        req.body.model,
+        req.body.vin,
+        req.body.notes,
+      ]
 
-      db.query(query, queryValues, (err, result) => { 
-        if(err){
-            res.status(500).json({ err: err.message })
-        }
-        else{
-            res.json({ message: "Car added" })
+      db.query(query, queryValues, (err, result) => {
+        if (err) {
+          res.status(500).json({ err: err.message })
+        } else {
+          res.json({ message: "Car added" })
         }
       })
     }

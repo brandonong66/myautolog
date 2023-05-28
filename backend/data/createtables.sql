@@ -47,6 +47,7 @@ CREATE TABLE Car(
     make varchar(255) not null,
     model varchar(255) not null,
     vin varchar(255),
+    licensePlate varchar(255),
     notes varchar(255),
     FOREIGN KEY (userId) REFERENCES User(userId)
 );

@@ -1,0 +1,34 @@
+.car-card:hover .edit-icon-container {
+  display: block;
+}
+
+.car-card__title-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  /* outline: 1px solid red; */
+}
+.car-card__title {
+  display: inline-block;
+}
+.car-icon-container {
+  max-width: 4rem;
+  max-height: 3rem;
+  border-radius: 10%;
+  display: grid;
+  place-items: center;
+  display: inline-block;
+  margin-right: 0.5rem;
+}
+
+.edit-icon-container {
+  margin-left: auto;
+  display: none;
+}
+
+.edit-button {
+  color: var(--tertiary-color);
+}
+.edit-button:hover .edit-icon {
+  color: var(--accent-color);
+}
