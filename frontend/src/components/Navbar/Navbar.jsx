@@ -7,7 +7,7 @@ import FolderIcon from "@mui/icons-material/Folder"
 import LoginIcon from "@mui/icons-material/Login"
 import LogoutIcon from "@mui/icons-material/Logout"
 import GarageIcon from "@mui/icons-material/Garage"
-
+import NavLink from "./NavLink"
 import Cookies from "js-cookie"
 import "./Navbar.css"
 
@@ -22,97 +22,16 @@ function Navbar() {
   }
   return (
     <Box className="navbar">
-      <a className="nav-link" href="/">
-        <div className="nav-item">
-          <div>
-            <HomeIcon className="nav-icon" />
-          </div>
-          <div>
-            <Typography className="nav-text" variant="h6" underline="none">
-              Home
-            </Typography>
-          </div>
-        </div>
-      </a>
-
-      <a className="nav-link" href="/expenses">
-        <div className="nav-item">
-          <div>
-            <AttachMoneyIcon className="nav-icon" />
-          </div>
-          <div>
-            <Typography className="nav-text" variant="h6" underline="none">
-              Expenses
-            </Typography>
-          </div>
-        </div>
-      </a>
-
-      <a className="nav-link" href="/resources">
-        <div className="nav-item">
-          <div>
-            <FolderIcon className="nav-icon" />
-          </div>
-          <div>
-            <Typography className="nav-text" variant="h6" underline="none">
-              Resources
-            </Typography>
-          </div>
-        </div>
-      </a>
-
-      <a className="nav-link" href="/tasks">
-        {" "}
-        <div className="nav-item">
-          <div>
-            <FormatListNumberedIcon className="nav-icon" />
-          </div>
-          <div>
-            <Typography className="nav-text" variant="h6" underline="none">
-              Tasks
-            </Typography>
-          </div>
-        </div>
-      </a>
-      <a className="nav-link" href="/garage">
-        <div className="nav-item">
-          <div>
-            <GarageIcon className="nav-icon" />
-          </div>
-          <div>
-            <Typography className="nav-text" variant="h6" underline="none">
-              Garage
-            </Typography>
-          </div>
-        </div>
-      </a>
+      <NavLink href="/" icon={<HomeIcon />} text="Home" />
+      <NavLink href="/expenses" icon={<AttachMoneyIcon />} text="Expenses" />
+      <NavLink href="/resources" icon={<FolderIcon />} text="Resources" />
+      <NavLink href="/tasks" icon={<FormatListNumberedIcon />} text="Tasks" />
+      <NavLink href="/garage" icon={<GarageIcon />} text="Garage" />
 
       {isLoggedIn ? (
-        <a className="nav-link" href="" onClick={handleLogout}>
-          <div className="nav-item">
-            <div>
-              <LogoutIcon className="nav-icon" />
-            </div>
-            <div>
-              <Typography className="nav-text" variant="h6" underline="none">
-                Logout
-              </Typography>
-            </div>
-          </div>
-        </a>
+        <NavLink icon={<LogoutIcon />} text="Logout" onClick={handleLogout} />
       ) : (
-        <a className="nav-link" href="/login">
-          <div className="nav-item">
-            <div>
-              <LoginIcon className="nav-icon" />
-            </div>
-            <div>
-              <Typography className="nav-text" variant="h6" underline="none">
-                Login
-              </Typography>
-            </div>
-          </div>
-        </a>
+        <NavLink href="/login" icon={<LoginIcon />} text="Login" />
       )}
     </Box>
   )
