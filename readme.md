@@ -14,6 +14,11 @@
  - order processing (and status)
    - auto calculation for taxes, shipping, ...
  - linking ordered parts to to do list items
+ - NHTSA API for adding cars
+ - BMW API integration for vin decoding
+ - BMW parts API
+ - web scrape part numbers for possible sellers
+ - torque spec lookup
 ## Architecture
  - Frontend: React
    - UI: MUI

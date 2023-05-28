@@ -12,7 +12,7 @@
   width: 90vw;
   margin: 0 0 30vh 0;
 }
-.card {
+.feature-card {
   grid-area: card;
   border-radius: 10px;
   background-color: #ffffff;

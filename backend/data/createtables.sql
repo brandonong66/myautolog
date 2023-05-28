@@ -43,10 +43,11 @@ CREATE TABLE Car(
 	carId integer primary key auto_increment,
     userId integer not null,
     userLabel varchar(255),
-    year integer,
-    make varchar(255),
-    model varchar(255),
+    year integer not null,
+    make varchar(255) not null,
+    model varchar(255) not null,
     vin varchar(255),
+    licensePlate varchar(255),
     notes varchar(255),
     FOREIGN KEY (userId) REFERENCES User(userId)
 );
