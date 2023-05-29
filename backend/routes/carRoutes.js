@@ -1,22 +1,7 @@
 const express = require("express")
 const router = express.Router()
-const mysql = require("mysql2")
 const authenticateToken = require("../middleware/authenticateToken")
-
-const db = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: "myautolog",
-})
-
-db.connect((err) => {
-  if (err) {
-    console.log("Error connecrting to the database: ", err)
-  } else {
-    console.log("MySQL connected")
-  }
-})
+const dbConnectionPool = require("../utilities/db")
 
 router.get("/getCars", authenticateToken, async (req, res) => {
   try {
@@ -26,13 +11,10 @@ router.get("/getCars", authenticateToken, async (req, res) => {
       const query = "SELECT * FROM Car WHERE userId = ?"
       const queryValues = [req.userId]
 
-      db.query(query, queryValues, (err, result) => {
-        if (err) {
-          res.status(500).json({ err: err.message })
-        } else {
-          res.json(result)
-        }
-      })
+      const [rows, fields] = await dbConnectionPool
+        .promise()
+        .query(query, queryValues)
+      return res.json(rows)
     }
   } catch (error) {
     console.error(error.message)
@@ -62,19 +44,43 @@ router.post("/add", authenticateToken, async (req, res) => {
         req.body.vin,
         req.body.notes,
       ]
-
-      db.query(query, queryValues, (err, result) => {
-        if (err) {
-          res.status(500).json({ err: err.message })
-        } else {
-          res.json({ message: "Car added" })
-        }
-      })
+      const [rows, fields] = await dbConnectionPool
+        .promise()
+        .query(query, queryValues)
+      return res.json({ message: "Car added" })
     }
   } catch (error) {
     console.error(error.message)
     res.status(500).json({ error: "Internal Server Error" })
   }
 })
-
+router.put("/update", authenticateToken, async (req, res) => {
+  try {
+    if (!req.userId) {
+      res.status(422).json({ error: "bad login token" })
+    } else if (!req.body.carId) {
+      res.status(422).json({ error: "Missing carId" })
+    } else {
+      const query =
+        "UPDATE Car SET userLabel = ?, year = ?, make = ?, model = ?, vin = ?, licensePlate = ?, notes = ? WHERE carId = ?"
+      const queryValues = [
+        req.body.userLabel,
+        req.body.year,
+        req.body.make,
+        req.body.model,
+        req.body.vin,
+        req.body.licensePlate,
+        req.body.notes,
+        req.body.carId,
+      ]
+      const [rows, fields] = await dbConnectionPool
+        .promise()
+        .query(query, queryValues)
+      return res.json({ message: "Car updated" })
+    }
+  } catch (error) {
+    console.error(error.message)
+    res.status(500).json({ error: "Internal Server Error" })
+  }
+})
 module.exports = router

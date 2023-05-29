@@ -1,23 +1,7 @@
-
 const express = require("express")
 const router = express.Router()
-const mysql = require("mysql2")
 const bcrypt = require("bcrypt")
-
-const db = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: "myautolog",
-})
-
-db.connect((err) => {
-  if (err) {
-    console.log("Error connecrting to the database: ", err)
-  } else {
-    console.log("MySQL connected")
-  }
-})
+const dbConnectionPool = require("../utilities/db")
 
 router.post("/signup", async (req, res) => {
   try {
@@ -30,27 +14,18 @@ router.post("/signup", async (req, res) => {
       const query = "INSERT INTO User (email, password) VALUES (?, ?)"
       const queryValues = [req.body.email, hashedPassword]
 
-      db.query(query, queryValues, (err, result) => {
-        if (err) {
-          // duplicate email
-          if (err.code === "ER_DUP_ENTRY") {
-            res.status(422).json({ error: "Email already in use" })
-          }
-          // all other errors
-          else {
-            console.error(err.message)
-            res.status(500).json({ error: "Internal Server Error" })
-          }
-        }
-        // success
-        else {
-          res.json({ message: "User created" })
-        }
-      })
+      const [rows, fields] = await dbConnectionPool
+        .promise()
+        .query(query, queryValues)
+      return res.json({ message: "User created" })
     }
   } catch (error) {
-    console.error(error.message)
-    res.status(500).json({ error: "Internal Server Error" })
+    if (error.code === "ER_DUP_ENTRY") {
+      res.status(422).json({ error: "Email already in use" })
+    } else {
+      console.error(error.message)
+      res.status(500).json({ error: "Internal Server Error" })
+    }
   }
 })
 

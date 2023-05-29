@@ -41,3 +41,24 @@ export function addCar(params = {}) {
       })
   })
 }
+
+export function updateCar(params = {}) {
+  return new Promise((resolve, reject) => {
+    axios
+      .put(process.env.REACT_APP_MY_API + "/car/update", params, {
+        withCredentials: true,
+      })
+      .then((response) => {
+        resolve(response.data)
+      })
+      .catch((error) => {
+        if (error.response) {
+          reject(error.response.data)
+        } else {
+          reject({
+            message: "Unable to connect to the server. Please try again later.",
+          })
+        }
+      })
+  })
+}

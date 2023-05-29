@@ -1,8 +1,9 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { Typography } from "@mui/material"
 import "./CarCardContent.css"
 
 function CarCardContent(props) {
+  useEffect(() => {}, [props.triggerRefresh])
   return (
     <div className="car-card-content__container">
       <div>
@@ -24,7 +25,7 @@ function CarCardContent(props) {
           Vin: {props.car.vin}
         </Typography>
         <Typography variant="h6" component="h3">
-          License Plate: {props.car.plate}
+          License Plate: {props.car.licensePlate}
         </Typography>
       </div>
       <div>

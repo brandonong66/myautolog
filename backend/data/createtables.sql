@@ -51,3 +51,11 @@ CREATE TABLE Car(
     notes varchar(255),
     FOREIGN KEY (userId) REFERENCES User(userId)
 );
+
+CREATE TABLE Mileage(
+	carId integer not null,
+    mileage integer not null,
+    mileageDate date not null,
+    FOREIGN KEY (carId) references Car(carId),
+    PRIMARY KEY (carId, mileage)
+);

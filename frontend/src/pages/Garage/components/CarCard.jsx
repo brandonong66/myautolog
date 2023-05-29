@@ -38,7 +38,13 @@ function CarCard(props) {
         </div>
         {!edit && <CarCardContent car={props.car} />}
         {edit && (
-          <EditCarForm car={props.car} onCancel={() => setEdit(false)} />
+          <EditCarForm
+            car={props.car}
+            onCancel={() => setEdit(false)}
+            onFormSubmitSuccess={() => {
+              setEdit(false)
+            }}
+          />
         )}
       </div>
     </Card>

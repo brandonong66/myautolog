@@ -38,12 +38,34 @@ export function validateToken() {
     if (!isValid) {
       logout()
     }
-    
+
     return isValid
   }
 }
 
 export function logout() {
-  Cookies.remove("clientAuthToken")
-  window.location.href = "/"
+  return new Promise((resolve, reject) => {
+    axios
+      .post(
+        process.env.REACT_APP_MY_API + "/auth/logout",
+        {},
+        {
+          withCredentials: true,
+        }
+      )
+      .then((response) => {
+        resolve(response.data)
+        window.location.href = "/"
+      })
+      .catch((error) => {
+        if (error.response) {
+          reject(error.response.data)
+        } else {
+          reject({
+            error: "Unable to connect to the server. Please try again later.",
+          })
+        }
+      })
+  })
+  
 }

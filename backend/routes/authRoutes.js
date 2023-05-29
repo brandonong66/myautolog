@@ -2,69 +2,98 @@ const express = require("express")
 const router = express.Router()
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
-const mysql = require("mysql2")
+const dbConnectionPool = require("../utilities/db")
 
-const db = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: "myautolog",
-})
+const EXPIRE_TIME = {
+  jwt: "1h",
+  cookie: new Date(Date.now() + 60 * 60 * 1000), // 1 hour
+}
+router.post("/login", async (req, res) => {
+  try {
+    // check inputs
+    if (!req.body.email) {
+      res.status(400).json({ error: "Bad Request: missing email" })
+    } else if (!req.body.password) {
+      res.status(400).json({ error: "Bad Request: missing password" })
+    } else {
+      // get user from db
+      const { email, password } = req.body
+      const userQuery = "SELECT * FROM User WHERE email = ?"
+      const userQueryValues = [email]
 
-db.connect((err) => {
-  if (err) {
-    console.log("Error connecrting to the database: ", err)
-  } else {
-    console.log("MySQL connected")
-  }
-})
+      const [rows, fields] = await dbConnectionPool
+        .promise()
+        .query(userQuery, userQueryValues)
 
-router.post("/login", (req, res) => {
-  if (!req.body.email) {
-    res.status(400).json({ error: "Bad Request: missing email" })
-  } else if (!req.body.password) {
-    res.status(400).json({ error: "Bad Request: missing password" })
-  } else {
-    const { email, password } = req.body
-    const userQuery = "SELECT * FROM User WHERE email = ?"
-    const userQueryValues = [email]
-
-    db.query(userQuery, userQueryValues, async (err, result) => {
-      if (err) {
-        console.error(err.message)
-        res.status(500).json({ error: "Internal Server Error" })
-      } else if (result.length === 0) {
-        res.status(401).json({ error: "Invalid email or password" })
-      } else {
-        const user = result[0]
-        const match = await bcrypt.compare(password, user.password)
-        if (match) {
-          const payload = { userId: user.userId }
-          const authToken = jwt.sign(payload, process.env.JWT_SECRET, {
-            expiresIn: "1h",
-          })
-          res.cookie("authToken", authToken, {
-            httpOnly: true,
-            secure: true,
-            sameSite: "strict",
-          })
-
-          const clientAuthToken = jwt.sign(payload, process.env.JWT_SECRET, {
-            expiresIn: "1h",
-          })
-          res.cookie("clientAuthToken", clientAuthToken, {
-            httpOnly: false,
-            secure: true,
-            sameSite: "strict",
-          })
-
-          res.json({ message: "Login successful" })
-        } else {
-          res.status(401).json({ error: "Invalid email or password" })
-        }
+      // does user with specified email exist?
+      if (!rows.length) {
+        return res.status(401).json({ error: "Invalid email or password" })
       }
-    })
+
+      const user = rows[0]
+
+      // verify password hash
+      const match = await bcrypt.compare(password, user.password)
+      if (match) {
+        const payload = { userId: user.userId }
+
+        // set auth token cookie (for auth purposes, secure)
+        const authToken = jwt.sign(payload, process.env.JWT_SECRET, {
+          expiresIn: EXPIRE_TIME.jwt,
+        })
+        res.cookie("authToken", authToken, {
+          httpOnly: true,
+          secure: true,
+          sameSite: "strict",
+          expires: EXPIRE_TIME.cookie,
+        })
+
+        // set clientAuthToken cookie (for frontend use, not secure)
+        const clientAuthToken = jwt.sign(payload, process.env.JWT_SECRET, {
+          expiresIn: "1h",
+        })
+        res.cookie("clientAuthToken", clientAuthToken, {
+          httpOnly: false,
+          secure: true,
+          sameSite: "strict",
+          expires: EXPIRE_TIME.cookie,
+        })
+
+        res.json({ message: "Login successful" })
+      }
+
+      // if password match fails
+      else {
+        res.status(401).json({ error: "Invalid email or password" })
+      }
+    }
+  } catch (error) {
+    console.log(error)
+    console.error(error.message)
+    return res.status(500).json({ error: "Internal Server Error" })
   }
 })
 
+router.post("/logout", async (req, res) => {
+  try {
+    res.cookie("authToken", "", {
+      expires: new Date(0),
+      httpOnly: true,
+      secure: true,
+      sameSite: "strict",
+    })
+
+    res.cookie("clientAuthToken", "", {
+      expires: new Date(0),
+      httpOnly: false,
+      secure: true,
+      sameSite: "strict",
+    })
+    res.json({message: "Logout successful"})
+  } catch (error) {
+    console.log(error)
+    console.error(error.message)
+    return res.status(500).json({ error: "Internal Server Error" })
+  }
+})
 module.exports = router

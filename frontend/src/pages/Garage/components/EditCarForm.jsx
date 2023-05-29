@@ -1,14 +1,45 @@
 import React, { useState } from "react"
 import { Button, TextField } from "@mui/material"
+import { updateCar } from "../../../lib/carFunctions"
 import "./CarForm.css"
 
 function CarCardEditForm(props) {
-  const [formData, setFormData] = useState(props.car)
-  
+  const [formData, setFormData] = useState({
+    carId: props.car.carId,
+    label: props.car.label || "",
+    year: props.car.year || "",
+    make: props.car.make || "",
+    model: props.car.model || "",
+    mileage: props.car.mileage || "",
+    vin: props.car.vin || "",
+    licensePlate: props.car.licensePlate || "",
+    notes: props.car.notes || "",
+  })
+
   const handleSubmit = (e) => {
     e.preventDefault()
+    console.log(formData)
+    updateCar(formData)
+      .then((res) => {
+        props.onFormSubmitSuccess()
+        setFormData({
+          carId: props.carId,
+          label: "",
+          year: "",
+          make: "",
+          model: "",
+          mileage: "",
+          vin: "",
+          licensePlate: "",
+          notes: "",
+        })
+        window.location.reload()
+      })
+      .catch((err) => {
+        console.log(err)
+      })
   }
-  
+
   const handleChange = (e) => {
     e.preventDefault()
     setFormData({ ...formData, [e.target.id]: e.target.value })
@@ -77,16 +108,17 @@ function CarCardEditForm(props) {
             <TextField
               id="vin"
               label="vin"
+              onChange={handleChange}
               type="text"
               value={formData.vin}
               variant="outlined"
             />
             <TextField
-              id="plate"
+              id="licensePlate"
               label="license plate"
               type="text"
               variant="outlined"
-              value={formData.plate}
+              value={formData.licensePlate}
               onChange={handleChange}
             />
           </div>
@@ -105,7 +137,7 @@ function CarCardEditForm(props) {
           />
         </div>
         <div className="car-form__button-container">
-          <Button variant="outlined" className="car-form__submit">
+          <Button type="submit" variant="outlined" className="car-form__submit">
             Submit
           </Button>
           <Button color="error" onClick={props.onCancel}>
