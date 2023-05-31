@@ -5,6 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: var(--background-color);
 }
 
 code {
@@ -19,10 +20,17 @@ code {
   --background-color: #f8f9fa;
   --accent-color: #481ba1;
   /* --text-color: #04131a; */
-  --text-color:#2c424f;
+  --text-color: #2c424f;
 }
 
-.page-body{
+.page-body {
   display: flex;
   justify-content: center;
+}
+
+/* remove arrows from number inputs */
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
 }

@@ -25,7 +25,9 @@
  - API: node + express
  - Database: MySQL
    - hosting: Amazon RDS
- - User Authentication: auth0
+ - User Authentication: self
+ - astro?
+ 
  
  
 ## Design

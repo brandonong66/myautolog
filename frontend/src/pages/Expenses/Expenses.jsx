@@ -1,31 +1,15 @@
 import React, { useEffect, useState } from "react"
-import axios from "axios"
-import { Box, Container, Typography } from "@mui/material"
-import Card from "../../components/Card"
-import DataTable from "../../components/Table/DataTable.jsx"
-import MainExpenseTable from "../../components/Table/MainExpenseTable.jsx"
+import MainExpenseTable from "./components/MainExpenseTable/MainExpenseTable.jsx"
 import Page from "../../components/Page"
+import OrderForm from "./components/OrderForm"
+import OrderTable from './components/OrderTable'
 
 import "./Expenses.css"
 function Expenses() {
-  const [expenseData, setExpenseData] = useState()
-  useEffect(() => {
-    axios
-      .get("http://localhost:3001/expenses")
-      .then((res) => {
-        setExpenseData(res.data)
-        console.log(res.data)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  }, [])
-
   return (
-    <Container className="page-body">
-      <Typography variant="h3" component="h1" sx={{ textAlign: "center" }}>
-        Expenses
-      </Typography>
+    <Page title="Expenses">
+      <OrderForm />
+      <OrderTable />
       <div className="expenses-container">
         {/* <Card className="car-selection">
           <p>
@@ -38,7 +22,8 @@ function Expenses() {
         <MainExpenseTable className="data-table" />
         
       </div>
-    </Container>
+      
+    </Page>
   )
 }
 

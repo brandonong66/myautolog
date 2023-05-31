@@ -59,7 +59,7 @@ for (let i = new Date().getFullYear(); i >= 1940; i--) {
 }
 function CarForm(props) {
   const [formData, setFormData] = useState({
-    label: "",
+    userLabel: "",
     year: "",
     make: "",
     model: "",
@@ -82,7 +82,7 @@ function CarForm(props) {
         console.log(res)
         props.onFormSubmitSuccess()
         setFormData({
-          label: "",
+          userLabel: "",
           year: "",
           make: "",
           model: "",
@@ -113,11 +113,11 @@ function CarForm(props) {
                 <TextField
                   className="car-form__label-input"
                   fullWidth
-                  id="label"
+                  id="userLabel"
                   label="label"
                   onChange={handleChange}
                   type="text"
-                  value={formData.label}
+                  value={formData.userLabel}
                   variant="outlined"
                 />
               </div>

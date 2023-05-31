@@ -7,7 +7,7 @@
   position: fixed;
   transition: width 0.2s ease-in-out;
   gap: 1rem;
-  z-index: 2;
+  z-index: 99 !important;
   border-right: 2px solid var(--text-color);
 }
 

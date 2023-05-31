@@ -15,30 +15,19 @@ app.use(cors(corsOptions))
 app.use(bodyParser.json())
 app.use(cookieParser())
 
+
 const authRoutes = require("./routes/authRoutes")
 const userRoutes = require("./routes/userRoutes")
 const carRoutes = require("./routes/carRoutes")
+const expenseRoutes = require('./routes/expenseRoutes')
 
 app.use("/auth", authRoutes)
 app.use("/user", userRoutes)
 app.use("/car", carRoutes)
-
+app.use("/expense", expenseRoutes)
 
 
 app.listen(3001, function () {
   console.log("Server running on port 3001")
 })
 
-app.get("/expenses", (req, res) => {
-  db.all(
-    "SELECT storeOrderId, orderDate, source, itemId, itemName, itemBrand, partNumber, price, itemTax FROM `Order` NATURAL JOIN OrderLineItem NATURAL JOIN Item;",
-    function (err, rows) {
-      if (err) {
-        console.error(err.message)
-        res.status(500).json({ error: "Internal Server Error" })
-      } else {
-        res.json(rows)
-      }
-    }
-  )
-})

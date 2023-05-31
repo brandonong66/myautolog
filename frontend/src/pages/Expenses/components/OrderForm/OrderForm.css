@@ -1,0 +1,87 @@
+.order-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.order-form__order-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-bottom: 1rem;
+}
+
+.order-form__date-container {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.order-form__source-container {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.order-form__price-container {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.order-form__item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.order-form__item-identifier-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.order-form__item-price-container {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+.order-form__item-tax {
+    width: 33.33%;
+  }
+  .order-form__item-quantity {
+    width: 33.33%;
+  }
+  .order-form__item-price {
+    width: 33.33%;
+  }
+  
+.order-form__item-selects-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+@media (min-width: 600px) {
+  /* item identifiers section */
+  .order-form__item-identifier-container {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+  }
+  .order-form__item-brand {
+    width: 50%;
+  }
+  .order-form__item-part-number {
+    width: 50%;
+  }
+
+  /* item selects section */
+  .order-form__item-selects-container {
+    flex-direction: row;
+  }
+  .order-form__item-category {
+    width: 50%;
+  }
+  .order-form__item-car {
+    width: 50%;
+  }
+}

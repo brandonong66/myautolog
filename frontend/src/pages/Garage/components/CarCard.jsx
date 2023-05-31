@@ -22,8 +22,8 @@ function CarCard(props) {
           </div>
           <div className="car-card__title">
             <Typography variant="h5" component="h2">
-              {props.car.label
-                ? props.car.label
+              {props.car.userLabel
+                ? props.car.userLabel
                 : `${props.car.year} ${props.car.make} ${props.car.model}`}
             </Typography>
           </div>

@@ -6,7 +6,7 @@ import "./CarForm.css"
 function CarCardEditForm(props) {
   const [formData, setFormData] = useState({
     carId: props.car.carId,
-    label: props.car.label || "",
+    userLabel: props.car.userLabel || "",
     year: props.car.year || "",
     make: props.car.make || "",
     model: props.car.model || "",
@@ -24,7 +24,7 @@ function CarCardEditForm(props) {
         props.onFormSubmitSuccess()
         setFormData({
           carId: props.carId,
-          label: "",
+          userLabel: "",
           year: "",
           make: "",
           model: "",
@@ -52,11 +52,11 @@ function CarCardEditForm(props) {
           <TextField
             className="car-form__label-input"
             fullWidth
-            id="label"
+            id="userLabel"
             label="label"
             onChange={handleChange}
             type="text"
-            value={formData.label}
+            value={formData.userLabel}
             variant="outlined"
           />
         </div>
