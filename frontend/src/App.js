@@ -20,17 +20,11 @@ function App() {
         <div className="main-container">
           <Routes>
             <Route exact path="/landing" element={<Landing />} />
-            <Route exact path="/" element={<Home className="page-body" />} />
-            <Route
-              path="/expenses"
-              element={<Expenses className="page-body" />}
-            />
-            <Route
-              path="/resources"
-              element={<Resources className="page-body" />}
-            />
+            <Route exact path="/" element={<Home />} />
+            <Route path="/expenses" element={<Expenses />} />
+            <Route path="/resources" element={<Resources />} />
             <Route path="/garage" element={<Garage />} />
-            <Route path="/tasks" element={<Tasks className="page-body" />} />
+            <Route path="/tasks" element={<Tasks />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
           </Routes>

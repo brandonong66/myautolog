@@ -1,6 +1,6 @@
 import React from "react"
 import Card from "../../../../components/Card/Card"
-import { Chip, Divider, TextField, Typography } from "@mui/material"
+import { Chip, Divider, TextField } from "@mui/material"
 import "./OrderForm.css"
 function OrderForm() {
   return (
