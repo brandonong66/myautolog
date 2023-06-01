@@ -1,8 +1,10 @@
-import React from 'react'
+import PageLayout from "../../components/PageLayout"
 
 function GaragePage() {
   return (
-    <div>GaragePage</div>
+    <PageLayout title="Garage">
+      test
+    </PageLayout>
   )
 }
 

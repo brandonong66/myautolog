@@ -1,9 +1,9 @@
-import React from 'react'
+import PageLayout from "../../components/PageLayout"
 
 function HomePage() {
-  return (
-    <div>HomePage</div>
-  )
+  return <PageLayout title="Home">
+    hello
+  </PageLayout>
 }
 
 export default HomePage

@@ -1,20 +1,19 @@
-import { useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
 import { useForm } from "react-hook-form"
 import { Button } from "../../components/ui/button"
-import { authenticateUser } from "../../lib/authFunctions"
 
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "../../components/ui/form"
 import { Input } from "../../components/ui/input"
+import { useState } from "react"
+import { AlertDestructive } from "../../components/ui/alertdestructive"
 
 const formSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
@@ -22,10 +21,7 @@ const formSchema = z.object({
 })
 
 export default function LoginForm() {
-  const [loginStatus, setLoginStatus] = useState({
-    success: false,
-    error: false,
-  })
+  const [loginError, setLoginError] = useState()
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
@@ -37,17 +33,24 @@ export default function LoginForm() {
   })
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
+    const { authenticateUser } = await import("../../lib/authFunctions")
     console.log(values)
-    authenticateUser(values).then((res)=>{
-      window.location.assign("/")
-    })
+    authenticateUser(values)
+      .then((res) => {
+        window.location.assign("/")
+      })
+      .catch((err) => {
+        setLoginError(err.error)
+        console.log(err)
+      })
   }
 
   return (
     <Form {...form}>
+      {loginError && <AlertDestructive description={loginError} />}
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <FormField
           control={form.control}
@@ -75,7 +78,11 @@ export default function LoginForm() {
             </FormItem>
           )}
         />
-        <Button type="submit">Login</Button>
+        <div className="flex">
+          <Button type="submit" className="ml-auto">
+            Login
+          </Button>
+        </div>
       </form>
     </Form>
   )

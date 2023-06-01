@@ -1,7 +1,12 @@
 import axios from "axios"
 import Cookies from "js-cookie"
 
-export function authenticateUser(params = {}) {
+interface userParams {
+  email: string
+  password: string
+}
+
+export function authenticateUser(params: userParams) {
   return new Promise((resolve, reject) => {
     axios
       .post(import.meta.env.VITE_APP_MY_API + "/auth/login", params, {
@@ -67,5 +72,4 @@ export function logout() {
         }
       })
   })
-  
 }

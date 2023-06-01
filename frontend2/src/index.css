@@ -26,7 +26,26 @@ a {
 a:hover {
   color: #535bf2;
 }
+/* body {
+  --s: 250px; 
+  --c1: #dbdbdb;
+  --c2: #f0f0f0;
+  --c3: #ffffff;
 
-body {
-
-}
+  background: repeating-conic-gradient(
+        from 30deg,
+        #0000 0 120deg,
+        var(--c3) 0 180deg
+      )
+      calc(0.5 * var(--s)) calc(0.5 * var(--s) * 0.577),
+    repeating-conic-gradient(
+      from 30deg,
+      var(--c1) 0 60deg,
+      var(--c2) 0 120deg,
+      var(--c3) 0 180deg
+    );
+  background-size: var(--s) calc(var(--s) * 0.577);
+ 
+  backdrop-filter: blur(0.5rem);
+} */
+ /* 0.577 = tan(30deg)*//* control the size */

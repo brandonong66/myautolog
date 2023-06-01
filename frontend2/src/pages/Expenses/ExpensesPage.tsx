@@ -1,9 +1,7 @@
-import React from 'react'
+import PageLayout from "../../components/PageLayout"
 
 function ExpensesPage() {
-  return (
-    <div>ExpensesPage</div>
-  )
+  return <PageLayout title="Expenses"> hello</PageLayout>
 }
 
 export default ExpensesPage
