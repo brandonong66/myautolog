@@ -13,6 +13,8 @@ import {
 import { Input } from "../../components/ui/input"
 import { useState } from "react"
 import { AlertDestructive } from "../../components/ui/alertdestructive"
+import { AlertSuccess } from "../../components/ui/alertsuccess"
+
 import { registerUser } from "../../lib/userFunctions"
 
 const formSchema = z
@@ -27,6 +29,7 @@ const formSchema = z
   })
 
 export default function SignupForm() {
+  const [success, setSuccess] = useState(false)
   const [emailError, setEmailError] = useState()
 
   // 1. Define your form.
@@ -45,9 +48,12 @@ export default function SignupForm() {
     // ✅ This will be type-safe and validated.
     registerUser(values)
       .then((res) => {
+        setEmailError(undefined)
+        setSuccess(true)
         console.log(res)
       })
       .catch((err) => {
+        setSuccess(false)
         setEmailError(err.error)
         console.log(err)
       })
@@ -58,6 +64,7 @@ export default function SignupForm() {
   return (
     <Form {...form}>
       {emailError && <AlertDestructive description={emailError} />}
+      {success && <AlertSuccess description="Account Created" />}
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <FormField
           control={form.control}

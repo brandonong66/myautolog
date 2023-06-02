@@ -7,7 +7,9 @@ interface pageLayoutProps {
 function PageLayout({ children, title }: pageLayoutProps) {
   return (
     <div>
-      <Typography variant="h1">{title}</Typography>
+      <div className="mb-8 text-center">
+        <Typography variant="h1">{title}</Typography>
+      </div>
       {children}
     </div>
   )

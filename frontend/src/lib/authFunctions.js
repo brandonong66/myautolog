@@ -4,7 +4,7 @@ import Cookies from "js-cookie"
 export function authenticateUser(params = {}) {
   return new Promise((resolve, reject) => {
     axios
-      .post(import.meta.env.VITE_APP_MY_API + "/auth/login", params, {
+      .post(process.env.REACT_APP_MY_API + "/auth/login", params, {
         withCredentials: true,
       })
       .then((response) => {
@@ -47,7 +47,7 @@ export function logout() {
   return new Promise((resolve, reject) => {
     axios
       .post(
-        import.meta.env.VITE_APP_MY_API + "/auth/logout",
+        process.env.REACT_APP_MY_API + "/auth/logout",
         {},
         {
           withCredentials: true,

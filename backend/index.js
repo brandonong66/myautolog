@@ -7,7 +7,7 @@ var app = express()
 var cors = require("cors")
 
 var corsOptions = {
-  origin: "http://localhost:5173",
+  origin: ["http://localhost:5173","http://localhost:3002"],
   optionsSuccessStatus: 200,
   credentials: true,
 }

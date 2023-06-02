@@ -33,15 +33,21 @@ router.post("/add", authenticateToken, async (req, res) => {
     } else if (!req.body.model) {
       res.status(422).json({ error: "Missing model" })
     } else {
+      let userLabel = req.body.userLabel
+      if (!req.body.userLabel) {
+        userLabel = req.body.year + " " + req.body.make + " " + req.body.model
+      }
       const query =
-        "INSERT INTO Car (userId, userLabel, year, make, model, vin, notes) VALUES (?, ?, ?, ?, ?, ?, ?)"
+        "INSERT INTO Car (userId, userLabel, year, make, model, color, vin, licensePlate, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
       const queryValues = [
         req.userId,
-        req.body.userLabel,
+        userLabel,
         req.body.year,
         req.body.make,
         req.body.model,
+        req.body.color,
         req.body.vin,
+        req.body.licensePlate,
         req.body.notes,
       ]
       const [rows, fields] = await dbConnectionPool

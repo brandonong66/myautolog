@@ -10,13 +10,19 @@ interface typographyProps {
     | "small"
     | "muted"
   children: React.ReactNode
+  className?: string
 }
 
-function Typography({ variant, children }: typographyProps) {
+function Typography({ variant, children, className }: typographyProps) {
   return (
     <>
       {variant === "h1" && (
-        <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
+        <h1
+          className={
+            "scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl " +
+            className
+          }
+        >
           {children}
         </h1>
       )}
@@ -36,7 +42,7 @@ function Typography({ variant, children }: typographyProps) {
         </h4>
       )}
       {variant === "p" && (
-        <p className="leading-7 [&:not(:first-child)]:mt-6">{children}</p>
+        <p className="">{children}</p>
       )}
       {variant === "blockquote" && (
         <blockquote className="mt-6 border-l-2 pl-6 italic">

@@ -11,7 +11,7 @@ function App() {
     <Router>
       <div className="App">
         <Navbar />
-        <div className="main-container ml-16">
+        <div className="main-container ml-16 p-4">
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/expenses" element={<ExpensesPage />} />

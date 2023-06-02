@@ -1,6 +1,19 @@
 import axios from "axios"
 
-export async function getCars() {
+interface Car {
+  carId: number
+  userLabel?: string
+  year: number
+  make: string
+  model: string
+  color?: string
+  vin?: string
+  licensePlate?: string
+  notes?: string
+  mileage?: number
+}
+
+export async function getCars(): Promise<Car[]> {
   return new Promise((resolve, reject) => {
     axios
       .get(import.meta.env.VITE_APP_MY_API + "/car/getCars", {
@@ -21,7 +34,18 @@ export async function getCars() {
   })
 }
 
-export function addCar(params = {}) {
+interface addCarParams {
+  userLabel?: string
+  year: number
+  make: string
+  model: string
+  color?: string
+  vin?: string
+  licensePlate?: string
+  notes?: string
+  mileage?: number
+}
+export function addCar(params: addCarParams) {
   return new Promise((resolve, reject) => {
     axios
       .post(import.meta.env.VITE_APP_MY_API + "/car/add", params, {

@@ -3,7 +3,7 @@ import axios from "axios"
 export async function getExpenses() {
   return new Promise((resolve, reject) => {
     axios
-      .get(import.meta.env.VITE_APP_MY_API + "/expense/getExpenses", {
+      .get(process.env.REACT_APP_MY_API + "/expense/getExpenses", {
         withCredentials: true,
       })
       .then((response) => {
@@ -24,7 +24,7 @@ export async function getExpenses() {
 export async function getOrders(){
   return new Promise((resolve, reject) => {
     axios
-      .get(import.meta.env.VITE_APP_MY_API + "/expense/getOrders", {
+      .get(process.env.REACT_APP_MY_API + "/expense/getOrders", {
         withCredentials: true,
       })
       .then((response) => {

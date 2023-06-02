@@ -3,7 +3,7 @@ import axios from "axios"
 export async function getCars() {
   return new Promise((resolve, reject) => {
     axios
-      .get(import.meta.env.VITE_APP_MY_API + "/car/getCars", {
+      .get(process.env.REACT_APP_MY_API + "/car/getCars", {
         withCredentials: true,
       })
       .then((response) => {
@@ -24,7 +24,7 @@ export async function getCars() {
 export function addCar(params = {}) {
   return new Promise((resolve, reject) => {
     axios
-      .post(import.meta.env.VITE_APP_MY_API + "/car/add", params, {
+      .post(process.env.REACT_APP_MY_API + "/car/add", params, {
         withCredentials: true,
       })
       .then((response) => {
@@ -45,7 +45,7 @@ export function addCar(params = {}) {
 export function updateCar(params = {}) {
   return new Promise((resolve, reject) => {
     axios
-      .put(import.meta.env.VITE_APP_MY_API + "/car/update", params, {
+      .put(process.env.REACT_APP_MY_API + "/car/update", params, {
         withCredentials: true,
       })
       .then((response) => {

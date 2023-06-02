@@ -15,6 +15,7 @@ CREATE TABLE Car(
     year integer not null,
     make varchar(255) not null,
     model varchar(255) not null,
+    color varchar(255),
     vin varchar(255),
     licensePlate varchar(255),
     notes varchar(255),
