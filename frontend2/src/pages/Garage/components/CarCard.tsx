@@ -240,7 +240,7 @@ function CarCard({ car }: { car: Car }) {
                     </FormItem>
                   )}
                 />
-                <div>
+                <div className="flex gap-4">
                   <AlertDialog>
                     <AlertDialogTrigger className="mr-auto" asChild>
                       <Button variant="destructive">Delete</Button>
