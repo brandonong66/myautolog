@@ -68,12 +68,13 @@ router.put("/update", authenticateToken, async (req, res) => {
       res.status(422).json({ error: "Missing carId" })
     } else {
       const query =
-        "UPDATE Car SET userLabel = ?, year = ?, make = ?, model = ?, vin = ?, licensePlate = ?, notes = ? WHERE carId = ?"
+        "UPDATE Car SET userLabel = ?, year = ?, make = ?, model = ?, color = ?,  vin = ?, licensePlate = ?, notes = ? WHERE carId = ?"
       const queryValues = [
         req.body.userLabel,
         req.body.year,
         req.body.make,
         req.body.model,
+        req.body.color,
         req.body.vin,
         req.body.licensePlate,
         req.body.notes,

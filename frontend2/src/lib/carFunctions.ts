@@ -10,7 +10,6 @@ interface Car {
   vin?: string
   licensePlate?: string
   notes?: string
-  mileage?: number
 }
 
 export async function getCars(): Promise<Car[]> {
@@ -66,7 +65,7 @@ export function addCar(params: addCarParams) {
   })
 }
 
-export function updateCar(params = {}) {
+export function updateCar(params: Car) {
   return new Promise((resolve, reject) => {
     axios
       .put(import.meta.env.VITE_APP_MY_API + "/car/update", params, {
