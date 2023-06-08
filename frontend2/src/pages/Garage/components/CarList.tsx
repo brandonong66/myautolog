@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react"
 import { getCars } from "../../../lib/carFunctions"
 import CarCard from "./CarCard"
+import { Button } from "../../../components/ui/button"
+import AddCarForm from "./AddCarForm"
 
 interface Car {
   carId: number
@@ -17,6 +19,7 @@ interface Car {
 
 function CarList() {
   const [cars, setCars] = useState<Car[]>([])
+  const [edit, setEdit] = useState(false)
 
   useEffect(() => {
     getCars()
@@ -34,6 +37,13 @@ function CarList() {
         cars.map((car) => {
           return <CarCard key={car.carId} car={car} />
         })}
+      {edit ? (
+        <AddCarForm onCancel={() => setEdit(false)} />
+      ) : (
+        <Button className="m-auto w-[25%]" onClick={() => setEdit(true)}>
+          Add Car
+        </Button>
+      )}
     </div>
   )
 }

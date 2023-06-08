@@ -18,7 +18,7 @@ CREATE TABLE Car(
     color varchar(255),
     vin varchar(255),
     licensePlate varchar(255),
-    notes varchar(255),
+    notes varchar(1024),
     FOREIGN KEY (userId) REFERENCES User(userId)
 );
 CREATE TABLE `Order`(

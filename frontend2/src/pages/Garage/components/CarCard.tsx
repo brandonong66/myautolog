@@ -87,7 +87,7 @@ function CarCard({ car }: { car: Car }) {
 
   return (
     <Card title={car.userLabel} className="group max-w-[40rem]">
-      <div className="px-2 py-2">
+      <div >
         {!edit ? (
           <>
             <div className="flex">
@@ -244,7 +244,7 @@ function CarCard({ car }: { car: Car }) {
                   <AlertDialog>
                     <AlertDialogTrigger className="mr-auto" asChild>
                       <Button variant="destructive">Delete</Button>
-                    </AlertDialogTrigger>
+                    </AlertDialogTrigger> 
                     <AlertDialogContent>
                       <AlertDialogHeader>
                         <AlertDialogTitle>

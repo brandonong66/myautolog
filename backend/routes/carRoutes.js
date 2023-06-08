@@ -86,8 +86,12 @@ router.put("/update", authenticateToken, async (req, res) => {
       return res.json({ message: "Car updated" })
     }
   } catch (error) {
-    console.error(error.message)
-    res.status(500).json({ error: "Internal Server Error" })
+    if (error.code === "ER_DATA_TOO_LONG") {
+      res.status(422).json({ error: "Data too long" })
+    } else {
+      console.error(error.message)
+      res.status(500).json({ error: "Internal Server Error" })
+    }
   }
 })
 module.exports = router
