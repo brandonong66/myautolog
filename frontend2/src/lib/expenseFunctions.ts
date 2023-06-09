@@ -1,6 +1,22 @@
 import axios from "axios"
 
-export async function getExpenses() {
+interface expenseData {
+  storeOrderId: string
+  orderDate: string
+  source: string
+  url: string
+  itemId: number
+  itemName: string
+  itemBrand: string
+  partNumber: string
+  notes: string
+  quantity: number
+  price: number
+  itemTax: number
+  userLabel: string
+}
+
+export async function getExpenses(): Promise<expenseData[]> {
   return new Promise((resolve, reject) => {
     axios
       .get(import.meta.env.VITE_APP_MY_API + "/expense/getExpenses", {
@@ -21,7 +37,7 @@ export async function getExpenses() {
   })
 }
 
-export async function getOrders(){
+export async function getOrders() {
   return new Promise((resolve, reject) => {
     axios
       .get(import.meta.env.VITE_APP_MY_API + "/expense/getOrders", {
