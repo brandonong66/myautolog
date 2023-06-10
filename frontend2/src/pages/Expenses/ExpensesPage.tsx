@@ -4,7 +4,7 @@ import ExpenseTable from "./components/ExpenseTable"
 function ExpensesPage() {
   return (
     <PageLayout title="Expenses">
-      <ExpenseTable />
+      <ExpenseTable className=""/>
     </PageLayout>
   )
 }

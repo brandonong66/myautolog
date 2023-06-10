@@ -4,7 +4,6 @@ import { DataTablePagination } from "../../components/DataTable/DataTablePaginat
 import { DataTableViewOptions } from "../../components/DataTable/DataTableViewOptions"
 import {
   ColumnDef,
-  ColumnFiltersState,
   SortingState,
   VisibilityState,
   flexRender,
@@ -34,14 +33,14 @@ export function DataTable<TData, TValue>({
   data,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const [globalFilter, setGlobalFilter] = useState("")
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
 
   const table = useReactTable({
     data,
     columns,
     onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
+    onGlobalFilterChange: setGlobalFilter,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -49,24 +48,25 @@ export function DataTable<TData, TValue>({
     onColumnVisibilityChange: setColumnVisibility,
     state: {
       sorting,
-      columnFilters,
+      globalFilter,
       columnVisibility,
     },
   })
 
   return (
-    <div className="flex-col gap-8">
-      <div className="flex">
-        <Input
-          placeholder="Filter "
-          value={(table.getColumn("source")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("source")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
+    <div className="flex-col space-y-4">
+      <div className="flex justify-between">
+        <div>
+          <Input
+            placeholder="Filter "
+            onChange={(event) => setGlobalFilter(event.target.value)}
+            className="max-w-sm"
+          />
+        </div>
 
-        <DataTableViewOptions table={table} />
+        <div>
+          <DataTableViewOptions table={table} />
+        </div>
       </div>
 
       <div className="rounded-md border">

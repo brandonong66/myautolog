@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react"
 import { DataTable } from "../../../components/DataTable/DataTable"
 import { DataTableColumnHeader } from "../../../components/DataTable/DataTableColumnHeader"
-
 import { getExpenses } from "../../../lib/expenseFunctions"
-
 import { ColumnDef } from "@tanstack/react-table"
-
 import Card from "../../../components/Card/Card"
+import { cn } from "../../../lib/utils"
+import CustomCell from "../../../components/DataTable/CustomCell"
 
 //define columns
 type expenseData = {
@@ -26,10 +25,22 @@ type expenseData = {
 }
 const columns: ColumnDef<expenseData>[] = [
   {
+    accessorKey: "userLabel",
+    header: "User Label",
+  },
+  {
     accessorKey: "storeOrderId",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Order ID" />
     ),
+    cell: ({ row }) => {
+      const storeOrderId: string = row.getValue("storeOrderId")
+      return (
+        <div className="max-w-[150px] overflow-hidden overflow-ellipsis whitespace-nowrap">
+          {storeOrderId}
+        </div>
+      )
+    },
   },
   {
     accessorKey: "orderDate",
@@ -40,11 +51,15 @@ const columns: ColumnDef<expenseData>[] = [
       const orderDate = new Date(row.getValue("orderDate"))
       const formattedDate = new Intl.DateTimeFormat("en-us", {
         year: "numeric",
-        month: "long",
+        month: "numeric",
         day: "numeric",
       }).format(orderDate)
 
-      return <div>{formattedDate}</div>
+      return (
+        <div className="max-w-[150px] overflow-hidden overflow-ellipsis whitespace-nowrap">
+          {formattedDate}
+        </div>
+      )
     },
   },
   {
@@ -58,18 +73,28 @@ const columns: ColumnDef<expenseData>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="URL" />
     ),
-  },
-  {
-    accessorKey: "itemId",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Item ID" />
-    ),
+    cell: ({ row }) => {
+      const url: string = row.getValue("url")
+      return (
+        <CustomCell>
+          <a href={url}>{url}</a>
+        </CustomCell>
+      )
+    },
   },
   {
     accessorKey: "itemName",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Item Name" />
     ),
+    cell: ({ row }) => {
+      const itemName: string = row.getValue("itemName")
+      return (
+        <CustomCell className="max-w-[200px]">
+          <p className="overflow-hidden overflow-ellipsis">{itemName}</p>
+        </CustomCell>
+      )
+    },
   },
   {
     accessorKey: "itemBrand",
@@ -83,12 +108,7 @@ const columns: ColumnDef<expenseData>[] = [
       <DataTableColumnHeader column={column} title="Part Number" />
     ),
   },
-  {
-    accessorKey: "notes",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Notes" />
-    ),
-  },
+
   {
     accessorKey: "quantity",
     header: ({ column }) => (
@@ -122,13 +142,18 @@ const columns: ColumnDef<expenseData>[] = [
       return <div>{formattedItemTax}</div>
     },
   },
+
   {
-    accessorKey: "userLabel",
-    header: "User Label",
+    accessorKey: "notes",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Notes" />
+    ),
   },
 ]
-
-function ExpenseTable() {
+interface expenseTableProps {
+  className?: string
+}
+function ExpenseTable({ className }: expenseTableProps) {
   const [data, setData] = useState<expenseData[]>([])
   useEffect(() => {
     getExpenses()
@@ -142,9 +167,11 @@ function ExpenseTable() {
   }, [])
 
   return (
-    <Card title="Main Expenses">
-      <DataTable columns={columns} data={data} />
-    </Card>
+    <div className={cn("", className)}>
+      <Card title="Main Expenses">
+        <DataTable columns={columns} data={data} />
+      </Card>
+    </div>
   )
 }
 
