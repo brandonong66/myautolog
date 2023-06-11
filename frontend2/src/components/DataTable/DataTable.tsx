@@ -54,7 +54,7 @@ export function DataTable<TData, TValue>({
   })
 
   return (
-    <div className="flex-col space-y-4">
+    <div className="flex flex-col gap-4">
       <div className="flex justify-between">
         <div>
           <Input

@@ -26,7 +26,9 @@ type expenseData = {
 const columns: ColumnDef<expenseData>[] = [
   {
     accessorKey: "userLabel",
-    header: "User Label",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="User Label" />
+    ),
   },
   {
     accessorKey: "storeOrderId",
@@ -36,9 +38,9 @@ const columns: ColumnDef<expenseData>[] = [
     cell: ({ row }) => {
       const storeOrderId: string = row.getValue("storeOrderId")
       return (
-        <div className="max-w-[150px] overflow-hidden overflow-ellipsis whitespace-nowrap">
-          {storeOrderId}
-        </div>
+        <CustomCell>
+          <>{storeOrderId}</>
+        </CustomCell>
       )
     },
   },
@@ -56,9 +58,9 @@ const columns: ColumnDef<expenseData>[] = [
       }).format(orderDate)
 
       return (
-        <div className="max-w-[150px] overflow-hidden overflow-ellipsis whitespace-nowrap">
-          {formattedDate}
-        </div>
+        <CustomCell>
+          <>{formattedDate}</>
+        </CustomCell>
       )
     },
   },
@@ -91,7 +93,7 @@ const columns: ColumnDef<expenseData>[] = [
       const itemName: string = row.getValue("itemName")
       return (
         <CustomCell className="max-w-[200px]">
-          <p className="overflow-hidden overflow-ellipsis">{itemName}</p>
+          <>{itemName}</>
         </CustomCell>
       )
     },
@@ -127,19 +129,30 @@ const columns: ColumnDef<expenseData>[] = [
         currency: "USD",
       }).format(price)
 
-      return <div>{formattedPrice}</div>
+      return (
+        <CustomCell>
+          <>{formattedPrice}</>
+        </CustomCell>
+      )
     },
   },
   {
     accessorKey: "itemTax",
-    header: "Item Tax",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Item Tax" />
+    ),
     cell: ({ row }) => {
       const itemTax = parseFloat(row.getValue("itemTax"))
       const formattedItemTax = new Intl.NumberFormat("en-us", {
         style: "currency",
         currency: "USD",
       }).format(itemTax)
-      return <div>{formattedItemTax}</div>
+
+      return (
+        <CustomCell>
+          <>{formattedItemTax}</>
+        </CustomCell>
+      )
     },
   },
 

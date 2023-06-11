@@ -37,7 +37,18 @@ export async function getExpenses(): Promise<expenseData[]> {
   })
 }
 
-export async function getOrders() {
+type orderData = {
+  storeOrderId: string
+  orderDate: string
+  source: string
+  url: string
+  expectedArrivalDate: string
+  subtotalPrice: number
+  orderTax: number
+  shippingPrice: number
+  totalPrice: number
+}
+export async function getOrders(): Promise<orderData[]> {
   return new Promise((resolve, reject) => {
     axios
       .get(import.meta.env.VITE_APP_MY_API + "/expense/getOrders", {
