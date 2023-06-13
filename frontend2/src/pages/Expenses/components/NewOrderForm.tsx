@@ -13,24 +13,69 @@ import {
 } from "../../../components/ui/form"
 import { DateInput } from "../../../components/DateInput"
 import { Input } from "../../../components/ui/input"
+import { cn } from "../../../lib/utils"
 
 const formSchema = z.object({
   storeOrderId: z.string(),
   orderDate: z.date(),
-  expectedArrivalDate: z.date(),
-  source: z.string(),
-  url: z.string(),
-  subtotalPrice: z.number(),
-  shippingPrice: z.number(),
-  orderTax: z.number(),
-  totalPrice: z.number(),
+  expectedArrivalDate: z.date().optional(),
+  source: z.string().optional(),
+  url: z.string().optional(),
+  subtotalPrice: z.string().transform((val, ctx) => {
+    const parsedInt = parseInt(val)
+    if (isNaN(parsedInt)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Subtotal Price must be a number",
+      })
+      return z.NEVER
+    }
+    return parsedInt
+  }),
+  shippingPrice: z.string().transform((val, ctx) => {
+    const parsedInt = parseInt(val)
+    if (isNaN(parsedInt)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Shipping Price must be a number",
+      })
+      return z.NEVER
+    }
+    return parsedInt
+  }),
+  orderTax: z.string().transform((val, ctx) => {
+    const parsedInt = parseInt(val)
+    if (isNaN(parsedInt)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Order Tax must be a number",
+      })
+      return z.NEVER
+    }
+    return parsedInt
+  }),
+  totalPrice: z.string().transform((val, ctx) => {
+    const parsedInt = parseInt(val)
+    if (isNaN(parsedInt)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Total Price must be a number",
+      })
+      return z.NEVER
+    }
+    return parsedInt
+  }),
 })
 
-function NewOrderForm() {
+interface NewOrderFormProps {
+  className?: string
+}
+function NewOrderForm({ className }: NewOrderFormProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       storeOrderId: "",
+      orderDate: new Date(),
       source: "",
       url: "",
       subtotalPrice: 0,
@@ -42,11 +87,10 @@ function NewOrderForm() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values)
-    console.log("test")
   }
 
   return (
-    <Card title="New Order">
+    <Card title="New Order" className={cn("", className)}>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -57,7 +101,7 @@ function NewOrderForm() {
             name="storeOrderId"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Order ID</FormLabel>
+                <FormLabel>*Order Id</FormLabel>
                 <FormControl>
                   <Input {...field} type="text" />
                 </FormControl>
@@ -65,11 +109,19 @@ function NewOrderForm() {
               </FormItem>
             )}
           />
-
-          {/* <div className="flex gap-4">
-            <DateInput control={form.control} name="orderDate" />
-          </div>
           <div className="flex gap-4">
+            <DateInput
+              control={form.control}
+              name="orderDate"
+              label="* Order Date"
+              className="w-full"
+            />
+            <DateInput
+              control={form.control}
+              name="expectedArrivalDate"
+              label="Expected Arrival Date"
+              className="w-full"
+            />
             <FormField
               control={form.control}
               name="source"
@@ -96,7 +148,62 @@ function NewOrderForm() {
                 </FormItem>
               )}
             />
-          </div> */}
+          </div>
+          <div className="flex w-full gap-4">
+            <FormField
+              control={form.control}
+              name="subtotalPrice"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel>* Subtotal Price</FormLabel>
+                  <FormControl>
+                    <Input {...field} type="number" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="shippingPrice"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel>* Shipping Price</FormLabel>
+                  <FormControl>
+                    <Input {...field} type="number" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="orderTax"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel>* Order Tax</FormLabel>
+                  <FormControl>
+                    <Input {...field} type="number" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="totalPrice"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel>* Total Price</FormLabel>
+                  <FormControl>
+                    <Input {...field} type="number" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
           <div className="flex">
             <Button type="submit" className="ml-auto">
               Submit
