@@ -1,3 +1,4 @@
+import { useState } from "react"
 import Card from "../../../components/Card/Card"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
@@ -13,6 +14,7 @@ import {
 } from "../../../components/ui/form"
 import { DateInput } from "../../../components/DateInput"
 import { Input } from "../../../components/ui/input"
+import { Separator } from "../../../components/ui/separator"
 import { cn } from "../../../lib/utils"
 
 const formSchema = z.object({
@@ -70,7 +72,9 @@ const formSchema = z.object({
 interface NewOrderFormProps {
   className?: string
 }
+
 function NewOrderForm({ className }: NewOrderFormProps) {
+  const [items, setItems] = useState([])
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -203,7 +207,40 @@ function NewOrderForm({ className }: NewOrderFormProps) {
               )}
             />
           </div>
-
+          <Separator />
+          <div className="flex flex-col gap-4">
+            {items.map((item) => (
+              <Card
+                key={items.indexOf(item)}
+                title={"Item " + (items.indexOf(item) + 1)}
+                titleVariant="h3"
+              >
+                <FormField
+                  name={"item" + (items.indexOf(item) + 1)}
+                  control={form.control}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>* Item Name</FormLabel>
+                      <FormControl>
+                        <Input {...field} type="text" />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </Card>
+            ))}
+          </div>
+          <div className="flex">
+            <Button
+              className="m-auto"
+              onClick={() => {
+                setItems([...items, {}])
+              }}
+            >
+              Add Item
+            </Button>
+          </div>
           <div className="flex">
             <Button type="submit" className="ml-auto">
               Submit
