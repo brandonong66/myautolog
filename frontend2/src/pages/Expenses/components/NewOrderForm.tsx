@@ -2,7 +2,7 @@ import { useState } from "react"
 import Card from "../../../components/Card/Card"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
-import { useForm } from "react-hook-form"
+import { useForm, useFieldArray } from "react-hook-form"
 import { Button } from "../../../components/ui/button"
 import {
   Form,
@@ -17,56 +17,107 @@ import { Input } from "../../../components/ui/input"
 import { Separator } from "../../../components/ui/separator"
 import { cn } from "../../../lib/utils"
 
+const itemSchema = z.object({
+  itemName: z.string(),
+  itemBrand: z.string().optional(),
+  partNumber: z.string().optional(),
+  price: z.string().transform((val, ctx) => {
+    const parsedInt = parseInt(val)
+    if (isNaN(parsedInt)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Price must be a number",
+      })
+      return z.NEVER
+    }
+    return parsedInt
+  }),
+  itemTax: z.string().transform((val, ctx) => {
+    const parsedInt = parseInt(val)
+    if (isNaN(parsedInt)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Item Tax must be a number",
+      })
+      return z.NEVER
+    }
+    return parsedInt
+  }),
+  quantity: z.string().transform((val, ctx) => {
+    const parsedInt = parseInt(val)
+    if (isNaN(parsedInt)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Quantity must be a number",
+      })
+      return z.NEVER
+    }
+    return parsedInt
+  }),
+  categoryId: z.number().optional(),
+  carId: z.number().optional(),
+  notes: z.string().optional(),
+})
+
 const formSchema = z.object({
   storeOrderId: z.string(),
   orderDate: z.date(),
   expectedArrivalDate: z.date().optional(),
   source: z.string().optional(),
   url: z.string().optional(),
-  subtotalPrice: z.string().transform((val, ctx) => {
-    const parsedInt = parseInt(val)
-    if (isNaN(parsedInt)) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "Subtotal Price must be a number",
-      })
-      return z.NEVER
-    }
-    return parsedInt
-  }),
-  shippingPrice: z.string().transform((val, ctx) => {
-    const parsedInt = parseInt(val)
-    if (isNaN(parsedInt)) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "Shipping Price must be a number",
-      })
-      return z.NEVER
-    }
-    return parsedInt
-  }),
-  orderTax: z.string().transform((val, ctx) => {
-    const parsedInt = parseInt(val)
-    if (isNaN(parsedInt)) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "Order Tax must be a number",
-      })
-      return z.NEVER
-    }
-    return parsedInt
-  }),
-  totalPrice: z.string().transform((val, ctx) => {
-    const parsedInt = parseInt(val)
-    if (isNaN(parsedInt)) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "Total Price must be a number",
-      })
-      return z.NEVER
-    }
-    return parsedInt
-  }),
+  subtotalPrice:
+    z.number() ||
+    z.string().transform((val, ctx) => {
+      const parsedInt = parseInt(val)
+      if (isNaN(parsedInt)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Subtotal Price must be a number",
+        })
+        return z.NEVER
+      }
+      return parsedInt
+    }),
+  shippingPrice:
+    z.number() ||
+    z.string().transform((val, ctx) => {
+      const parsedInt = parseInt(val)
+      if (isNaN(parsedInt)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Shipping Price must be a number",
+        })
+        return z.NEVER
+      }
+      return parsedInt
+    }),
+  orderTax:
+    z.number() ||
+    z.string().transform((val, ctx) => {
+      const parsedInt = parseInt(val)
+      if (isNaN(parsedInt)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Order Tax must be a number",
+        })
+        return z.NEVER
+      }
+      return parsedInt
+    }),
+  totalPrice:
+    z.number() ||
+    z.string().transform((val, ctx) => {
+      const parsedInt = parseInt(val)
+      if (isNaN(parsedInt)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Total Price must be a number",
+        })
+        return z.NEVER
+      }
+      return parsedInt
+    }),
+  items: z.array(itemSchema),
 })
 
 interface NewOrderFormProps {
@@ -74,7 +125,6 @@ interface NewOrderFormProps {
 }
 
 function NewOrderForm({ className }: NewOrderFormProps) {
-  const [items, setItems] = useState([])
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -86,7 +136,13 @@ function NewOrderForm({ className }: NewOrderFormProps) {
       shippingPrice: 0,
       orderTax: 0,
       totalPrice: 0,
+      items: [],
     },
+  })
+
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "items",
   })
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -209,18 +265,145 @@ function NewOrderForm({ className }: NewOrderFormProps) {
           </div>
           <Separator />
           <div className="flex flex-col gap-4">
-            {items.map((item) => (
+            {fields.map((item, index) => (
               <Card
-                key={items.indexOf(item)}
-                title={"Item " + (items.indexOf(item) + 1)}
+                key={item.id}
+                title="Item 1"
                 titleVariant="h3"
+                topRight={
+                  <Button
+                    onClick={() => {
+                      remove(index)
+                    }}
+                    variant="destructive"
+                  >
+                    delete
+                  </Button>
+                }
               >
+                <div className="flex gap-4">
+                  <div className="w-full">
+                    <FormField
+                      control={form.control}
+                      name={`items.${index}.itemName`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>* Item Name</FormLabel>
+                          <FormControl>
+                            <Input {...field} type="text" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <div className="w-[100px]">
+                    <FormField
+                      control={form.control}
+                      name={`items.${index}.quantity`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>* Quantity</FormLabel>
+                          <FormControl>
+                            <Input {...field} type="text" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
+                <div className="flex gap-4">
+                  <FormField
+                    control={form.control}
+                    name={`items.${index}.itemBrand`}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Item Brand</FormLabel>
+                        <FormControl>
+                          <Input {...field} type="text" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name={`items.${index}.partNumber`}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Part Number</FormLabel>
+                        <FormControl>
+                          <Input {...field} type="text" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="flex gap-4">
+                  <FormField
+                    control={form.control}
+                    name={`items.${index}.itemTax`}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>* Tax</FormLabel>
+                        <FormControl>
+                          <Input {...field} type="text" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name={`items.${index}.price`}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>* Price</FormLabel>
+                        <FormControl>
+                          <Input {...field} type="text" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="flex gap-4">
+                  <FormField
+                    control={form.control}
+                    name={`items.${index}.categoryId`}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Category</FormLabel>
+                        <FormControl>
+                          <Input {...field} type="text" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name={`items.${index}.carId`}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Car</FormLabel>
+                        <FormControl>
+                          <Input {...field} type="text" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
                 <FormField
-                  name={"item" + (items.indexOf(item) + 1)}
                   control={form.control}
+                  name={`items.${index}.notes`}
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>* Item Name</FormLabel>
+                      <FormLabel>Notes</FormLabel>
                       <FormControl>
                         <Input {...field} type="text" />
                       </FormControl>
@@ -228,6 +411,11 @@ function NewOrderForm({ className }: NewOrderFormProps) {
                     </FormItem>
                   )}
                 />
+
+                {/* quantity: z.number(),
+  categoryId: z.number().optional(),
+  carId: z.number().optional(),
+  notes: z.string().optional(), */}
               </Card>
             ))}
           </div>
@@ -235,7 +423,7 @@ function NewOrderForm({ className }: NewOrderFormProps) {
             <Button
               className="m-auto"
               onClick={() => {
-                setItems([...items, {}])
+                append({ itemName: "" })
               }}
             >
               Add Item
