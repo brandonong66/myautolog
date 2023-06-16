@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Card from "../../../components/Card/Card"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
@@ -16,6 +16,14 @@ import { DateInput } from "../../../components/DateInput"
 import { Input } from "../../../components/ui/input"
 import { Separator } from "../../../components/ui/separator"
 import { cn } from "../../../lib/utils"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../../../components/ui/select"
+import { getCars } from "../../../lib/carFunctions"
 
 const itemSchema = z.object({
   itemName: z.string(),
@@ -125,6 +133,7 @@ interface NewOrderFormProps {
 }
 
 function NewOrderForm({ className }: NewOrderFormProps) {
+  const [cars, setCars] = useState([])
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -136,7 +145,7 @@ function NewOrderForm({ className }: NewOrderFormProps) {
       shippingPrice: 0,
       orderTax: 0,
       totalPrice: 0,
-      items: [],
+      items: [{ quantity: "1" }], // string because it's auto formatted into a number
     },
   })
 
@@ -148,6 +157,17 @@ function NewOrderForm({ className }: NewOrderFormProps) {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values)
   }
+
+  useEffect(() => {
+    getCars()
+      .then((res) => {
+        console.log(res)
+        setCars(res)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }, [])
 
   return (
     <Card title="New Order" className={cn("", className)}>
@@ -305,6 +325,39 @@ function NewOrderForm({ className }: NewOrderFormProps) {
                         <FormItem>
                           <FormLabel>* Quantity</FormLabel>
                           <FormControl>
+                            <Input {...field} type="number" defaultValue={1} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
+                <div className="flex gap-4">
+                  <div className="w-full">
+                    {" "}
+                    <FormField
+                      control={form.control}
+                      name={`items.${index}.itemBrand`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Item Brand</FormLabel>
+                          <FormControl>
+                            <Input {...field} type="text" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <div className="w-full">
+                    <FormField
+                      control={form.control}
+                      name={`items.${index}.partNumber`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Part Number</FormLabel>
+                          <FormControl>
                             <Input {...field} type="text" />
                           </FormControl>
                           <FormMessage />
@@ -314,88 +367,83 @@ function NewOrderForm({ className }: NewOrderFormProps) {
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <FormField
-                    control={form.control}
-                    name={`items.${index}.itemBrand`}
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Item Brand</FormLabel>
-                        <FormControl>
-                          <Input {...field} type="text" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name={`items.${index}.partNumber`}
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Part Number</FormLabel>
-                        <FormControl>
-                          <Input {...field} type="text" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                  <div className="w-full">
+                    <FormField
+                      control={form.control}
+                      name={`items.${index}.itemTax`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>* Tax</FormLabel>
+                          <FormControl>
+                            <Input {...field} type="text" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  <div className="w-full">
+                    <FormField
+                      control={form.control}
+                      name={`items.${index}.price`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>* Price</FormLabel>
+                          <FormControl>
+                            <Input {...field} type="text" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
                 </div>
                 <div className="flex gap-4">
-                  <FormField
-                    control={form.control}
-                    name={`items.${index}.itemTax`}
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>* Tax</FormLabel>
-                        <FormControl>
-                          <Input {...field} type="text" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name={`items.${index}.price`}
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>* Price</FormLabel>
-                        <FormControl>
-                          <Input {...field} type="text" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                <div className="flex gap-4">
-                  <FormField
-                    control={form.control}
-                    name={`items.${index}.categoryId`}
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Category</FormLabel>
-                        <FormControl>
-                          <Input {...field} type="text" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name={`items.${index}.carId`}
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Car</FormLabel>
-                        <FormControl>
-                          <Input {...field} type="text" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                  <div className="w-full">
+                    <FormField
+                      control={form.control}
+                      name={`items.${index}.categoryId`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Category</FormLabel>
+                          <FormControl>
+                            <Input {...field} type="text" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <div className="w-full">
+                    <FormField
+                      control={form.control}
+                      name={`items.${index}.carId`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Car</FormLabel>
+                          <FormControl>
+                            <Select>
+                              <SelectTrigger>
+                                <SelectValue {...field} placeholder="car" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {cars.map((car) => (
+                                  <SelectItem
+                                    key={car.carId}
+                                    value={car.carId}
+                                  >
+                                    {car.userLabel}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
                 </div>
 
                 <FormField
@@ -411,11 +459,6 @@ function NewOrderForm({ className }: NewOrderFormProps) {
                     </FormItem>
                   )}
                 />
-
-                {/* quantity: z.number(),
-  categoryId: z.number().optional(),
-  carId: z.number().optional(),
-  notes: z.string().optional(), */}
               </Card>
             ))}
           </div>
