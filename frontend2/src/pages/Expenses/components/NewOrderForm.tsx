@@ -24,7 +24,7 @@ import {
   SelectValue,
 } from "../../../components/ui/select"
 import { getCars } from "../../../lib/carFunctions"
-
+import { CarType } from "../../../types/car"
 const itemSchema = z.object({
   itemName: z.string(),
   itemBrand: z.string().optional(),
@@ -63,7 +63,7 @@ const itemSchema = z.object({
     return parsedInt
   }),
   categoryId: z.number().optional(),
-  carId: z.number().optional(),
+  carId: z.string().optional(),
   notes: z.string().optional(),
 })
 
@@ -423,16 +423,16 @@ function NewOrderForm({ className }: NewOrderFormProps) {
                         <FormItem>
                           <FormLabel>Car</FormLabel>
                           <FormControl>
-                            <Select>
+                            <Select
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
                               <SelectTrigger>
-                                <SelectValue {...field} placeholder="car" />
+                                <SelectValue placeholder="car" />
                               </SelectTrigger>
                               <SelectContent>
-                                {cars.map((car) => (
-                                  <SelectItem
-                                    key={car.carId}
-                                    value={car.carId}
-                                  >
+                                {cars.map((car: CarType) => (
+                                  <SelectItem key={car.carId} value={car.carId.toString()}>
                                     {car.userLabel}
                                   </SelectItem>
                                 ))}
