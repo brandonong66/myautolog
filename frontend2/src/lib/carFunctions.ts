@@ -1,18 +1,8 @@
 import axios from "axios"
+import { CarType } from "../types/car"
 
-interface Car {
-  carId: number
-  userLabel?: string
-  year: number
-  make: string
-  model: string
-  color?: string
-  vin?: string
-  licensePlate?: string
-  notes?: string
-}
 
-export async function getCars(): Promise<Car[]> {
+export async function getCars(): Promise<CarType[]> {
   return new Promise((resolve, reject) => {
     axios
       .get(import.meta.env.VITE_APP_MY_API + "/car/getCars", {

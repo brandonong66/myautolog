@@ -26,126 +26,50 @@ import {
 import { getCars } from "../../../lib/carFunctions"
 import { CarType } from "../../../types/car"
 const itemSchema = z.object({
-  itemName: z.string(),
-  itemBrand: z.string().optional(),
-  partNumber: z.string().optional(),
-  price: z.string().transform((val, ctx) => {
-    const parsedInt = parseInt(val)
-    if (isNaN(parsedInt)) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "Price must be a number",
-      })
-      return z.NEVER
-    }
-    return parsedInt
-  }),
-  itemTax: z.string().transform((val, ctx) => {
-    const parsedInt = parseInt(val)
-    if (isNaN(parsedInt)) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "Item Tax must be a number",
-      })
-      return z.NEVER
-    }
-    return parsedInt
-  }),
-  quantity: z.string().transform((val, ctx) => {
-    const parsedInt = parseInt(val)
-    if (isNaN(parsedInt)) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "Quantity must be a number",
-      })
-      return z.NEVER
-    }
-    return parsedInt
-  }),
+  itemName: z.string().nonempty(),
+  itemBrand: z.string(),
+  partNumber: z.string(),
+  price: z.coerce.number().nonnegative().default(0),
+  itemTax: z.coerce.number().nonnegative().default(0),
+  quantity: z.coerce.number().gt(0).default(1),
   categoryId: z.number().optional(),
-  carId: z.string().optional(),
-  notes: z.string().optional(),
+  carId: z.coerce.number(),
+  notes: z.string(),
 })
 
-const formSchema = z.object({
-  storeOrderId: z.string(),
+const orderSchema = z.object({
+  storeOrderId: z.string().nonempty(),
   orderDate: z.date(),
   expectedArrivalDate: z.date().optional(),
   source: z.string().optional(),
   url: z.string().optional(),
-  subtotalPrice:
-    z.number() ||
-    z.string().transform((val, ctx) => {
-      const parsedInt = parseInt(val)
-      if (isNaN(parsedInt)) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "Subtotal Price must be a number",
-        })
-        return z.NEVER
-      }
-      return parsedInt
-    }),
-  shippingPrice:
-    z.number() ||
-    z.string().transform((val, ctx) => {
-      const parsedInt = parseInt(val)
-      if (isNaN(parsedInt)) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "Shipping Price must be a number",
-        })
-        return z.NEVER
-      }
-      return parsedInt
-    }),
-  orderTax:
-    z.number() ||
-    z.string().transform((val, ctx) => {
-      const parsedInt = parseInt(val)
-      if (isNaN(parsedInt)) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "Order Tax must be a number",
-        })
-        return z.NEVER
-      }
-      return parsedInt
-    }),
-  totalPrice:
-    z.number() ||
-    z.string().transform((val, ctx) => {
-      const parsedInt = parseInt(val)
-      if (isNaN(parsedInt)) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "Total Price must be a number",
-        })
-        return z.NEVER
-      }
-      return parsedInt
-    }),
-  items: z.array(itemSchema),
+  subtotalPrice: z.coerce.number().nonnegative(),
+  shippingPrice: z.coerce.number().nonnegative(),
+  orderTax: z.coerce.number().nonnegative(),
+  totalPrice: z.coerce.number().nonnegative(),
+  items: z.array(itemSchema).nonempty(),
 })
 
+type ItemType = z.infer<typeof orderSchema>["items"][number]
 interface NewOrderFormProps {
   className?: string
 }
 
 function NewOrderForm({ className }: NewOrderFormProps) {
-  const [cars, setCars] = useState([])
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const [items, setItems] = useState<ItemType[]>([])
+  const [cars, setCars] = useState<CarType[]>([])
+  const form = useForm<z.infer<typeof orderSchema>>({
+    resolver: zodResolver(orderSchema),
     defaultValues: {
       storeOrderId: "",
       orderDate: new Date(),
       source: "",
       url: "",
-      subtotalPrice: 0,
+      subtotalPrice: 0, // string because it's auto formatted into a number
       shippingPrice: 0,
       orderTax: 0,
       totalPrice: 0,
-      items: [{ quantity: "1" }], // string because it's auto formatted into a number
+      items: items,
     },
   })
 
@@ -154,9 +78,14 @@ function NewOrderForm({ className }: NewOrderFormProps) {
     name: "items",
   })
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof orderSchema>) {
     console.log(values)
+    setItems(values.items)
   }
+
+  useEffect(() => {
+    console.log(items)
+  }, [items])
 
   useEffect(() => {
     getCars()
@@ -172,41 +101,27 @@ function NewOrderForm({ className }: NewOrderFormProps) {
   return (
     <Card title="New Order" className={cn("", className)}>
       <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-col gap-4"
-        >
-          <FormField
-            control={form.control}
-            name="storeOrderId"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>*Order Id</FormLabel>
-                <FormControl>
-                  <Input {...field} type="text" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+        <form onSubmit={form.handleSubmit(onSubmit)} className="">
           <div className="flex gap-4">
-            <DateInput
+            <FormField
               control={form.control}
-              name="orderDate"
-              label="* Order Date"
-              className="w-full"
+              name="storeOrderId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>*Order Id</FormLabel>
+                  <FormControl>
+                    <Input {...field} type="text" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-            <DateInput
-              control={form.control}
-              name="expectedArrivalDate"
-              label="Expected Arrival Date"
-              className="w-full"
-            />
+
             <FormField
               control={form.control}
               name="source"
               render={({ field }) => (
-                <FormItem className="w-full">
+                <FormItem className="min-w-[200px]">
                   <FormLabel>Source</FormLabel>
                   <FormControl>
                     <Input {...field} type="text" />
@@ -219,7 +134,7 @@ function NewOrderForm({ className }: NewOrderFormProps) {
               control={form.control}
               name="url"
               render={({ field }) => (
-                <FormItem className="w-full">
+                <FormItem className="min-w-fit">
                   <FormLabel>URL</FormLabel>
                   <FormControl>
                     <Input {...field} type="text" />
@@ -228,14 +143,25 @@ function NewOrderForm({ className }: NewOrderFormProps) {
                 </FormItem>
               )}
             />
-          </div>
-          <div className="flex w-full gap-4">
+            <DateInput
+              control={form.control}
+              name="orderDate"
+              label="* Order Date"
+              className="w-[200px]"
+            />
+            <DateInput
+              control={form.control}
+              name="expectedArrivalDate"
+              label="Expected Arrival Date"
+              className="w-[200px]"
+            />
+            <Separator orientation="vertical" />
             <FormField
               control={form.control}
               name="subtotalPrice"
               render={({ field }) => (
-                <FormItem className="w-full">
-                  <FormLabel>* Subtotal Price</FormLabel>
+                <FormItem className="w-20">
+                  <FormLabel>* Subtotal</FormLabel>
                   <FormControl>
                     <Input {...field} type="number" />
                   </FormControl>
@@ -247,8 +173,8 @@ function NewOrderForm({ className }: NewOrderFormProps) {
               control={form.control}
               name="shippingPrice"
               render={({ field }) => (
-                <FormItem className="w-full">
-                  <FormLabel>* Shipping Price</FormLabel>
+                <FormItem className="w-20">
+                  <FormLabel>* Shipping</FormLabel>
                   <FormControl>
                     <Input {...field} type="number" />
                   </FormControl>
@@ -260,8 +186,8 @@ function NewOrderForm({ className }: NewOrderFormProps) {
               control={form.control}
               name="orderTax"
               render={({ field }) => (
-                <FormItem className="w-full">
-                  <FormLabel>* Order Tax</FormLabel>
+                <FormItem className="w-20">
+                  <FormLabel>* Tax</FormLabel>
                   <FormControl>
                     <Input {...field} type="number" />
                   </FormControl>
@@ -273,8 +199,8 @@ function NewOrderForm({ className }: NewOrderFormProps) {
               control={form.control}
               name="totalPrice"
               render={({ field }) => (
-                <FormItem className="w-full">
-                  <FormLabel>* Total Price</FormLabel>
+                <FormItem className="w-20">
+                  <FormLabel>* Total</FormLabel>
                   <FormControl>
                     <Input {...field} type="number" />
                   </FormControl>
@@ -283,7 +209,7 @@ function NewOrderForm({ className }: NewOrderFormProps) {
               )}
             />
           </div>
-          <Separator />
+          <Separator className="my-4" />
           <div className="flex flex-col gap-4">
             {fields.map((item, index) => (
               <Card
@@ -302,7 +228,7 @@ function NewOrderForm({ className }: NewOrderFormProps) {
                 }
               >
                 <div className="flex gap-4">
-                  <div className="w-full">
+                  <div className="">
                     <FormField
                       control={form.control}
                       name={`items.${index}.itemName`}
@@ -317,25 +243,8 @@ function NewOrderForm({ className }: NewOrderFormProps) {
                       )}
                     />
                   </div>
-                  <div className="w-[100px]">
-                    <FormField
-                      control={form.control}
-                      name={`items.${index}.quantity`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>* Quantity</FormLabel>
-                          <FormControl>
-                            <Input {...field} type="number" defaultValue={1} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                </div>
-                <div className="flex gap-4">
-                  <div className="w-full">
-                    {" "}
+
+                  <div className="">
                     <FormField
                       control={form.control}
                       name={`items.${index}.itemBrand`}
@@ -350,7 +259,7 @@ function NewOrderForm({ className }: NewOrderFormProps) {
                       )}
                     />
                   </div>
-                  <div className="w-full">
+                  <div className="">
                     <FormField
                       control={form.control}
                       name={`items.${index}.partNumber`}
@@ -365,42 +274,20 @@ function NewOrderForm({ className }: NewOrderFormProps) {
                       )}
                     />
                   </div>
-                </div>
-                <div className="flex gap-4">
-                  <div className="w-full">
-                    <FormField
-                      control={form.control}
-                      name={`items.${index}.itemTax`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>* Tax</FormLabel>
-                          <FormControl>
-                            <Input {...field} type="text" />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-
-                  <div className="w-full">
-                    <FormField
-                      control={form.control}
-                      name={`items.${index}.price`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>* Price</FormLabel>
-                          <FormControl>
-                            <Input {...field} type="text" />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                </div>
-                <div className="flex gap-4">
-                  <div className="w-full">
+                  <FormField
+                    control={form.control}
+                    name={`items.${index}.notes`}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Notes</FormLabel>
+                        <FormControl>
+                          <Input {...field} type="text" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <div className="w-28">
                     <FormField
                       control={form.control}
                       name={`items.${index}.categoryId`}
@@ -415,7 +302,7 @@ function NewOrderForm({ className }: NewOrderFormProps) {
                       )}
                     />
                   </div>
-                  <div className="w-full">
+                  <div className="w-28">
                     <FormField
                       control={form.control}
                       name={`items.${index}.carId`}
@@ -425,14 +312,17 @@ function NewOrderForm({ className }: NewOrderFormProps) {
                           <FormControl>
                             <Select
                               onValueChange={field.onChange}
-                              defaultValue={field.value}
+                              defaultValue={cars[0].carId.toString()}
                             >
                               <SelectTrigger>
                                 <SelectValue placeholder="car" />
                               </SelectTrigger>
                               <SelectContent>
                                 {cars.map((car: CarType) => (
-                                  <SelectItem key={car.carId} value={car.carId.toString()}>
+                                  <SelectItem
+                                    key={car.carId}
+                                    value={car.carId.toString()}
+                                  >
                                     {car.userLabel}
                                   </SelectItem>
                                 ))}
@@ -444,29 +334,62 @@ function NewOrderForm({ className }: NewOrderFormProps) {
                       )}
                     />
                   </div>
-                </div>
+                  <Separator orientation="vertical" />
+                  <div className="w-20">
+                    <FormField
+                      control={form.control}
+                      name={`items.${index}.itemTax`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>* Tax</FormLabel>
+                          <FormControl>
+                            <Input {...field} type="number" defaultValue={0} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
 
-                <FormField
-                  control={form.control}
-                  name={`items.${index}.notes`}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Notes</FormLabel>
-                      <FormControl>
-                        <Input {...field} type="text" />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                  <div className="w-20">
+                    <FormField
+                      control={form.control}
+                      name={`items.${index}.price`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>* Price</FormLabel>
+                          <FormControl>
+                            <Input {...field} type="number" defaultValue={0} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <div className="w-20">
+                    <FormField
+                      control={form.control}
+                      name={`items.${index}.quantity`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>* Qty</FormLabel>
+                          <FormControl>
+                            <Input {...field} type="number" defaultValue={1} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
               </Card>
             ))}
           </div>
-          <div className="flex">
+          <div className="mt-4 flex">
             <Button
               className="m-auto"
               onClick={() => {
-                append({ itemName: "" })
+                append({ itemName: "", itemBrand: "", partNumber: "", notes: "", carId: cars[0].carId })
               }}
             >
               Add Item

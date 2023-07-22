@@ -7,7 +7,7 @@ function ExpensesPage() {
   return (
     <PageLayout title="Expenses">
       <div className="flex flex-col items-center gap-4">
-        <NewOrderForm className="max-w-3xl" />
+        <NewOrderForm className="" />
         <ExpenseTable className="" />
         <OrdersTable />
       </div>
