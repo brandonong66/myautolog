@@ -1,36 +1,51 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background-color: var(--background-color);
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
-  --primary-color: #1b32a1;
-  --secondary-color: #82acf2;
-  --tertiary-color: #5950bc;
-  --background-color: #f8f9fa;
-  --accent-color: #481ba1;
-  /* --text-color: #04131a; */
-  --text-color: #2c424f;
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  /* color: rgba(255, 255, 255, 0.87); */
+  /* background-color: #242424; */
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
 }
 
-.page-body {
-  display: flex;
-  justify-content: center;
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
 }
+a:hover {
+  color: #535bf2;
+}
+/* body {
+  --s: 250px; 
+  --c1: #dbdbdb;
+  --c2: #f0f0f0;
+  --c3: #ffffff;
 
-/* remove arrows from number inputs */
-input[type=number]::-webkit-inner-spin-button, 
-input[type=number]::-webkit-outer-spin-button { 
-  -webkit-appearance: none; 
-  margin: 0; 
-}
+  background: repeating-conic-gradient(
+        from 30deg,
+        #0000 0 120deg,
+        var(--c3) 0 180deg
+      )
+      calc(0.5 * var(--s)) calc(0.5 * var(--s) * 0.577),
+    repeating-conic-gradient(
+      from 30deg,
+      var(--c1) 0 60deg,
+      var(--c2) 0 120deg,
+      var(--c3) 0 180deg
+    );
+  background-size: var(--s) calc(var(--s) * 0.577);
+ 
+  backdrop-filter: blur(0.5rem);
+} */
+ /* 0.577 = tan(30deg)*//* control the size */

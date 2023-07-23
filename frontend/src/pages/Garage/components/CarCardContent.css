@@ -1,8 +1,0 @@
-.car-card-content__container {
-    display: flex;
-    min-width: 600px;
-    display: grid;
-    grid-template-areas:
-      "left right"
-      "notes notes";
-  }
