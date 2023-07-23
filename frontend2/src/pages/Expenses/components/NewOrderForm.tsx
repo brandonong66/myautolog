@@ -26,21 +26,21 @@ import {
 import { getCars } from "../../../lib/carFunctions"
 import { CarType } from "../../../types/car"
 const itemSchema = z.object({
-  itemName: z.string().nonempty(),
+  itemName: z.string().nonempty({ message: "Item name required" }),
   itemBrand: z.string(),
   partNumber: z.string(),
   price: z.coerce.number().nonnegative().default(0),
   itemTax: z.coerce.number().nonnegative().default(0),
   quantity: z.coerce.number().gt(0).default(1),
-  categoryId: z.number().optional(),
+  category: z.string(),
   carId: z.coerce.number(),
   notes: z.string(),
 })
 
 const orderSchema = z.object({
-  storeOrderId: z.string().nonempty(),
+  storeOrderId: z.string().nonempty({ message: "Order ID required" }),
   orderDate: z.date(),
-  expectedArrivalDate: z.date().optional(),
+  // expectedArrivalDate: z.date().optional(),
   source: z.string().optional(),
   url: z.string().optional(),
   subtotalPrice: z.coerce.number().nonnegative(),
@@ -50,16 +50,13 @@ const orderSchema = z.object({
   items: z.array(itemSchema).nonempty(),
 })
 
-type ItemType = z.infer<typeof orderSchema>["items"][number]
 interface NewOrderFormProps {
   className?: string
 }
 
 function NewOrderForm({ className }: NewOrderFormProps) {
-  const [items, setItems] = useState<ItemType[]>([])
   const [cars, setCars] = useState<CarType[]>([])
   const form = useForm<z.infer<typeof orderSchema>>({
-    resolver: zodResolver(orderSchema),
     defaultValues: {
       storeOrderId: "",
       orderDate: new Date(),
@@ -69,10 +66,25 @@ function NewOrderForm({ className }: NewOrderFormProps) {
       shippingPrice: 0,
       orderTax: 0,
       totalPrice: 0,
-      items: items,
+      items: [
+        {
+          itemName: "",
+          itemBrand: "",
+          partNumber: "",
+          price: 0,
+          itemTax: 0,
+          quantity: 1,
+          carId: cars[0]?.carId,
+          notes: "",
+          category: "Other"
+        },
+      ],
     },
+    mode: "onChange",
+    resolver: zodResolver(orderSchema),
   })
 
+  // for dynamic form fields
   const { fields, append, remove } = useFieldArray({
     control: form.control,
     name: "items",
@@ -80,17 +92,63 @@ function NewOrderForm({ className }: NewOrderFormProps) {
 
   async function onSubmit(values: z.infer<typeof orderSchema>) {
     console.log(values)
-    setItems(values.items)
   }
 
+  // watch form data for changes
+  const { watch } = form
+  const watchItems = watch("items")
+  const watchSubtotalPrice = watch("subtotalPrice", 0)
+  const watchShippingPrice = watch("shippingPrice", 0)
+  const watchTotalPrice = watch("totalPrice", 0)
+
   useEffect(() => {
-    console.log(items)
-  }, [items])
+    console.log(form.getValues())
+
+    // step 1: calculate subtotal based on item prices and quantities
+    let newSubtotal = 0
+    watchItems.forEach((item) => {
+      const itemSubtotal = item.price * item.quantity
+      newSubtotal += itemSubtotal
+    })
+    form.setValue("subtotalPrice", parseFloat(newSubtotal.toFixed(2)))
+
+    // step 2: calculate order tax based on total, subtotal, and shipping
+    if (form.getValues("totalPrice") !== 0) {
+      const newOrderTax =
+        watchTotalPrice - watchSubtotalPrice - watchShippingPrice
+
+      // make sure Total price is valid (greater than subtotal + shipping)
+      if (
+        newOrderTax < 0 ||
+        watchTotalPrice < watchSubtotalPrice + watchShippingPrice
+      ) {
+        form.setError("totalPrice", {
+          type: "manual",
+          message: "Total must be greater than subtotal + shipping",
+        })
+      } else {
+        form.clearErrors("totalPrice")
+        form.setValue("orderTax", parseFloat(newOrderTax.toFixed(2)))
+      }
+
+      // step 3: once order tax is calculated, calculate individual item taxes
+      watchItems.forEach((item, index) => {
+        const itemTax = (item.price / watchSubtotalPrice) * newOrderTax
+        form.setValue(`items.${index}.itemTax`, parseFloat(itemTax.toFixed(2)))
+      })
+    }
+  }, [
+    watchItems,
+    JSON.stringify(watchItems),
+    watchShippingPrice,
+    watchSubtotalPrice,
+    watchTotalPrice,
+    form,
+  ]) //stringify necessary for watching an update to an array item field but not the array itself i.e. a new item is added to the array
 
   useEffect(() => {
     getCars()
       .then((res) => {
-        console.log(res)
         setCars(res)
       })
       .catch((err) => {
@@ -149,21 +207,21 @@ function NewOrderForm({ className }: NewOrderFormProps) {
               label="* Order Date"
               className="w-[200px]"
             />
-            <DateInput
+            {/* <DateInput
               control={form.control}
               name="expectedArrivalDate"
               label="Expected Arrival Date"
               className="w-[200px]"
-            />
+            /> */}
             <Separator orientation="vertical" />
             <FormField
               control={form.control}
               name="subtotalPrice"
               render={({ field }) => (
-                <FormItem className="w-20">
+                <FormItem className="ml-auto w-20">
                   <FormLabel>* Subtotal</FormLabel>
                   <FormControl>
-                    <Input {...field} type="number" />
+                    <Input {...field} type="number" disabled />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -189,7 +247,7 @@ function NewOrderForm({ className }: NewOrderFormProps) {
                 <FormItem className="w-20">
                   <FormLabel>* Tax</FormLabel>
                   <FormControl>
-                    <Input {...field} type="number" />
+                    <Input {...field} type="number" disabled />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -210,11 +268,12 @@ function NewOrderForm({ className }: NewOrderFormProps) {
             />
           </div>
           <Separator className="my-4" />
+
           <div className="flex flex-col gap-4">
             {fields.map((item, index) => (
               <Card
                 key={item.id}
-                title="Item 1"
+                title={"Item " + (index + 1)}
                 titleVariant="h3"
                 topRight={
                   <Button
@@ -235,7 +294,14 @@ function NewOrderForm({ className }: NewOrderFormProps) {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>* Item Name</FormLabel>
-                          <FormControl>
+                          <FormControl
+                            onChange={() => {
+                              // console.log(
+                              //   form.getValues(`items.${index}.itemName`)
+                              // )
+                              console.log(form.getValues())
+                            }}
+                          >
                             <Input {...field} type="text" />
                           </FormControl>
                           <FormMessage />
@@ -250,7 +316,7 @@ function NewOrderForm({ className }: NewOrderFormProps) {
                       name={`items.${index}.itemBrand`}
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Item Brand</FormLabel>
+                          <FormLabel>Brand</FormLabel>
                           <FormControl>
                             <Input {...field} type="text" />
                           </FormControl>
@@ -290,12 +356,34 @@ function NewOrderForm({ className }: NewOrderFormProps) {
                   <div className="w-28">
                     <FormField
                       control={form.control}
-                      name={`items.${index}.categoryId`}
+                      name={`items.${index}.category`}
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Category</FormLabel>
                           <FormControl>
-                            <Input {...field} type="text" />
+                            <Select
+                              onValueChange={field.onChange}
+                              defaultValue="Other"
+                            >
+                              <SelectTrigger>
+                                <SelectValue placeholder="category" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="Other">Other</SelectItem>
+                                <SelectItem value="Performance">
+                                  Performance
+                                </SelectItem>
+                                <SelectItem value="Maintenance">
+                                  Maintenance
+                                </SelectItem>
+                                <SelectItem value="Cosmetic">
+                                  Cosmetic
+                                </SelectItem>
+                                <SelectItem value="Interior">
+                                  Interior
+                                </SelectItem>
+                              </SelectContent>
+                            </Select>
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -312,7 +400,7 @@ function NewOrderForm({ className }: NewOrderFormProps) {
                           <FormControl>
                             <Select
                               onValueChange={field.onChange}
-                              defaultValue={cars[0].carId.toString()}
+                              defaultValue={cars[0]?.carId.toString()}
                             >
                               <SelectTrigger>
                                 <SelectValue placeholder="car" />
@@ -343,7 +431,7 @@ function NewOrderForm({ className }: NewOrderFormProps) {
                         <FormItem>
                           <FormLabel>* Tax</FormLabel>
                           <FormControl>
-                            <Input {...field} type="number" defaultValue={0} />
+                            <Input {...field} type="number" disabled />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -359,7 +447,7 @@ function NewOrderForm({ className }: NewOrderFormProps) {
                         <FormItem>
                           <FormLabel>* Price</FormLabel>
                           <FormControl>
-                            <Input {...field} type="number" defaultValue={0} />
+                            <Input {...field} type="number" />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -374,7 +462,7 @@ function NewOrderForm({ className }: NewOrderFormProps) {
                         <FormItem>
                           <FormLabel>* Qty</FormLabel>
                           <FormControl>
-                            <Input {...field} type="number" defaultValue={1} />
+                            <Input {...field} type="number" />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -389,7 +477,17 @@ function NewOrderForm({ className }: NewOrderFormProps) {
             <Button
               className="m-auto"
               onClick={() => {
-                append({ itemName: "", itemBrand: "", partNumber: "", notes: "", carId: cars[0].carId })
+                append({
+                  itemName: "",
+                  itemBrand: "",
+                  partNumber: "",
+                  notes: "",
+                  carId: cars[0].carId,
+                  price: 0,
+                  itemTax: 0,
+                  quantity: 1,
+                  category: "Other"
+                })
               }}
             >
               Add Item

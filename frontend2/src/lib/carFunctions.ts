@@ -32,7 +32,7 @@ interface addCarParams {
   vin?: string
   licensePlate?: string
   notes?: string
-  mileage?: number
+  mileage?: number // for initial mileage tracking
 }
 export function addCar(params: addCarParams) {
   return new Promise((resolve, reject) => {
@@ -55,7 +55,7 @@ export function addCar(params: addCarParams) {
   })
 }
 
-export function updateCar(params: Car) {
+export function updateCar(params: CarType) {
   return new Promise((resolve, reject) => {
     axios
       .put(import.meta.env.VITE_APP_MY_API + "/car/update", params, {

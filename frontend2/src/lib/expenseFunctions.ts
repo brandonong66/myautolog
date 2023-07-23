@@ -14,6 +14,7 @@ interface expenseData {
   price: number
   itemTax: number
   userLabel: string
+  category: string
 }
 
 export async function getExpenses(): Promise<expenseData[]> {

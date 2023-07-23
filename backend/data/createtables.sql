@@ -34,12 +34,7 @@ CREATE TABLE `Order`(
     shippingPrice real not null,
     totalPrice real not null
 );
-CREATE TABLE ItemCategory(
-	categoryId integer primary key auto_increment ,
-    categoryName varchar(255) not null,
-    userId integer,
-    FOREIGN KEY (userId) REFERENCES User(userId)
-);
+
 
 CREATE TABLE Item(
     itemId integer primary key auto_increment,
@@ -51,10 +46,9 @@ CREATE TABLE Item(
     price real not null,
     itemTax real not null,
     quantity integer not null,
-	categoryId integer,
+	category varchar(64),
     carId integer,
     FOREIGN KEY (orderId) REFERENCES `Order`(orderId),
-    FOREIGN KEY (categoryId) REFERENCES ItemCategory(categoryId),
     FOREIGN KEY (carId) REFERENCES Car(carId)
 );
 

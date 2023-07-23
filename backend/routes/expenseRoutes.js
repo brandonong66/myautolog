@@ -9,7 +9,7 @@ router.get("/getExpenses", authenticateToken, async (req, res) => {
       res.status(422).json({ error: "bad login token" })
     } else {
       const query =
-        "SELECT `Order`.storeOrderId, `Order`.orderDate, `Order`.source, `Order`.url, Item.itemId, Item.itemName, Item.itemBrand, Item.partNumber, Item.notes, Item.quantity, Item.price, Item.itemTax, Car.userLabel FROM `Order` JOIN Item on Item.orderId = `Order`.orderId JOIN Car ON Car.carId = Item.carId WHERE `Order`.userId = ?;"
+        "SELECT `Order`.storeOrderId, `Order`.orderDate, `Order`.source, `Order`.url, Item.itemId, Item.itemName, Item.category, Item.itemBrand, Item.partNumber, Item.notes, Item.quantity, Item.price, Item.itemTax, Car.userLabel FROM `Order` JOIN Item on Item.orderId = `Order`.orderId JOIN Car ON Car.carId = Item.carId WHERE `Order`.userId = ?;"
       const queryValues = [req.userId]
 
       const [rows, fields] = await dbConnectionPool

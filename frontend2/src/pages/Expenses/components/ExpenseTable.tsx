@@ -22,6 +22,7 @@ type expenseData = {
   price: number
   itemTax: number
   userLabel: string
+  category: string
 }
 const columns: ColumnDef<expenseData>[] = [
   {
@@ -162,6 +163,13 @@ const columns: ColumnDef<expenseData>[] = [
       <DataTableColumnHeader column={column} title="Notes" />
     ),
   },
+
+  {
+    accessorKey: "category",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Category" />
+    ),
+  }
 ]
 interface expenseTableProps {
   className?: string
