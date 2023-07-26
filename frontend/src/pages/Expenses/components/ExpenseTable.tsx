@@ -26,9 +26,23 @@ type expenseData = {
 }
 const columns: ColumnDef<expenseData>[] = [
   {
+    accessorKey: "itemName",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Item Name" />
+    ),
+    cell: ({ row }) => {
+      const itemName: string = row.getValue("itemName")
+      return (
+        <CustomCell className="max-w-[200px]">
+          <>{itemName}</>
+        </CustomCell>
+      )
+    },
+  },
+  {
     accessorKey: "userLabel",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="User Label" />
+      <DataTableColumnHeader column={column} title="Car" />
     ),
   },
   {
@@ -85,20 +99,7 @@ const columns: ColumnDef<expenseData>[] = [
       )
     },
   },
-  {
-    accessorKey: "itemName",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Item Name" />
-    ),
-    cell: ({ row }) => {
-      const itemName: string = row.getValue("itemName")
-      return (
-        <CustomCell className="max-w-[200px]">
-          <>{itemName}</>
-        </CustomCell>
-      )
-    },
-  },
+
   {
     accessorKey: "itemBrand",
     header: ({ column }) => (
@@ -169,7 +170,7 @@ const columns: ColumnDef<expenseData>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Category" />
     ),
-  }
+  },
 ]
 interface expenseTableProps {
   className?: string

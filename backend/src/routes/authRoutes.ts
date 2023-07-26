@@ -1,9 +1,9 @@
-const express = require("express")
-const router = express.Router()
-const bcrypt = require("bcrypt")
-const jwt = require("jsonwebtoken")
-const dbConnectionPool = require("../utilities/db")
+import express, { Request, Response } from "express"
+import bcrypt from "bcrypt"
+import jwt from "jsonwebtoken"
+import { dbConnectionPool } from "../utilities/db"
 
+const router = express.Router()
 const EXPIRE_TIME = {
   jwt: "1h",
   cookie: new Date(Date.now() + 60 * 60 * 1000), // 1 hour
@@ -22,11 +22,10 @@ router.post("/login", async (req, res) => {
       const userQueryValues = [email]
 
       const [rows, fields] = await dbConnectionPool
-        .promise()
         .query(userQuery, userQueryValues)
 
       // does user with specified email exist?
-      if (!rows.length) {
+      if (Array.isArray(rows) && rows.length === 0) {
         return res.status(401).json({ error: "Invalid email or password" })
       }
 
@@ -89,11 +88,11 @@ router.post("/logout", async (req, res) => {
       secure: true,
       sameSite: "strict",
     })
-    res.json({message: "Logout successful"})
+    res.json({ message: "Logout successful" })
   } catch (error) {
     console.log(error)
     console.error(error.message)
     return res.status(500).json({ error: "Internal Server Error" })
   }
 })
-module.exports = router
+export default router

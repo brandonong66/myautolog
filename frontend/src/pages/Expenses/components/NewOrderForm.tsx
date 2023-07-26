@@ -74,9 +74,9 @@ function NewOrderForm({ className }: NewOrderFormProps) {
           price: 0,
           itemTax: 0,
           quantity: 1,
-          carId: cars[0]?.carId,
+          carId: cars[0] ? cars[0].carId : 0,
           notes: "",
-          category: "Other"
+          category: "Other",
         },
       ],
     },
@@ -102,8 +102,6 @@ function NewOrderForm({ className }: NewOrderFormProps) {
   const watchTotalPrice = watch("totalPrice", 0)
 
   useEffect(() => {
-    console.log(form.getValues())
-
     // step 1: calculate subtotal based on item prices and quantities
     let newSubtotal = 0
     watchItems.forEach((item) => {
@@ -294,14 +292,7 @@ function NewOrderForm({ className }: NewOrderFormProps) {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>* Item Name</FormLabel>
-                          <FormControl
-                            onChange={() => {
-                              // console.log(
-                              //   form.getValues(`items.${index}.itemName`)
-                              // )
-                              console.log(form.getValues())
-                            }}
-                          >
+                          <FormControl>
                             <Input {...field} type="text" />
                           </FormControl>
                           <FormMessage />
@@ -400,12 +391,15 @@ function NewOrderForm({ className }: NewOrderFormProps) {
                           <FormControl>
                             <Select
                               onValueChange={field.onChange}
-                              defaultValue={cars[0]?.carId.toString()}
+                              defaultValue={"0"}
                             >
                               <SelectTrigger>
                                 <SelectValue placeholder="car" />
                               </SelectTrigger>
                               <SelectContent>
+                                <SelectItem key={0} value={"0"}>
+                                  None
+                                </SelectItem>
                                 {cars.map((car: CarType) => (
                                   <SelectItem
                                     key={car.carId}
@@ -486,7 +480,7 @@ function NewOrderForm({ className }: NewOrderFormProps) {
                   price: 0,
                   itemTax: 0,
                   quantity: 1,
-                  category: "Other"
+                  category: "Other",
                 })
               }}
             >

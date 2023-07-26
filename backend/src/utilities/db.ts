@@ -1,6 +1,6 @@
-const mysql = require("mysql2")
+import mysql from "mysql2/promise"
 
-const dbConnectionPool = mysql.createPool({
+export const dbConnectionPool = mysql.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
@@ -10,4 +10,3 @@ const dbConnectionPool = mysql.createPool({
   queueLimit: 0,
 })
 
-module.exports = dbConnectionPool

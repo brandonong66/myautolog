@@ -11,11 +11,15 @@
     "node": "^20.2.0"
   },
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js"
+    "start": "node dist/index.js",
+    "dev": "tsc -w & nodemon dist/index.js",
+    "build": "rm -rf dist && npx tsc"
   },
   "devDependencies": {
+    "@types/express": "^4.17.17",
+    "@types/node": "^20.4.4",
     "nodemon": "^2.0.22",
-    "sqlite3": "^5.1.6"
+    "sqlite3": "^5.1.6",
+    "typescript": "^5.1.6"
   }
 }

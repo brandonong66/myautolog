@@ -1,7 +1,8 @@
-const express = require("express")
+import express from "express"
+
+import bcrypt from "bcrypt"
+import { dbConnectionPool } from "../utilities/db"
 const router = express.Router()
-const bcrypt = require("bcrypt")
-const dbConnectionPool = require("../utilities/db")
 
 router.post("/signup", async (req, res) => {
   try {
@@ -14,9 +15,7 @@ router.post("/signup", async (req, res) => {
       const query = "INSERT INTO User (email, password) VALUES (?, ?)"
       const queryValues = [req.body.email, hashedPassword]
 
-      const [rows, fields] = await dbConnectionPool
-        .promise()
-        .query(query, queryValues)
+      const [rows, fields] = await dbConnectionPool.query(query, queryValues)
       return res.json({ message: "User created" })
     }
   } catch (error) {

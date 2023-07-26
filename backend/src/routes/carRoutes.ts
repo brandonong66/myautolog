@@ -1,9 +1,11 @@
-const express = require("express")
+import express from "express"
+import authenticateToken from "../middleware/authenticateToken"
+import { dbConnectionPool } from "../utilities/db"
+import { AuthenticatedRequest } from "../types"
 const router = express.Router()
-const authenticateToken = require("../middleware/authenticateToken")
-const dbConnectionPool = require("../utilities/db")
 
-router.get("/getCars", authenticateToken, async (req, res) => {
+
+router.get("/getCars", authenticateToken, async (req:AuthenticatedRequest, res) => {
   try {
     if (!req.userId) {
       res.status(422).json({ error: "bad login token" })
@@ -12,7 +14,6 @@ router.get("/getCars", authenticateToken, async (req, res) => {
       const queryValues = [req.userId]
 
       const [rows, fields] = await dbConnectionPool
-        .promise()
         .query(query, queryValues)
       return res.json(rows)
     }
@@ -22,7 +23,7 @@ router.get("/getCars", authenticateToken, async (req, res) => {
   }
 })
 
-router.post("/add", authenticateToken, async (req, res) => {
+router.post("/add", authenticateToken, async (req: AuthenticatedRequest, res) => {
   try {
     if (!req.userId) {
       res.status(422).json({ error: "bad login token" })
@@ -51,7 +52,6 @@ router.post("/add", authenticateToken, async (req, res) => {
         req.body.notes,
       ]
       const [rows, fields] = await dbConnectionPool
-        .promise()
         .query(query, queryValues)
       return res.json({ message: "Car added" })
     }
@@ -60,7 +60,7 @@ router.post("/add", authenticateToken, async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" })
   }
 })
-router.put("/update", authenticateToken, async (req, res) => {
+router.put("/update", authenticateToken, async (req: AuthenticatedRequest, res) => {
   try {
     if (!req.userId) {
       res.status(422).json({ error: "bad login token" })
@@ -81,7 +81,6 @@ router.put("/update", authenticateToken, async (req, res) => {
         req.body.carId,
       ]
       const [rows, fields] = await dbConnectionPool
-        .promise()
         .query(query, queryValues)
       return res.json({ message: "Car updated" })
     }
