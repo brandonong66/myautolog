@@ -40,7 +40,7 @@ export default function LoginForm() {
     console.log(values)
     authenticateUser(values)
       .then((res) => {
-        window.location.assign("/")
+        // window.location.assign("/")
       })
       .catch((err) => {
         setLoginError(err.error)

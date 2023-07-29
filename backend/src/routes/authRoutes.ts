@@ -2,13 +2,14 @@ import express, { Request, Response } from "express"
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 import { dbConnectionPool } from "../utilities/db"
+import logRequests from "../middleware/logRequests"
 
 const router = express.Router()
-const EXPIRE_TIME = {
-  jwt: "1h",
-  cookie: new Date(Date.now() + 60 * 60 * 1000), // 1 hour
-}
-router.post("/login", async (req, res) => {
+
+const JWT_EXPIRE_TIME = "1h"
+const COOKIE_EXPIRE_TIME = 60 * 60 * 1000 // 60 * 60 * 1000 = 1 hr
+
+router.post("/login", logRequests, async (req, res) => {
   try {
     // check inputs
     if (!req.body.email) {
@@ -21,8 +22,10 @@ router.post("/login", async (req, res) => {
       const userQuery = "SELECT * FROM User WHERE email = ?"
       const userQueryValues = [email]
 
-      const [rows, fields] = await dbConnectionPool
-        .query(userQuery, userQueryValues)
+      const [rows, fields] = await dbConnectionPool.query(
+        userQuery,
+        userQueryValues
+      )
 
       // does user with specified email exist?
       if (Array.isArray(rows) && rows.length === 0) {
@@ -38,13 +41,13 @@ router.post("/login", async (req, res) => {
 
         // set auth token cookie (for auth purposes, secure)
         const authToken = jwt.sign(payload, process.env.JWT_SECRET, {
-          expiresIn: EXPIRE_TIME.jwt,
+          expiresIn: JWT_EXPIRE_TIME,
         })
         res.cookie("authToken", authToken, {
           httpOnly: true,
           secure: true,
           sameSite: "strict",
-          expires: EXPIRE_TIME.cookie,
+          expires: new Date(Date.now() + COOKIE_EXPIRE_TIME),
         })
 
         // set clientAuthToken cookie (for frontend use, not secure)
@@ -55,9 +58,9 @@ router.post("/login", async (req, res) => {
           httpOnly: false,
           secure: true,
           sameSite: "strict",
-          expires: EXPIRE_TIME.cookie,
+          expires: new Date(Date.now() + COOKIE_EXPIRE_TIME),
         })
-
+        console.log(authToken)
         res.json({ message: "Login successful" })
       }
 

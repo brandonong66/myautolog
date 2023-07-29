@@ -14,6 +14,7 @@ export function authenticateUser(params: userParams) {
       })
       .then((response) => {
         resolve(response.data)
+        window.location.href = "/"
       })
       .catch((error) => {
         if (error.response) {
