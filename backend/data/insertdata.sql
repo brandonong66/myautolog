@@ -4,14 +4,14 @@ INSERT INTO Car (carId, userId, userLabel, year, make, model, notes) VALUES
 (1, 1, "E30", 1991, "BMW", "325i", "Convertible. M50B25 Swapped"),
 (2, 1, "E90", 2006, "BMW" , "325i", "Sedan. Bagged on airtekk struts and airlift v2 management");
 
-INSERT INTO `Order` (orderId, userId, storeOrderId, source, url, orderDate, expectedArrivalDate, subtotalPrice, orderTax, shippingPrice, totalPrice) VALUES
-(1, 1, "R576474056", "fcpeuro", "https://www.fcpeuro.com/orders/R576474056", "2023-02-11", "2023-02-22", "84.77", "7.95", "0", "92.72"),
-(2, 1, "R918389183", "fcpeuro", "https://www.fcpeuro.com/orders/R918389183", "2023-02-01", "2023-02-14", "49.37", "4.62", "0", "53.99"),
-(3, 1, "R999055397", "fcpeuro", "https://www.fcpeuro.com/orders/R999055397", "2023-01-24", "2023-02-03", "135.85", "12.74", "0", "148.59"),
-(4, 1, "R151286134", "fcpeuro", "https://www.fcpeuro.com/orders/R151286134", "2022-10-28", "2022-11-08", "157.56", "14.76", "0", "172.32"),
-(5, 1, "557036", "bimmerworld", "https://secure.bimmerworld.com/myaccount-1-06-0/index.ssp?sc=6#/ordershistory/view/2504754", "2022-07-29", null, "49.97", "4.68", "15.99", "70.64"),
-(6, 1, "556052", "bimmerworld", "https://secure.bimmerworld.com/myaccount-1-06-0/index.ssp?sc=6#/ordershistory/view/2492293", "2022-07-24", null, "61.07", "5.73", "15.99", "82.79"),
-(7, 1, "GAR41400", "garagistic", "https://www.garagistic.com/account/orders/1b0b405b6727d55b5751eaeba2a076ce", "2022-09-20", null, "111.55", "8.09", "43.12", "162.76");
+INSERT INTO `Order` (orderId, userId, storeOrderId, source, url, orderDate, subtotalPrice, orderTax, shippingPrice, totalPrice) VALUES
+(1, 1, "R576474056", "fcpeuro", "https://www.fcpeuro.com/orders/R576474056", "2023-02-11",  "84.77", "7.95", "0", "92.72"),
+(2, 1, "R918389183", "fcpeuro", "https://www.fcpeuro.com/orders/R918389183", "2023-02-01",  "49.37", "4.62", "0", "53.99"),
+(3, 1, "R999055397", "fcpeuro", "https://www.fcpeuro.com/orders/R999055397", "2023-01-24",  "135.85", "12.74", "0", "148.59"),
+(4, 1, "R151286134", "fcpeuro", "https://www.fcpeuro.com/orders/R151286134", "2022-10-28", "157.56", "14.76", "0", "172.32"),
+(5, 1, "557036", "bimmerworld", "https://secure.bimmerworld.com/myaccount-1-06-0/index.ssp?sc=6#/ordershistory/view/2504754", "2022-07-29", "49.97", "4.68", "15.99", "70.64"),
+(6, 1, "556052", "bimmerworld", "https://secure.bimmerworld.com/myaccount-1-06-0/index.ssp?sc=6#/ordershistory/view/2492293", "2022-07-24", "61.07", "5.73", "15.99", "82.79"),
+(7, 1, "GAR41400", "garagistic", "https://www.garagistic.com/account/orders/1b0b405b6727d55b5751eaeba2a076ce", "2022-09-20",  "111.55", "8.09", "43.12", "162.76");
 
 
 INSERT INTO Item (itemId, orderId, itemName, itemBrand, partNumber, notes, price, itemTax, quantity, category, carId) VALUES

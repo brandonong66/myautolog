@@ -28,7 +28,6 @@ CREATE TABLE `Order`(
     `source` varchar(255),
 	url varchar(255),
     orderDate date not null,
-    expectedArrivalDate date,
     subtotalPrice real not null,
     orderTax real not null,
     shippingPrice real not null,

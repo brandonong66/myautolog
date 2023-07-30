@@ -53,25 +53,7 @@ const columns: ColumnDef<orderData>[] = [
       )
     },
   },
-  {
-    accessorKey: "expectedArrivalDate",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Expected Arrival Date" />
-    ),
-    cell: ({ row }) => {
-      const expectedArrivalDate = new Date(row.getValue("expectedArrivalDate"))
-      const formattedDate = new Intl.DateTimeFormat("en-us", {
-        year: "numeric",
-        month: "numeric",
-        day: "numeric",
-      }).format(expectedArrivalDate)
-      return (
-        <CustomCell>
-          <>{formattedDate}</>
-        </CustomCell>
-      )
-    },
-  },
+  
   {
     accessorKey: "source",
     header: ({ column }) => (

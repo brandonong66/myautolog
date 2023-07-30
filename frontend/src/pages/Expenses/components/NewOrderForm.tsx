@@ -25,6 +25,8 @@ import {
 } from "../../../components/ui/select"
 import { getCars } from "../../../lib/carFunctions"
 import { CarType } from "../../../types/car"
+import { submitOrder } from "../../../lib/expenseFunctions"
+
 const itemSchema = z.object({
   itemName: z.string().nonempty({ message: "Item name required" }),
   itemBrand: z.string(),
@@ -92,6 +94,18 @@ function NewOrderForm({ className }: NewOrderFormProps) {
 
   async function onSubmit(values: z.infer<typeof orderSchema>) {
     console.log(values)
+    const orderInfo = {
+      storeOrderId: values.storeOrderId,
+      orderDate: values.orderDate,
+      source: values.source ? values.source : "",
+      url: values.url ? values.url : "",
+      subtotalPrice: values.subtotalPrice,
+      shippingPrice: values.shippingPrice,
+      orderTax: values.orderTax,
+      totalPrice: values.totalPrice,
+    }
+    const items = values.items
+    submitOrder(orderInfo, items)
   }
 
   // watch form data for changes

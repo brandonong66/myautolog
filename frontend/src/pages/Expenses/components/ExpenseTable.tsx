@@ -181,7 +181,6 @@ function ExpenseTable({ className }: expenseTableProps) {
     getExpenses()
       .then((data) => {
         setData(data)
-        console.log(data)
       })
       .catch((err) => {
         console.log(err)
