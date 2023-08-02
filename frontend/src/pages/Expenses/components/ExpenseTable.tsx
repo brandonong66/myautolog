@@ -26,6 +26,26 @@ type expenseData = {
 }
 const columns: ColumnDef<expenseData>[] = [
   {
+    accessorKey: "orderDate",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Order Date" />
+    ),
+    cell: ({ row }) => {
+      const orderDate = new Date(row.getValue("orderDate"))
+      const formattedDate = new Intl.DateTimeFormat("en-us", {
+        year: "numeric",
+        month: "numeric",
+        day: "numeric",
+      }).format(orderDate)
+
+      return (
+        <CustomCell>
+          <>{formattedDate}</>
+        </CustomCell>
+      )
+    },
+  },
+  {
     accessorKey: "itemName",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Item Name" />
@@ -59,26 +79,7 @@ const columns: ColumnDef<expenseData>[] = [
       )
     },
   },
-  {
-    accessorKey: "orderDate",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Order Date" />
-    ),
-    cell: ({ row }) => {
-      const orderDate = new Date(row.getValue("orderDate"))
-      const formattedDate = new Intl.DateTimeFormat("en-us", {
-        year: "numeric",
-        month: "numeric",
-        day: "numeric",
-      }).format(orderDate)
 
-      return (
-        <CustomCell>
-          <>{formattedDate}</>
-        </CustomCell>
-      )
-    },
-  },
   {
     accessorKey: "source",
     header: ({ column }) => (
@@ -141,7 +142,7 @@ const columns: ColumnDef<expenseData>[] = [
   {
     accessorKey: "itemTax",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Item Tax" />
+      <DataTableColumnHeader column={column} title="Tax" />
     ),
     cell: ({ row }) => {
       const itemTax = parseFloat(row.getValue("itemTax"))
@@ -153,6 +154,27 @@ const columns: ColumnDef<expenseData>[] = [
       return (
         <CustomCell>
           <>{formattedItemTax}</>
+        </CustomCell>
+      )
+    },
+  },
+  {
+    accessorKey: "total",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Total" />
+    ),
+    cell: ({ row }) => {
+      const price = parseFloat(row.getValue("price"))
+      const itemTax = parseFloat(row.getValue("itemTax"))
+      const total = (price + itemTax) * parseInt(row.getValue("quantity"))
+      const formattedTotal = new Intl.NumberFormat("en-us", {
+        style: "currency",
+        currency: "USD",
+      }).format(total)
+
+      return (
+        <CustomCell>
+          <>{formattedTotal}</>
         </CustomCell>
       )
     },
@@ -189,8 +211,12 @@ function ExpenseTable({ className }: expenseTableProps) {
 
   return (
     <div className={cn("", className)}>
-      <Card title="Main Expenses">
-        <DataTable columns={columns} data={data} />
+      <Card title="Items">
+        <DataTable
+          columns={columns}
+          data={data}
+          visibility={{ notes: false, url: false }}
+        />
       </Card>
     </div>
   )

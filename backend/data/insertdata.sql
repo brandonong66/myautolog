@@ -15,7 +15,7 @@ INSERT INTO `Order` (orderId, userId, storeOrderId, source, url, orderDate, subt
 
 
 INSERT INTO Item (itemId, orderId, itemName, itemBrand, partNumber, notes, price, itemTax, quantity, category, carId) VALUES
-(1, 1, "Coolant Level Sensor", "Febi Bilstein", "61311378320",  "", 13.69, 1.28, 1, "Maintenance", 1),
+(1, 1, "Coolant Level Sensor", "Febi Bilstein", "61311378320",  "", 13.69, 1.28, 2, "Maintenance", 1),
 (2, 1, "Oxygen Sensor", "Bosch", "11781247235", "", 57.99, 5.44, 1, "Maintenance", 1),
 (3, 2, "Valve Cover Screw Set", "Febi Bilstein", "11120409288", "", 26.39, 2.47, 1, "Maintenance", 1),
 (4, 2, "Windshield Wiper Blade", "Valeo", "61611387678", "", 11.49, 1.08, 2, "Maintenance", 1),

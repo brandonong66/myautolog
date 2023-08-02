@@ -32,7 +32,10 @@ const itemSchema = z.object({
   itemBrand: z.string(),
   partNumber: z.string(),
   price: z.coerce.number().nonnegative().default(0),
-  itemTax: z.coerce.number().nonnegative().default(0),
+  itemTax: z.coerce
+    .number()
+    .nonnegative({ message: "Negative number" })
+    .default(0),
   quantity: z.coerce.number().gt(0).default(1),
   category: z.string(),
   carId: z.coerce.number(),
@@ -47,7 +50,9 @@ const orderSchema = z.object({
   url: z.string().optional(),
   subtotalPrice: z.coerce.number().nonnegative(),
   shippingPrice: z.coerce.number().nonnegative(),
-  orderTax: z.coerce.number().nonnegative(),
+  orderTax: z.coerce.number().nonnegative({
+    message: "Negative number",
+  }),
   totalPrice: z.coerce.number().nonnegative(),
   items: z.array(itemSchema).nonempty(),
 })
@@ -114,40 +119,59 @@ function NewOrderForm({ className }: NewOrderFormProps) {
   const watchSubtotalPrice = watch("subtotalPrice", 0)
   const watchShippingPrice = watch("shippingPrice", 0)
   const watchTotalPrice = watch("totalPrice", 0)
+  const watchOrderTax = watch("orderTax", 0)
 
   useEffect(() => {
-    // step 1: calculate subtotal based on item prices and quantities
-    let newSubtotal = 0
-    watchItems.forEach((item) => {
-      const itemSubtotal = item.price * item.quantity
-      newSubtotal += itemSubtotal
+    form.clearErrors()
+
+    // step 1: update subtotal based on price of items
+    const newSubtotal: number = watchItems.reduce(
+      (acc, item) => acc + item.price * item.quantity,
+      0
+    )
+    form.setValue("subtotalPrice", newSubtotal)
+
+    // step 2: calculate tax based on total (user inputted total)
+    const newOrderTax: number =
+      watchTotalPrice - newSubtotal - watchShippingPrice
+    form.setValue("orderTax", newOrderTax)
+    // step 2.5: calculate tax rate based on total tax and subtotal
+    const taxRate = newOrderTax / newSubtotal
+
+    // step 3: update individual item tax based on total tax
+    watchItems.forEach((item, index) => {
+      const itemTax = item.price * taxRate
+      form.setValue(`items.${index}.itemTax`, itemTax ? itemTax : 0)
     })
-    form.setValue("subtotalPrice", parseFloat(newSubtotal.toFixed(2)))
 
-    // step 2: calculate order tax based on total, subtotal, and shipping
-    if (form.getValues("totalPrice") !== 0) {
-      const newOrderTax =
-        watchTotalPrice - watchSubtotalPrice - watchShippingPrice
+    // step 4: check if total price is greater than subtotal + shipping + tax
+    const parsedSubtotal =
+      typeof newSubtotal === "string" ? parseFloat(newSubtotal) : newSubtotal
+    const parsedShipping =
+      typeof watchShippingPrice === "string"
+        ? parseFloat(watchShippingPrice)
+        : watchShippingPrice
+    const parsedOrderTax =
+      typeof newOrderTax === "string" ? parseFloat(newOrderTax) : newOrderTax
 
-      // make sure Total price is valid (greater than subtotal + shipping)
-      if (
-        newOrderTax < 0 ||
-        watchTotalPrice < watchSubtotalPrice + watchShippingPrice
-      ) {
-        form.setError("totalPrice", {
-          type: "manual",
-          message: "Total must be greater than subtotal + shipping",
-        })
-      } else {
-        form.clearErrors("totalPrice")
-        form.setValue("orderTax", parseFloat(newOrderTax.toFixed(2)))
-      }
+    const parsedWatchTotal =
+      typeof watchTotalPrice === "string"
+        ? parseFloat(watchTotalPrice)
+        : watchTotalPrice
 
-      // step 3: once order tax is calculated, calculate individual item taxes
-      watchItems.forEach((item, index) => {
-        const itemTax = (item.price / watchSubtotalPrice) * newOrderTax
-        form.setValue(`items.${index}.itemTax`, parseFloat(itemTax.toFixed(2)))
+    const calculatedTotalNoShipping = parsedSubtotal + parsedShipping 
+
+    console.log(`calculated total: ${calculatedTotalNoShipping}`)
+    console.log(`watch total: ${parsedWatchTotal}`)
+    if (parsedWatchTotal < calculatedTotalNoShipping) {
+      form.setError("totalPrice", {
+        type: "manual",
+        // message: "Total must be greater than subtotal: + shipping",
+        message: `${parsedWatchTotal} must be greater than ${newSubtotal} + ${watchShippingPrice} = ${calculatedTotalNoShipping}`,
       })
+    } else {
+      form.clearErrors("totalPrice")
+      form.setValue("orderTax", parseFloat(newOrderTax.toFixed(2)))
     }
   }, [
     watchItems,

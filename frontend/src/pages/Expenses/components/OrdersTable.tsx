@@ -6,19 +6,9 @@ import Card from "../../../components/Card/Card"
 import { cn } from "../../../lib/utils"
 import CustomCell from "../../../components/DataTable/CustomCell"
 import { getOrders } from "../../../lib/expenseFunctions"
+import { OrderType } from "../../../types/expenses"
 
-type orderData = {
-  storeOrderId: string
-  orderDate: string
-  source: string
-  url: string
-  expectedArrivalDate: string
-  subtotalPrice: number
-  orderTax: number
-  shippingPrice: number
-  totalPrice: number
-}
-const columns: ColumnDef<orderData>[] = [
+const columns: ColumnDef<OrderType>[] = [
   {
     accessorKey: "storeOrderId",
     header: ({ column }) => (
@@ -85,7 +75,7 @@ const columns: ColumnDef<orderData>[] = [
   {
     accessorKey: "subtotalPrice",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Subtotal Price" />
+      <DataTableColumnHeader column={column} title="Subtotal" />
     ),
     cell: ({ row }) => {
       const subtotalPrice: number = row.getValue("subtotalPrice")
@@ -104,7 +94,7 @@ const columns: ColumnDef<orderData>[] = [
   {
     accessorKey: "shippingPrice",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Shipping Price" />
+      <DataTableColumnHeader column={column} title="Shipping" />
     ),
     cell: ({ row }) => {
       const shippingPrice: number = row.getValue("shippingPrice")
@@ -122,7 +112,7 @@ const columns: ColumnDef<orderData>[] = [
   {
     accessorKey: "orderTax",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Order Tax" />
+      <DataTableColumnHeader column={column} title="Tax" />
     ),
     cell: ({ row }) => {
       const orderTax: number = row.getValue("orderTax")
@@ -140,7 +130,7 @@ const columns: ColumnDef<orderData>[] = [
   {
     accessorKey: "totalPrice",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Total Price" />
+      <DataTableColumnHeader column={column} title="Total" />
     ),
     cell: ({ row }) => {
       const totalPrice: number = row.getValue("totalPrice")
@@ -161,7 +151,7 @@ interface OrdersTableProps {
   className?: string
 }
 function OrdersTable({ className }: OrdersTableProps) {
-  const [orders, setOrders] = useState<orderData[]>([])
+  const [orders, setOrders] = useState<OrderType[]>([])
   useEffect(() => {
     getOrders()
       .then((res) => {
