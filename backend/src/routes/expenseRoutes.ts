@@ -36,7 +36,7 @@ router.get(
         res.status(422).json({ error: "bad login token" })
       } else {
         const query =
-          "SELECT orderId, storeOrderId, source, url, orderDate, subtotalPrice, orderTax, shippingPrice, totalPrice FROM `Order` WHERE userId = ?;"
+          "SELECT orderId, storeOrderId, source, url, orderDate, subtotalPrice, orderTax, shippingPrice, totalPrice FROM `Order` WHERE userId = ? ORDER BY `Order`.orderDate DESC;"
         const queryValues = [req.userId]
 
         const [rows, fields] = await dbConnectionPool.query(query, queryValues)

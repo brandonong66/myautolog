@@ -25,6 +25,7 @@ type expenseData = {
   category: string
 }
 const columns: ColumnDef<expenseData>[] = [
+ 
   {
     accessorKey: "orderDate",
     header: ({ column }) => (

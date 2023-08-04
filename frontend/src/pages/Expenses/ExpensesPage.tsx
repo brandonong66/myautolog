@@ -7,9 +7,9 @@ function ExpensesPage() {
   return (
     <PageLayout title="Expenses">
       <div className="flex flex-col items-center gap-4">
-        <NewOrderForm className="" />
-        <ExpenseTable className="" />
+        <NewOrderForm />
         <OrdersTable />
+        <ExpenseTable />
       </div>
     </PageLayout>
   )
