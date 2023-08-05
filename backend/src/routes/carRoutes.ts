@@ -1,7 +1,7 @@
 import express from "express"
 import authenticateToken from "../middleware/authenticateToken"
 import { dbConnectionPool } from "../utilities/db"
-import { AuthenticatedRequest } from "../types"
+import { AuthenticatedRequest } from "../types/requests"
 const router = express.Router()
 
 router.get(

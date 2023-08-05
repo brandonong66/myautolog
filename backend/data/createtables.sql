@@ -24,7 +24,7 @@ CREATE TABLE Car(
 CREATE TABLE `Order`(
     orderId integer primary key auto_increment,
     userId integer not null,
-    storeOrderId varchar(255),
+    storeOrderId varchar(255) unique,
     `source` varchar(255),
 	url varchar(255),
     orderDate date not null,

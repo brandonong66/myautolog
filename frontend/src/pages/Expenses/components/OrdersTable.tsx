@@ -1,15 +1,17 @@
-import { useEffect, useMemo, useState } from "react"
+import { Fragment, useEffect, useMemo, useState } from "react"
 
 // Icons
 import { ChevronRight, ChevronDown } from "lucide-react"
 // Types
-import { OrderType } from "../../../types/expenses"
+import { ItemType, OrderType } from "../../../types/expenses"
 
 // Functions
 import { cn } from "../../../lib/utils"
-import { getOrders } from "../../../lib/expenseFunctions"
+import { getAllOrderItems, getOrders } from "../../../lib/expenseFunctions"
+import { deleteOrder } from "../../../lib/expenseFunctions"
 
 // Components
+import { Button } from "../../../components/ui/button"
 import Card from "../../../components/Card/Card"
 import CustomCell from "../../../components/DataTable/CustomCell"
 import { Input } from "../../../components/ui/input"
@@ -21,6 +23,17 @@ import {
   TableHeader,
   TableRow,
 } from "../../../components/ui/table"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "../../../components/ui/alert-dialog"
 
 // Table Components
 import { DataTableColumnHeader } from "../../../components/DataTable/DataTableColumnHeader"
@@ -43,8 +56,12 @@ interface OrdersTableProps {
   className?: string
 }
 
+interface allOrderItems {
+  [storeOrderId: string]: ItemType[]
+}
 function OrdersTable({ className }: OrdersTableProps) {
   const [data, setData] = useState<OrderType[]>([])
+  const [allOrderItems, setAllOrderitems] = useState<allOrderItems>()
   const columns = useMemo<ColumnDef<OrderType>[]>(
     () => [
       {
@@ -241,7 +258,22 @@ function OrdersTable({ className }: OrdersTableProps) {
     },
   })
 
+  const delOrder = (storeOrderId: string) => {
+    // get order id from data given storeOrderId
+    const foundOrder = data.find((order) => order.storeOrderId === storeOrderId)
+    if (foundOrder) {
+      deleteOrder(foundOrder.orderId)
+    }
+  }
+
   useEffect(() => {
+    getAllOrderItems()
+      .then((res) => {
+        setAllOrderitems(res)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
     getOrders()
       .then((res) => {
         setData(res)
@@ -250,6 +282,7 @@ function OrdersTable({ className }: OrdersTableProps) {
         console.log(err)
       })
   }, [])
+
   return (
     <div className={cn("", className)}>
       <Card title="Orders">
@@ -291,7 +324,7 @@ function OrdersTable({ className }: OrdersTableProps) {
               <TableBody>
                 {table.getRowModel().rows?.length ? (
                   table.getRowModel().rows.map((row) => (
-                    <>
+                    <Fragment key={row.id}>
                       <TableRow
                         key={row.id}
                         data-state={row.getIsSelected() && "selected"}
@@ -307,10 +340,41 @@ function OrdersTable({ className }: OrdersTableProps) {
                       </TableRow>
                       {row.getIsExpanded() ? (
                         <TableRow>
-                          <TableCell colSpan={columns.length}>1234</TableCell>
+                          <TableCell colSpan={columns.length}>
+                            {allOrderItems && <p>...</p>}
+
+                            <AlertDialog>
+                              <AlertDialogTrigger asChild={true}>
+                                <Button variant="destructive">Delete</Button>
+                              </AlertDialogTrigger>
+                              <AlertDialogContent>
+                                <AlertDialogHeader>
+                                  <AlertDialogTitle>
+                                    Are you absolutely sure?
+                                  </AlertDialogTitle>
+                                  <AlertDialogDescription>
+                                    This action cannot be undone. This will
+                                    permanently delete this order and all of its
+                                    items.
+                                  </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                  <AlertDialogAction
+                                    className="bg-destructive hover:bg-destructive"
+                                    onClick={() => {
+                                      delOrder(row.getValue("storeOrderId"))
+                                    }}
+                                  >
+                                    Delete
+                                  </AlertDialogAction>
+                                </AlertDialogFooter>
+                              </AlertDialogContent>
+                            </AlertDialog>
+                          </TableCell>
                         </TableRow>
                       ) : null}
-                    </>
+                    </Fragment>
                   ))
                 ) : (
                   <TableRow>

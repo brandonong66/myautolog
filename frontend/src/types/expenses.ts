@@ -1,4 +1,5 @@
 export type OrderType = {
+  orderId: number
   storeOrderId: string
   orderDate: Date
   source: string

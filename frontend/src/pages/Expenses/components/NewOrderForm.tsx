@@ -1,9 +1,15 @@
 import { useEffect, useState } from "react"
+
+// components
+import { Alert } from "../../../components/ui/alert"
+import { Button } from "../../../components/ui/button"
 import Card from "../../../components/Card/Card"
+import { Separator } from "../../../components/ui/separator"
+
+// form components
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
 import { useForm, useFieldArray } from "react-hook-form"
-import { Button } from "../../../components/ui/button"
 import {
   Form,
   FormControl,
@@ -14,8 +20,6 @@ import {
 } from "../../../components/ui/form"
 import { DateInput } from "../../../components/DateInput"
 import { Input } from "../../../components/ui/input"
-import { Separator } from "../../../components/ui/separator"
-import { cn } from "../../../lib/utils"
 import {
   Select,
   SelectContent,
@@ -23,9 +27,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../../../components/ui/select"
+
+// functions
+import { cn } from "../../../lib/utils"
 import { getCars } from "../../../lib/carFunctions"
-import { CarType } from "../../../types/car"
 import { submitOrder } from "../../../lib/expenseFunctions"
+
+// types
+import { CarType } from "../../../types/car"
+
 
 const itemSchema = z.object({
   itemName: z.string().nonempty({ message: "Item name required" }),
@@ -62,6 +72,10 @@ interface NewOrderFormProps {
 }
 
 function NewOrderForm({ className }: NewOrderFormProps) {
+  const [formMessage, setFormMessage] = useState<{
+    type: "success" | "destructive"
+    message: string
+  }>()
   const [cars, setCars] = useState<CarType[]>([])
   const form = useForm<z.infer<typeof orderSchema>>({
     defaultValues: {
@@ -98,8 +112,8 @@ function NewOrderForm({ className }: NewOrderFormProps) {
   })
 
   async function onSubmit(values: z.infer<typeof orderSchema>) {
-    console.log(values)
     const orderInfo = {
+      orderId: -1, //doesn't matter, database will auto increment
       storeOrderId: values.storeOrderId,
       orderDate: values.orderDate,
       source: values.source ? values.source : "",
@@ -111,6 +125,18 @@ function NewOrderForm({ className }: NewOrderFormProps) {
     }
     const items = values.items
     submitOrder(orderInfo, items)
+      .then((res) => {
+        setFormMessage({
+          type: "success",
+          message: "Order submitted successfully",
+        })
+      })
+      .catch((error) => {
+        setFormMessage({
+          type: "destructive",
+          message: error.message,
+        })
+      })
   }
 
   // watch form data for changes
@@ -119,8 +145,8 @@ function NewOrderForm({ className }: NewOrderFormProps) {
   const watchSubtotalPrice = watch("subtotalPrice", 0)
   const watchShippingPrice = watch("shippingPrice", 0)
   const watchTotalPrice = watch("totalPrice", 0)
-  const watchOrderTax = watch("orderTax", 0)
 
+  // auto calculation
   useEffect(() => {
     form.clearErrors()
 
@@ -159,10 +185,8 @@ function NewOrderForm({ className }: NewOrderFormProps) {
         ? parseFloat(watchTotalPrice)
         : watchTotalPrice
 
-    const calculatedTotalNoShipping = parsedSubtotal + parsedShipping 
+    const calculatedTotalNoShipping = parsedSubtotal + parsedShipping
 
-    console.log(`calculated total: ${calculatedTotalNoShipping}`)
-    console.log(`watch total: ${parsedWatchTotal}`)
     if (parsedWatchTotal < calculatedTotalNoShipping) {
       form.setError("totalPrice", {
         type: "manual",
@@ -194,6 +218,12 @@ function NewOrderForm({ className }: NewOrderFormProps) {
 
   return (
     <Card title="New Order" className={cn("", className)}>
+      {formMessage && (
+        <Alert variant={formMessage.type} className="mb-4">
+          {formMessage.message}
+        </Alert>
+      )}
+
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="">
           <div className="flex gap-4">
