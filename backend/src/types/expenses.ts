@@ -21,4 +21,17 @@ export type OrderType = {
     itemTax: number
     quantity: number
   }
+
+  // same as ItemType but with carUserLabel instead of carId
+  export type ItemType2 ={
+    itemName: string
+    itemBrand: string
+    partNumber: string
+    notes: string
+    category: string
+    price: number
+    itemTax: number
+    quantity: number
+    carUserLabel: string
+  }
   

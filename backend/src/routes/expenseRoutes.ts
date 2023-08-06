@@ -3,7 +3,7 @@ import authenticateToken from "../middleware/authenticateToken"
 import { dbConnectionPool } from "../utilities/db"
 import { AuthenticatedRequest } from "../types/requests"
 import { Field, FieldPacket, OkPacket, RowDataPacket } from "mysql2/promise"
-import { ItemType } from "../types/expenses"
+import { ItemType, ItemType2 } from "../types/expenses"
 
 const router = express.Router()
 router.get(
@@ -202,7 +202,7 @@ router.get(
         return res.status(422).json({ error: "bad login token" })
       }
       const query =
-        "select `Order`.storeOrderId, itemName, itemBrand, partNumber, notes, price, itemTax, quantity, category, carId from Item join `Order` on Item.orderId = `Order`.orderId where `Order`.userId = ?;"
+        "select `Order`.storeOrderId, itemName, itemBrand, partNumber, Item.notes, price, itemTax, quantity, category, Car.userLabel from Item join `Order` on Item.orderId = `Order`.orderId left join Car on Item.carId = Car.carId where `Order`.userId = ?;"
       const queryArgs = [req.userId]
       const [rows, fields]: [RowDataPacket[], FieldPacket[]] =
         await dbConnectionPool.query(query, queryArgs)
@@ -211,7 +211,7 @@ router.get(
         if (rows.length > 0) {
           let orderItems = {}
           rows.forEach((row) => {
-            const item: ItemType = {
+            const item: ItemType2 = {
               itemName: row.itemName,
               itemBrand: row.itemBrand,
               partNumber: row.partNumber,
@@ -220,7 +220,7 @@ router.get(
               itemTax: row.itemTax,
               quantity: row.quantity,
               category: row.category,
-              carId: row.carId,
+              carUserLabel: row.userLabel,
             }
             const key = `${row.storeOrderId}`
             if (orderItems.hasOwnProperty(key)) {

@@ -3,7 +3,7 @@ import { Fragment, useEffect, useMemo, useState } from "react"
 // Icons
 import { ChevronRight, ChevronDown } from "lucide-react"
 // Types
-import { ItemType, OrderType } from "../../../types/expenses"
+import { ItemType2, OrderType } from "../../../types/expenses"
 
 // Functions
 import { cn } from "../../../lib/utils"
@@ -13,7 +13,6 @@ import { deleteOrder } from "../../../lib/expenseFunctions"
 // Components
 import { Button } from "../../../components/ui/button"
 import Card from "../../../components/Card/Card"
-import CustomCell from "../../../components/DataTable/CustomCell"
 import { Input } from "../../../components/ui/input"
 import {
   Table,
@@ -34,6 +33,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "../../../components/ui/alert-dialog"
+import OrderSubtable from "./OrderSubtable"
 
 // Table Components
 import { DataTableColumnHeader } from "../../../components/DataTable/DataTableColumnHeader"
@@ -49,6 +49,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table"
+import CustomCell from "../../../components/DataTable/CustomCell"
 import { DataTablePagination } from "../../../components/DataTable/DataTablePagination"
 import { DataTableViewOptions } from "../../../components/DataTable/DataTableViewOptions"
 
@@ -57,7 +58,7 @@ interface OrdersTableProps {
 }
 
 interface allOrderItems {
-  [storeOrderId: string]: ItemType[]
+  [storeOrderId: string]: ItemType2[]
 }
 function OrdersTable({ className }: OrdersTableProps) {
   const [data, setData] = useState<OrderType[]>([])
@@ -323,59 +324,72 @@ function OrdersTable({ className }: OrdersTableProps) {
               </TableHeader>
               <TableBody>
                 {table.getRowModel().rows?.length ? (
-                  table.getRowModel().rows.map((row) => (
-                    <Fragment key={row.id}>
-                      <TableRow
-                        key={row.id}
-                        data-state={row.getIsSelected() && "selected"}
-                      >
-                        {row.getVisibleCells().map((cell) => (
-                          <TableCell key={cell.id}>
-                            {flexRender(
-                              cell.column.columnDef.cell,
-                              cell.getContext()
-                            )}
-                          </TableCell>
-                        ))}
-                      </TableRow>
-                      {row.getIsExpanded() ? (
-                        <TableRow>
-                          <TableCell colSpan={columns.length}>
-                            {allOrderItems && <p>...</p>}
+                  table.getRowModel().rows.map((row) => {
+                    const soi: string = row.getValue("storeOrderId")
+                    const rowItems = allOrderItems ? allOrderItems[soi] : null
 
-                            <AlertDialog>
-                              <AlertDialogTrigger asChild={true}>
-                                <Button variant="destructive">Delete</Button>
-                              </AlertDialogTrigger>
-                              <AlertDialogContent>
-                                <AlertDialogHeader>
-                                  <AlertDialogTitle>
-                                    Are you absolutely sure?
-                                  </AlertDialogTitle>
-                                  <AlertDialogDescription>
-                                    This action cannot be undone. This will
-                                    permanently delete this order and all of its
-                                    items.
-                                  </AlertDialogDescription>
-                                </AlertDialogHeader>
-                                <AlertDialogFooter>
-                                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                  <AlertDialogAction
-                                    className="bg-destructive hover:bg-destructive"
-                                    onClick={() => {
-                                      delOrder(row.getValue("storeOrderId"))
-                                    }}
-                                  >
-                                    Delete
-                                  </AlertDialogAction>
-                                </AlertDialogFooter>
-                              </AlertDialogContent>
-                            </AlertDialog>
-                          </TableCell>
+                    return (
+                      <Fragment key={row.id}>
+                        <TableRow
+                          key={row.id}
+                          data-state={row.getIsSelected() && "selected"}
+                        >
+                          {row.getVisibleCells().map((cell) => (
+                            <TableCell key={cell.id}>
+                              {flexRender(
+                                cell.column.columnDef.cell,
+                                cell.getContext()
+                              )}
+                            </TableCell>
+                          ))}
                         </TableRow>
-                      ) : null}
-                    </Fragment>
-                  ))
+                        {row.getIsExpanded() ? (
+                          <TableRow>
+                            <TableCell colSpan={columns.length}>
+                              <OrderSubtable items={rowItems} />
+                              <div className="flex justify-end">
+                                <AlertDialog>
+                                  <AlertDialogTrigger asChild={true}>
+                                    <Button
+                                      
+                                      variant="destructive"
+                                    >
+                                      Delete
+                                    </Button>
+                                  </AlertDialogTrigger>
+                                  <AlertDialogContent>
+                                    <AlertDialogHeader>
+                                      <AlertDialogTitle>
+                                        Are you absolutely sure?
+                                      </AlertDialogTitle>
+                                      <AlertDialogDescription>
+                                        This action cannot be undone. This will
+                                        permanently delete this order and all of
+                                        its items.
+                                      </AlertDialogDescription>
+                                    </AlertDialogHeader>
+                                    <AlertDialogFooter>
+                                      <AlertDialogCancel>
+                                        Cancel
+                                      </AlertDialogCancel>
+                                      <AlertDialogAction
+                                        className="bg-destructive hover:bg-destructive"
+                                        onClick={() => {
+                                          delOrder(row.getValue("storeOrderId"))
+                                        }}
+                                      >
+                                        Delete
+                                      </AlertDialogAction>
+                                    </AlertDialogFooter>
+                                  </AlertDialogContent>
+                                </AlertDialog>
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        ) : null}
+                      </Fragment>
+                    )
+                  })
                 ) : (
                   <TableRow>
                     <TableCell
