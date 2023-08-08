@@ -130,6 +130,7 @@ function NewOrderForm({ className }: NewOrderFormProps) {
           type: "success",
           message: "Order submitted successfully",
         })
+        window.location.reload()
       })
       .catch((error) => {
         setFormMessage({

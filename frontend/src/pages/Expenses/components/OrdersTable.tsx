@@ -263,7 +263,7 @@ function OrdersTable({ className }: OrdersTableProps) {
     // get order id from data given storeOrderId
     const foundOrder = data.find((order) => order.storeOrderId === storeOrderId)
     if (foundOrder) {
-      deleteOrder(foundOrder.orderId)
+      deleteOrder(foundOrder.orderId).then((_) => window.location.reload())
     }
   }
 
@@ -350,10 +350,7 @@ function OrdersTable({ className }: OrdersTableProps) {
                               <div className="flex justify-end">
                                 <AlertDialog>
                                   <AlertDialogTrigger asChild={true}>
-                                    <Button
-                                      
-                                      variant="destructive"
-                                    >
+                                    <Button variant="destructive">
                                       Delete
                                     </Button>
                                   </AlertDialogTrigger>

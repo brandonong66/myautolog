@@ -36,7 +36,7 @@ function OrderSubtable({
   items,
 }: {
   className?: string
-  items: ItemType2[]
+  items: ItemType2[] | null
 }) {
   const columns = useMemo<ColumnDef<ItemType2>[]>(
     () => [
