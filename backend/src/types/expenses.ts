@@ -7,6 +7,7 @@ export type OrderType = {
     subtotalPrice: number
     orderTax: number
     shippingPrice: number
+    discount: number
     totalPrice: number
   }
   

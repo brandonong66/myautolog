@@ -38,7 +38,7 @@ router.get(
         res.status(422).json({ error: "bad login token" })
       } else {
         const query =
-          "SELECT orderId, storeOrderId, source, url, orderDate, subtotalPrice, orderTax, shippingPrice, totalPrice FROM `Order` WHERE userId = ? ORDER BY `Order`.orderDate DESC;"
+          "SELECT orderId, storeOrderId, source, url, orderDate, subtotalPrice, orderTax, shippingPrice, discount, totalPrice FROM `Order` WHERE userId = ? ORDER BY `Order`.orderDate DESC;"
         const queryValues = [req.userId]
 
         const [rows, fields] = await dbConnectionPool.query(query, queryValues)
@@ -60,7 +60,7 @@ router.post(
     }
 
     const orderQuery =
-      "INSERT INTO `Order` (userId, storeOrderId, source, url, orderDate, subtotalPrice, orderTax, shippingPrice, totalPrice) VALUES (?,?,?,?,?,?,?,?,?);"
+      "INSERT INTO `Order` (userId, storeOrderId, source, url, orderDate, subtotalPrice, orderTax, shippingPrice, discount, totalPrice) VALUES (?,?,?,?,?,?,?,?,?,?);"
     const orderValues = [
       req.userId,
       req.body.order.storeOrderId,
@@ -70,6 +70,7 @@ router.post(
       req.body.order.subtotalPrice,
       req.body.order.orderTax,
       req.body.order.shippingPrice,
+      req.body.order.discount,
       req.body.order.totalPrice,
     ]
 

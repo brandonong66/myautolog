@@ -31,31 +31,6 @@ export const options = {
   },
 }
 
-const labels = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-]
-
-export const data = {
-  labels,
-  datasets: [
-    {
-      label: "Dataset 1",
-      data: labels.map(() => 10),
-      backgroundColor: "rgba(255, 99, 132, 0.5)",
-    },
-  ],
-}
 
 function MonthlySpending() {
   const [monthlySpending, setMonthlySpending] =

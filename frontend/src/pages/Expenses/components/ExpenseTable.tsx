@@ -25,7 +25,6 @@ type expenseData = {
   category: string
 }
 const columns: ColumnDef<expenseData>[] = [
- 
   {
     accessorKey: "orderDate",
     header: ({ column }) => (
@@ -186,6 +185,14 @@ const columns: ColumnDef<expenseData>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Notes" />
     ),
+    cell: ({ row }) => {
+      const notes: string = row.getValue("notes")
+      return (
+        <CustomCell className="max-w-[100px]">
+          <p className="truncate">{notes}</p>
+        </CustomCell>
+      )
+    },
   },
 
   {

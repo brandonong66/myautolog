@@ -36,7 +36,6 @@ import { submitOrder } from "../../../lib/expenseFunctions"
 // types
 import { CarType } from "../../../types/car"
 
-
 const itemSchema = z.object({
   itemName: z.string().nonempty({ message: "Item name required" }),
   itemBrand: z.string(),
@@ -63,6 +62,7 @@ const orderSchema = z.object({
   orderTax: z.coerce.number().nonnegative({
     message: "Negative number",
   }),
+  discount: z.coerce.number().nonnegative(),
   totalPrice: z.coerce.number().nonnegative(),
   items: z.array(itemSchema).nonempty(),
 })
@@ -86,6 +86,7 @@ function NewOrderForm({ className }: NewOrderFormProps) {
       subtotalPrice: 0, // string because it's auto formatted into a number
       shippingPrice: 0,
       orderTax: 0,
+      discount: 0,
       totalPrice: 0,
       items: [
         {
@@ -121,6 +122,7 @@ function NewOrderForm({ className }: NewOrderFormProps) {
       subtotalPrice: values.subtotalPrice,
       shippingPrice: values.shippingPrice,
       orderTax: values.orderTax,
+      discount: values.discount,
       totalPrice: values.totalPrice,
     }
     const items = values.items
@@ -146,6 +148,7 @@ function NewOrderForm({ className }: NewOrderFormProps) {
   const watchSubtotalPrice = watch("subtotalPrice", 0)
   const watchShippingPrice = watch("shippingPrice", 0)
   const watchTotalPrice = watch("totalPrice", 0)
+  const watchDiscount = watch("discount", 0)
 
   // auto calculation
   useEffect(() => {
@@ -160,7 +163,7 @@ function NewOrderForm({ className }: NewOrderFormProps) {
 
     // step 2: calculate tax based on total (user inputted total)
     const newOrderTax: number =
-      watchTotalPrice - newSubtotal - watchShippingPrice
+      watchTotalPrice - (newSubtotal - watchDiscount) - watchShippingPrice
     form.setValue("orderTax", newOrderTax)
     // step 2.5: calculate tax rate based on total tax and subtotal
     const taxRate = newOrderTax / newSubtotal
@@ -186,13 +189,13 @@ function NewOrderForm({ className }: NewOrderFormProps) {
         ? parseFloat(watchTotalPrice)
         : watchTotalPrice
 
-    const calculatedTotalNoShipping = parsedSubtotal + parsedShipping
+    const calculatedTotalNoTax = parsedSubtotal - watchDiscount + parsedShipping
 
-    if (parsedWatchTotal < calculatedTotalNoShipping) {
+    if (parsedWatchTotal < calculatedTotalNoTax) {
       form.setError("totalPrice", {
         type: "manual",
         // message: "Total must be greater than subtotal: + shipping",
-        message: `${parsedWatchTotal} must be greater than ${newSubtotal} + ${watchShippingPrice} = ${calculatedTotalNoShipping}`,
+        message: `${parsedWatchTotal} must be greater than ${newSubtotal} - ${watchDiscount} + ${watchShippingPrice} = ${calculatedTotalNoTax}`,
       })
     } else {
       form.clearErrors("totalPrice")
@@ -203,6 +206,7 @@ function NewOrderForm({ className }: NewOrderFormProps) {
     JSON.stringify(watchItems),
     watchShippingPrice,
     watchSubtotalPrice,
+    watchDiscount,
     watchTotalPrice,
     form,
   ]) //stringify necessary for watching an update to an array item field but not the array itself i.e. a new item is added to the array
@@ -296,6 +300,18 @@ function NewOrderForm({ className }: NewOrderFormProps) {
             />
             <FormField
               control={form.control}
+              name="discount"
+              render={({ field }) => (
+                <FormItem className="w-20">
+                  <FormLabel>Discount</FormLabel>
+                  <FormControl>
+                    <Input {...field} type="number" />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
               name="shippingPrice"
               render={({ field }) => (
                 <FormItem className="w-20">
@@ -320,6 +336,7 @@ function NewOrderForm({ className }: NewOrderFormProps) {
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="totalPrice"

@@ -31,6 +31,7 @@ CREATE TABLE `Order`(
     subtotalPrice real not null,
     orderTax real not null,
     shippingPrice real not null,
+    discount real not null,
     totalPrice real not null
 );
 

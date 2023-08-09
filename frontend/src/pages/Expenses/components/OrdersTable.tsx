@@ -176,7 +176,24 @@ function OrdersTable({ className }: OrdersTableProps) {
           )
         },
       },
-
+      {
+        accessorKey: "discount",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title="Discount" />
+        ),
+        cell: ({ row }) => {
+          const discount: number = row.getValue("discount")
+          const formattedDiscount = new Intl.NumberFormat("en-us", {
+            style: "currency",
+            currency: "USD",
+          }).format(discount)
+          return (
+            <CustomCell>
+              <>{formattedDiscount}</>
+            </CustomCell>
+          )
+        },
+      },
       {
         accessorKey: "shippingPrice",
         header: ({ column }) => (
@@ -213,6 +230,7 @@ function OrdersTable({ className }: OrdersTableProps) {
           )
         },
       },
+
       {
         accessorKey: "totalPrice",
         header: ({ column }) => (
