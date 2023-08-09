@@ -39,6 +39,7 @@ CREATE TABLE `Order`(
 CREATE TABLE Item(
     itemId integer primary key auto_increment,
     orderId integer not null,
+    userId integer not null,
     itemName varchar(255) not null,
     itemBrand varchar(255),
     partNumber varchar(255),
@@ -49,7 +50,8 @@ CREATE TABLE Item(
 	category varchar(64),
     carId integer,
     FOREIGN KEY (orderId) REFERENCES `Order`(orderId),
-    FOREIGN KEY (carId) REFERENCES Car(carId)
+    FOREIGN KEY (carId) REFERENCES Car(carId),
+    FOREIGN KEY (userId) REFERENCES User(userId)
 );
 
 

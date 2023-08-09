@@ -12,3 +12,19 @@ export type MonthlySpendingFormatted = {
     backgroundColor: string
   }[]
 }
+
+export type CarSpendingType = {
+  userLabel: string
+  total_spending: number
+}
+
+export type CarSpendingFormatted = {
+  labels: string[]
+  datasets: {
+    label: string
+    data: number[]
+    backgroundColor: string[]
+    borderColor: string[]
+    borderWidth: number
+  }[]
+}

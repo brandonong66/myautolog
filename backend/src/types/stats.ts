@@ -3,3 +3,7 @@ export type MonthlySpendingType = {
     [month: string]: number
   }
 }
+export type CarSpendingType ={
+  userLabel: string
+  total_spending: number
+}

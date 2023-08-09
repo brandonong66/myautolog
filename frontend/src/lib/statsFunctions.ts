@@ -1,5 +1,10 @@
 import axios from "axios"
-import { MonthlySpendingType, MonthlySpendingFormatted } from "../types/stats"
+import {
+  MonthlySpendingType,
+  MonthlySpendingFormatted,
+  CarSpendingType,
+  CarSpendingFormatted,
+} from "../types/stats"
 
 export async function getMonthlySpending(): Promise<MonthlySpendingFormatted> {
   try {
@@ -9,7 +14,7 @@ export async function getMonthlySpending(): Promise<MonthlySpendingFormatted> {
         withCredentials: true,
       }
     )
-    return formatForChartJS(response.data.monthlySpending)
+    return formatMonthlySpending(response.data)
   } catch (error: any) {
     if (error.response) {
       throw new Error(error.response.data.error || "An error occurred")
@@ -36,9 +41,10 @@ const months = [
   "December",
 ]
 
-function formatForChartJS(data: MonthlySpendingType): MonthlySpendingFormatted {
+function formatMonthlySpending(
+  data: MonthlySpendingType
+): MonthlySpendingFormatted {
   const years = Object.keys(data)
-  console.log(years)
   const datasets = years.map((year: string) => {
     const monthlySpendingCurrentYear = data[year]
     return {
@@ -56,5 +62,57 @@ function formatForChartJS(data: MonthlySpendingType): MonthlySpendingFormatted {
   return {
     labels: months,
     datasets: datasets,
+  }
+}
+
+export async function getCarSpending(): Promise<CarSpendingFormatted> {
+  try {
+    const response = await axios.get(
+      import.meta.env.VITE_APP_MY_API + "/stats/carSpending",
+      {
+        withCredentials: true,
+      }
+    )
+    return formatCarSpending(response.data)
+  } catch (error: any) {
+    if (error.response) {
+      throw new Error(error.response.data.error || "An error occurred")
+    } else {
+      throw new Error(
+        "Unable to connect to the server. Please try again later."
+      )
+    }
+  }
+}
+
+function formatCarSpending(data: CarSpendingType[]): CarSpendingFormatted {
+  const labels = data.map((carSpending: CarSpendingType) => {
+    return carSpending.userLabel
+  })
+  const title = "Car Spending"
+  const spending_data = data.map((carSpending: CarSpendingType) => {
+    return carSpending.total_spending
+  })
+  const backgroundColor = data.map((carSpending: CarSpendingType) => {
+    return (function () {
+      const num = Math.round(0xffffff * Math.random())
+      const r = num >> 16
+      const g = (num >> 8) & 255
+      const b = num & 255
+      return "rgb(" + r + ", " + g + ", " + b + ")"
+    })()
+  })
+
+  return {
+    labels: labels,
+    datasets: [
+      {
+        label: title,
+        data: spending_data,
+        backgroundColor: backgroundColor,
+        borderColor: backgroundColor,
+        borderWidth: 1,
+      },
+    ],
   }
 }

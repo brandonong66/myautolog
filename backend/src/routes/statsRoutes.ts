@@ -71,7 +71,30 @@ router.get(
           }
         }
 
-        res.json({ monthlySpending })
+        res.json(monthlySpending)
+      }
+    } catch (error) {
+      console.error(error.message)
+      res.status(500).json({ error: "Internal Server Error" })
+    }
+  }
+)
+
+router.get(
+  "/carSpending",
+  authenticateToken,
+  async (req: AuthenticatedRequest, res) => {
+    try {
+      if (!req.userId) {
+        res.status(422).json({ error: "bad login token" })
+      } else {
+        const query =
+          "select Car.userLabel, SUM(Item.price) as total_spending from Item left join Car on Item.carId = Car.carId where Item.userId = ? GROUP BY Car.userLabel;"
+        const queryValues = [req.userId]
+        const [queryResult, _]: [RowDataPacket[], FieldPacket[]] =
+          await dbConnectionPool.query(query, queryValues)
+
+        res.json(queryResult)
       }
     } catch (error) {
       console.error(error.message)

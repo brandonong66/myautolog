@@ -13,10 +13,7 @@ import { Bar } from "react-chartjs-2"
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 import { getMonthlySpending } from "../../../../lib/statsFunctions"
-import {
-  MonthlySpendingFormatted,
-  MonthlySpendingType,
-} from "../../../../types/stats"
+import { MonthlySpendingFormatted } from "../../../../types/stats"
 
 export const options = {
   responsive: true,
@@ -31,7 +28,6 @@ export const options = {
   },
 }
 
-
 function MonthlySpending() {
   const [monthlySpending, setMonthlySpending] =
     useState<MonthlySpendingFormatted>()
@@ -39,7 +35,6 @@ function MonthlySpending() {
   useEffect(() => {
     getMonthlySpending().then((data) => {
       setMonthlySpending(data)
-      console.log(data)
     })
   }, [])
   return (
