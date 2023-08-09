@@ -103,4 +103,26 @@ router.get(
   }
 )
 
+router.get(
+  "/categorySpending",
+  authenticateToken,
+  async (req: AuthenticatedRequest, res) => {
+    try {
+      if (!req.userId) {
+        res.status(422).json({ error: "bad login token" })
+      } else {
+        const query =
+          "select category, SUM(Item.price) as total_spending from Item where Item.userId = ? GROUP BY category;"
+        const queryValues = [req.userId]
+        const [queryResult, _]: [RowDataPacket[], FieldPacket[]] =
+          await dbConnectionPool.query(query, queryValues)
+
+        res.json(queryResult)
+      }
+    } catch (error) {
+      console.error(error.message)
+      res.status(500).json({ error: "Internal Server Error" })
+    }
+  }
+)
 module.exports = router

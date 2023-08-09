@@ -21,10 +21,10 @@ export const options = {
     legend: {
       position: "top" as const,
     },
-    title: {
-      display: true,
-      text: "Monthly Spending",
-    },
+    // title: {
+    //   display: true,
+    //   text: "Monthly Spending",
+    // },
   },
 }
 

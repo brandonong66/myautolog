@@ -218,7 +218,7 @@ function ExpenseTable({ className }: expenseTableProps) {
   }, [])
 
   return (
-    <div className={cn("", className)}>
+    <div className={cn("min-w-[90rem]", className)}>
       <Card title="Items">
         <DataTable
           columns={columns}

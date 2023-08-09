@@ -4,6 +4,8 @@ import {
   MonthlySpendingFormatted,
   CarSpendingType,
   CarSpendingFormatted,
+  CategorySpending,
+  CategorySpendingFormatted,
 } from "../types/stats"
 
 export async function getMonthlySpending(): Promise<MonthlySpendingFormatted> {
@@ -93,7 +95,61 @@ function formatCarSpending(data: CarSpendingType[]): CarSpendingFormatted {
   const spending_data = data.map((carSpending: CarSpendingType) => {
     return carSpending.total_spending
   })
-  const backgroundColor = data.map((carSpending: CarSpendingType) => {
+  const backgroundColor = data.map(() => {
+    return (function () {
+      const num = Math.round(0xffffff * Math.random())
+      const r = num >> 16
+      const g = (num >> 8) & 255
+      const b = num & 255
+      return "rgb(" + r + ", " + g + ", " + b + ")"
+    })()
+  })
+
+  return {
+    labels: labels,
+    datasets: [
+      {
+        label: title,
+        data: spending_data,
+        backgroundColor: backgroundColor,
+        borderColor: backgroundColor,
+        borderWidth: 1,
+      },
+    ],
+  }
+}
+
+export async function getCategorySpending(): Promise<CategorySpendingFormatted> {
+  try {
+    const response = await axios.get(
+      import.meta.env.VITE_APP_MY_API + "/stats/categorySpending",
+      {
+        withCredentials: true,
+      }
+    )
+    return formatCategorySpending(response.data)
+  } catch (error: any) {
+    if (error.response) {
+      throw new Error(error.response.data.error || "An error occurred")
+    } else {
+      throw new Error(
+        "Unable to connect to the server. Please try again later."
+      )
+    }
+  }
+}
+
+function formatCategorySpending(
+  data: CategorySpending[]
+): CarSpendingFormatted {
+  const labels = data.map((categorySpending: CategorySpending) => {
+    return categorySpending.category
+  })
+  const title = "Category Spending"
+  const spending_data = data.map((categorySpending: CategorySpending) => {
+    return categorySpending.total_spending
+  })
+  const backgroundColor = data.map(() => {
     return (function () {
       const num = Math.round(0xffffff * Math.random())
       const r = num >> 16

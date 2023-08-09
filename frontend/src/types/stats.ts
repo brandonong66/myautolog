@@ -28,3 +28,19 @@ export type CarSpendingFormatted = {
     borderWidth: number
   }[]
 }
+
+export type CategorySpending = {
+  category: string
+  total_spending: number
+}
+
+export type CategorySpendingFormatted = {
+  labels: string[]
+  datasets: {
+    label: string
+    data: number[]
+    backgroundColor: string[]
+    borderColor: string[]
+    borderWidth: number
+  }[]
+}

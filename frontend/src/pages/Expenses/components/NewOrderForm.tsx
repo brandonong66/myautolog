@@ -72,6 +72,7 @@ interface NewOrderFormProps {
 }
 
 function NewOrderForm({ className }: NewOrderFormProps) {
+  const [showForm, setShowForm] = useState<boolean>(false)
   const [formMessage, setFormMessage] = useState<{
     type: "success" | "destructive"
     message: string
@@ -222,365 +223,377 @@ function NewOrderForm({ className }: NewOrderFormProps) {
   }, [])
 
   return (
-    <Card title="New Order" className={cn("", className)}>
-      {formMessage && (
-        <Alert variant={formMessage.type} className="mb-4">
-          {formMessage.message}
-        </Alert>
+    <>
+      {!showForm && (
+        <Button onClick={() => setShowForm(true)}>New Order</Button>
       )}
+      {showForm && (
+        <Card title="New Order" className={cn("w-[90rem]", className)}>
+          {formMessage && (
+            <Alert variant={formMessage.type} className="mb-4">
+              {formMessage.message}
+            </Alert>
+          )}
 
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="">
-          <div className="flex gap-4">
-            <FormField
-              control={form.control}
-              name="storeOrderId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>*Order Id</FormLabel>
-                  <FormControl>
-                    <Input {...field} type="text" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="">
+              <div className="flex gap-4">
+                <FormField
+                  control={form.control}
+                  name="storeOrderId"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>*Order Id</FormLabel>
+                      <FormControl>
+                        <Input {...field} type="text" />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-            <FormField
-              control={form.control}
-              name="source"
-              render={({ field }) => (
-                <FormItem className="min-w-[200px]">
-                  <FormLabel>Source</FormLabel>
-                  <FormControl>
-                    <Input {...field} type="text" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="url"
-              render={({ field }) => (
-                <FormItem className="min-w-fit">
-                  <FormLabel>URL</FormLabel>
-                  <FormControl>
-                    <Input {...field} type="text" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <DateInput
-              control={form.control}
-              name="orderDate"
-              label="* Order Date"
-              className="w-[200px]"
-            />
-            {/* <DateInput
+                <FormField
+                  control={form.control}
+                  name="source"
+                  render={({ field }) => (
+                    <FormItem className="min-w-[200px]">
+                      <FormLabel>Source</FormLabel>
+                      <FormControl>
+                        <Input {...field} type="text" />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="url"
+                  render={({ field }) => (
+                    <FormItem className="min-w-fit">
+                      <FormLabel>URL</FormLabel>
+                      <FormControl>
+                        <Input {...field} type="text" />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <DateInput
+                  control={form.control}
+                  name="orderDate"
+                  label="* Order Date"
+                  className="w-[200px]"
+                />
+                {/* <DateInput
               control={form.control}
               name="expectedArrivalDate"
               label="Expected Arrival Date"
               className="w-[200px]"
             /> */}
-            <Separator orientation="vertical" />
-            <FormField
-              control={form.control}
-              name="subtotalPrice"
-              render={({ field }) => (
-                <FormItem className="ml-auto w-20">
-                  <FormLabel>* Subtotal</FormLabel>
-                  <FormControl>
-                    <Input {...field} type="number" disabled />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="discount"
-              render={({ field }) => (
-                <FormItem className="w-20">
-                  <FormLabel>Discount</FormLabel>
-                  <FormControl>
-                    <Input {...field} type="number" />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="shippingPrice"
-              render={({ field }) => (
-                <FormItem className="w-20">
-                  <FormLabel>* Shipping</FormLabel>
-                  <FormControl>
-                    <Input {...field} type="number" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="orderTax"
-              render={({ field }) => (
-                <FormItem className="w-20">
-                  <FormLabel>* Tax</FormLabel>
-                  <FormControl>
-                    <Input {...field} type="number" disabled />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                <Separator orientation="vertical" />
+                <FormField
+                  control={form.control}
+                  name="subtotalPrice"
+                  render={({ field }) => (
+                    <FormItem className="ml-auto w-20">
+                      <FormLabel>* Subtotal</FormLabel>
+                      <FormControl>
+                        <Input {...field} type="number" disabled />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="discount"
+                  render={({ field }) => (
+                    <FormItem className="w-20">
+                      <FormLabel>Discount</FormLabel>
+                      <FormControl>
+                        <Input {...field} type="number" />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="shippingPrice"
+                  render={({ field }) => (
+                    <FormItem className="w-20">
+                      <FormLabel>* Shipping</FormLabel>
+                      <FormControl>
+                        <Input {...field} type="number" />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="orderTax"
+                  render={({ field }) => (
+                    <FormItem className="w-20">
+                      <FormLabel>* Tax</FormLabel>
+                      <FormControl>
+                        <Input {...field} type="number" disabled />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-            <FormField
-              control={form.control}
-              name="totalPrice"
-              render={({ field }) => (
-                <FormItem className="w-20">
-                  <FormLabel>* Total</FormLabel>
-                  <FormControl>
-                    <Input {...field} type="number" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <Separator className="my-4" />
+                <FormField
+                  control={form.control}
+                  name="totalPrice"
+                  render={({ field }) => (
+                    <FormItem className="w-20">
+                      <FormLabel>* Total</FormLabel>
+                      <FormControl>
+                        <Input {...field} type="number" />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <Separator className="my-4" />
 
-          <div className="flex flex-col gap-4">
-            {fields.map((item, index) => (
-              <Card
-                key={item.id}
-                title={"Item " + (index + 1)}
-                titleVariant="h3"
-                topRight={
-                  <Button
-                    onClick={() => {
-                      remove(index)
-                    }}
-                    variant="destructive"
+              <div className="flex flex-col gap-4">
+                {fields.map((item, index) => (
+                  <Card
+                    key={item.id}
+                    title={"Item " + (index + 1)}
+                    titleVariant="h3"
+                    topRight={
+                      <Button
+                        onClick={() => {
+                          remove(index)
+                        }}
+                        variant="destructive"
+                      >
+                        delete
+                      </Button>
+                    }
                   >
-                    delete
-                  </Button>
-                }
-              >
-                <div className="flex gap-4">
-                  <div className="">
-                    <FormField
-                      control={form.control}
-                      name={`items.${index}.itemName`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>* Item Name</FormLabel>
-                          <FormControl>
-                            <Input {...field} type="text" />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
+                    <div className="flex gap-4">
+                      <div className="">
+                        <FormField
+                          control={form.control}
+                          name={`items.${index}.itemName`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>* Item Name</FormLabel>
+                              <FormControl>
+                                <Input {...field} type="text" />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
 
-                  <div className="">
-                    <FormField
-                      control={form.control}
-                      name={`items.${index}.itemBrand`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Brand</FormLabel>
-                          <FormControl>
-                            <Input {...field} type="text" />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <div className="">
-                    <FormField
-                      control={form.control}
-                      name={`items.${index}.partNumber`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Part Number</FormLabel>
-                          <FormControl>
-                            <Input {...field} type="text" />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <FormField
-                    control={form.control}
-                    name={`items.${index}.notes`}
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Notes</FormLabel>
-                        <FormControl>
-                          <Input {...field} type="text" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <div className="w-28">
-                    <FormField
-                      control={form.control}
-                      name={`items.${index}.category`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Category</FormLabel>
-                          <FormControl>
-                            <Select
-                              onValueChange={field.onChange}
-                              defaultValue="Other"
-                            >
-                              <SelectTrigger>
-                                <SelectValue placeholder="category" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="Other">Other</SelectItem>
-                                <SelectItem value="Performance">
-                                  Performance
-                                </SelectItem>
-                                <SelectItem value="Maintenance">
-                                  Maintenance
-                                </SelectItem>
-                                <SelectItem value="Cosmetic">
-                                  Cosmetic
-                                </SelectItem>
-                                <SelectItem value="Interior">
-                                  Interior
-                                </SelectItem>
-                              </SelectContent>
-                            </Select>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <div className="w-28">
-                    <FormField
-                      control={form.control}
-                      name={`items.${index}.carId`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Car</FormLabel>
-                          <FormControl>
-                            <Select
-                              onValueChange={field.onChange}
-                              defaultValue={"0"}
-                            >
-                              <SelectTrigger>
-                                <SelectValue placeholder="car" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem key={0} value={"0"}>
-                                  None
-                                </SelectItem>
-                                {cars.map((car: CarType) => (
-                                  <SelectItem
-                                    key={car.carId}
-                                    value={car.carId.toString()}
-                                  >
-                                    {car.userLabel}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <Separator orientation="vertical" />
-                  <div className="w-20">
-                    <FormField
-                      control={form.control}
-                      name={`items.${index}.itemTax`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>* Tax</FormLabel>
-                          <FormControl>
-                            <Input {...field} type="number" disabled />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
+                      <div className="">
+                        <FormField
+                          control={form.control}
+                          name={`items.${index}.itemBrand`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Brand</FormLabel>
+                              <FormControl>
+                                <Input {...field} type="text" />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                      <div className="">
+                        <FormField
+                          control={form.control}
+                          name={`items.${index}.partNumber`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Part Number</FormLabel>
+                              <FormControl>
+                                <Input {...field} type="text" />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                      <FormField
+                        control={form.control}
+                        name={`items.${index}.notes`}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Notes</FormLabel>
+                            <FormControl>
+                              <Input {...field} type="text" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <div className="w-28">
+                        <FormField
+                          control={form.control}
+                          name={`items.${index}.category`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Category</FormLabel>
+                              <FormControl>
+                                <Select
+                                  onValueChange={field.onChange}
+                                  defaultValue="Other"
+                                >
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="category" />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    <SelectItem value="Other">Other</SelectItem>
+                                    <SelectItem value="Performance">
+                                      Performance
+                                    </SelectItem>
+                                    <SelectItem value="Maintenance">
+                                      Maintenance
+                                    </SelectItem>
+                                    <SelectItem value="Cosmetic">
+                                      Cosmetic
+                                    </SelectItem>
+                                    <SelectItem value="Interior">
+                                      Interior
+                                    </SelectItem>
+                                  </SelectContent>
+                                </Select>
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                      <div className="w-28">
+                        <FormField
+                          control={form.control}
+                          name={`items.${index}.carId`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Car</FormLabel>
+                              <FormControl>
+                                <Select
+                                  onValueChange={field.onChange}
+                                  defaultValue={"0"}
+                                >
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="car" />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    <SelectItem key={0} value={"0"}>
+                                      None
+                                    </SelectItem>
+                                    {cars.map((car: CarType) => (
+                                      <SelectItem
+                                        key={car.carId}
+                                        value={car.carId.toString()}
+                                      >
+                                        {car.userLabel}
+                                      </SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                      <Separator orientation="vertical" />
+                      <div className="w-20">
+                        <FormField
+                          control={form.control}
+                          name={`items.${index}.itemTax`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>* Tax</FormLabel>
+                              <FormControl>
+                                <Input {...field} type="number" disabled />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
 
-                  <div className="w-20">
-                    <FormField
-                      control={form.control}
-                      name={`items.${index}.price`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>* Price</FormLabel>
-                          <FormControl>
-                            <Input {...field} type="number" />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <div className="w-20">
-                    <FormField
-                      control={form.control}
-                      name={`items.${index}.quantity`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>* Qty</FormLabel>
-                          <FormControl>
-                            <Input {...field} type="number" />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                </div>
-              </Card>
-            ))}
-          </div>
-          <div className="mt-4 flex">
-            <Button
-              className="m-auto"
-              onClick={() => {
-                append({
-                  itemName: "",
-                  itemBrand: "",
-                  partNumber: "",
-                  notes: "",
-                  carId: cars[0].carId,
-                  price: 0,
-                  itemTax: 0,
-                  quantity: 1,
-                  category: "Other",
-                })
-              }}
-            >
-              Add Item
-            </Button>
-          </div>
-          <div className="flex">
-            <Button type="submit" className="ml-auto">
-              Submit
-            </Button>
-          </div>
-        </form>
-      </Form>
-    </Card>
+                      <div className="w-20">
+                        <FormField
+                          control={form.control}
+                          name={`items.${index}.price`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>* Price</FormLabel>
+                              <FormControl>
+                                <Input {...field} type="number" />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                      <div className="w-20">
+                        <FormField
+                          control={form.control}
+                          name={`items.${index}.quantity`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>* Qty</FormLabel>
+                              <FormControl>
+                                <Input {...field} type="number" />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                    </div>
+                  </Card>
+                ))}
+              </div>
+              <div className="mt-4 flex">
+                <Button
+                  className="m-auto"
+                  onClick={() => {
+                    append({
+                      itemName: "",
+                      itemBrand: "",
+                      partNumber: "",
+                      notes: "",
+                      carId: cars[0].carId,
+                      price: 0,
+                      itemTax: 0,
+                      quantity: 1,
+                      category: "Other",
+                    })
+                  }}
+                >
+                  Add Item
+                </Button>
+              </div>
+              <div className="flex">
+                <Button
+                  className="ml-auto mr-3"
+                  variant="outline"
+                  onClick={() => setShowForm(false)}
+                >
+                  Cancel
+                </Button>
+                <Button type="submit">Submit</Button>
+              </div>
+            </form>
+          </Form>
+        </Card>
+      )}
+    </>
   )
 }
 

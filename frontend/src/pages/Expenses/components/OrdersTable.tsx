@@ -52,6 +52,7 @@ import {
 import CustomCell from "../../../components/DataTable/CustomCell"
 import { DataTablePagination } from "../../../components/DataTable/DataTablePagination"
 import { DataTableViewOptions } from "../../../components/DataTable/DataTableViewOptions"
+import NewOrderForm from "./NewOrderForm"
 
 interface OrdersTableProps {
   className?: string
@@ -303,8 +304,11 @@ function OrdersTable({ className }: OrdersTableProps) {
   }, [])
 
   return (
-    <div className={cn("", className)}>
-      <Card title="Orders">
+    <div className={cn("min-w-[90rem]", className)}>
+      <Card
+        title="Orders"
+        
+      >
         <div className="flex flex-col gap-4">
           <div className="flex justify-between">
             <div>
