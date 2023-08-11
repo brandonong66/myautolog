@@ -54,6 +54,21 @@ CREATE TABLE Item(
     FOREIGN KEY (userId) REFERENCES User(userId)
 );
 
+CREATE TABLE Collection(
+	collectionId integer primary key auto_increment,
+	collectionName varchar(32) not null,
+    userId integer not null,
+    FOREIGN KEY (userId) REFERENCES User(userId)
+);
+
+CREATE TABLE `Resource`(
+	resourceId integer primary key auto_increment,
+    resourceName varchar(32) not null,
+    resourceBody varchar(4096),
+    userId integer not null,
+    FOREIGN KEY (userId) REFERENCES User(userId)
+);
+    
 
 CREATE TABLE Mileage(
 	carId integer not null,

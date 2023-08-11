@@ -1,4 +1,4 @@
-import Card from "../../../components/Card/Card"
+import Card from "../../../components/Card"
 import MonthlySpending from "./charts/MonthlySpending"
 import CarSpending from "./charts/CarSpending"
 import CategorySpending from "./charts/CategorySpending"

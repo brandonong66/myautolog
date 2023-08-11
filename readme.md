@@ -21,7 +21,7 @@
  - torque spec lookup
 ## Architecture
  - Frontend: React
-   - UI: MUI
+   - UI: SHADCN/UI
  - API: node + express
  - Database: MySQL
    - hosting: Amazon RDS

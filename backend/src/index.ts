@@ -9,6 +9,7 @@ const userRoutes = require("./routes/userRoutes")
 const carRoutes = require("./routes/carRoutes")
 const expenseRoutes = require("./routes/expenseRoutes")
 const statsRoutes = require("./routes/statsRoutes")
+const resourceRoutes = require("./routes/resourceRoutes")
 
 var app = express()
 var cors = require("cors")
@@ -34,6 +35,7 @@ app.use("/user", userRoutes)
 app.use("/car", carRoutes)
 app.use("/expense", expenseRoutes)
 app.use("/stats", statsRoutes)
+app.use("/resources", resourceRoutes, )
 
 app.listen(3001, function () {
   console.log("Server running on port 3001")

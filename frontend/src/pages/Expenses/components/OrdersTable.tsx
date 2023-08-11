@@ -12,7 +12,7 @@ import { deleteOrder } from "../../../lib/expenseFunctions"
 
 // Components
 import { Button } from "../../../components/ui/button"
-import Card from "../../../components/Card/Card"
+import Card from "../../../components/Card"
 import { Input } from "../../../components/ui/input"
 import {
   Table,

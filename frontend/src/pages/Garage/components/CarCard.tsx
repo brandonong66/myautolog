@@ -1,4 +1,4 @@
-import Card from "../../../components/Card/Card"
+import Card from "../../../components/Card"
 import Typography from "../../../components/ui/typography"
 import { Button } from "../../../components/ui/button"
 import { useState } from "react"

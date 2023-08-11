@@ -5,6 +5,7 @@ import GaragePage from "./pages/Garage/GaragePage"
 import LoginPage from "./pages/Login/LoginPage"
 import Navbar from "./components/Navbar/Navbar"
 import "./App.css"
+import ResourcesPage from "./pages/Resources/ResourcesPage"
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
             <Route path="/expenses" element={<ExpensesPage />} />
             <Route path="/garage" element={<GaragePage />} />
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/resources" element={<ResourcesPage />} />
           </Routes>
         </div>
       </div>

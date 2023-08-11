@@ -12,7 +12,7 @@ import {
 } from "../../../components/ui/form"
 import { Input } from "../../../components/ui/input"
 import { Textarea } from "../../../components/ui/textarea"
-import Card from "../../../components/Card/Card"
+import Card from "../../../components/Card"
 import { addCar } from "../../../lib/carFunctions"
 import { AlertDestructive } from "../../../components/ui/alertdestructive"
 import { useState } from "react"

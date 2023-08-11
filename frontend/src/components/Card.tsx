@@ -5,8 +5,8 @@ interface CardProps {
   titleVariant?: string
   className?: string
 }
-import Typography from "../ui/typography"
-import { cn } from "../../lib/utils"
+import Typography from "./ui/typography"
+import { cn } from "../lib/utils"
 
 function Card({
   children,
@@ -17,7 +17,7 @@ function Card({
 }: CardProps) {
   return (
     <div className={cn("rounded-lg bg-white p-4 drop-shadow", className)}>
-      <div className="flex">
+      <div>
         {title && !titleVariant && (
           <div className="mb-2 border-l-8 border-primary pl-4">
             <Typography variant="h2">{title}</Typography>

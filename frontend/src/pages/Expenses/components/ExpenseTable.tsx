@@ -3,7 +3,7 @@ import { DataTable } from "../../../components/DataTable/DataTable"
 import { DataTableColumnHeader } from "../../../components/DataTable/DataTableColumnHeader"
 import { getExpenses } from "../../../lib/expenseFunctions"
 import { ColumnDef } from "@tanstack/react-table"
-import Card from "../../../components/Card/Card"
+import Card from "../../../components/Card"
 import { cn } from "../../../lib/utils"
 import CustomCell from "../../../components/DataTable/CustomCell"
 
@@ -28,7 +28,7 @@ const columns: ColumnDef<expenseData>[] = [
   {
     accessorKey: "orderDate",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Order Date" />
+      <DataTableColumnHeader column={column} title="Date" />
     ),
     cell: ({ row }) => {
       const orderDate = new Date(row.getValue("orderDate"))
@@ -104,7 +104,7 @@ const columns: ColumnDef<expenseData>[] = [
   {
     accessorKey: "itemBrand",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Item Brand" />
+      <DataTableColumnHeader column={column} title="Brand" />
     ),
   },
   {
@@ -117,7 +117,7 @@ const columns: ColumnDef<expenseData>[] = [
   {
     accessorKey: "quantity",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Quantity" />
+      <DataTableColumnHeader column={column} title="Qty" />
     ),
   },
   {
@@ -218,7 +218,7 @@ function ExpenseTable({ className }: expenseTableProps) {
   }, [])
 
   return (
-    <div className={cn("min-w-[90rem]", className)}>
+    <div className={cn("w-[90rem]", className)}>
       <Card title="Items">
         <DataTable
           columns={columns}

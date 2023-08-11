@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 // components
 import { Alert } from "../../../components/ui/alert"
 import { Button } from "../../../components/ui/button"
-import Card from "../../../components/Card/Card"
+import Card from "../../../components/Card"
 import { Separator } from "../../../components/ui/separator"
 
 // form components
@@ -225,7 +225,12 @@ function NewOrderForm({ className }: NewOrderFormProps) {
   return (
     <>
       {!showForm && (
-        <Button onClick={() => setShowForm(true)}>New Order</Button>
+        <Button
+          className=""
+          onClick={() => setShowForm(true)}
+        >
+          New Order
+        </Button>
       )}
       {showForm && (
         <Card title="New Order" className={cn("w-[90rem]", className)}>
@@ -581,7 +586,7 @@ function NewOrderForm({ className }: NewOrderFormProps) {
               </div>
               <div className="flex">
                 <Button
-                  className="ml-auto mr-3"
+                  className="ml-auto mr-3 bg-background hover:bg-background/90"
                   variant="outline"
                   onClick={() => setShowForm(false)}
                 >
