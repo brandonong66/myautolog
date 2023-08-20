@@ -15,6 +15,8 @@ import { CollectionType } from "../../types/resources"
 import NewCollectionForm from "./components/NewCollectionForm"
 import Typography from "../../components/ui/typography"
 
+import "./ResourcesPage.css"
+
 function ResourcesPage() {
   const [collections, setCollections] = useState<CollectionType[]>([])
 
@@ -36,12 +38,19 @@ function ResourcesPage() {
                     className="m-[2px] flex hover:drop-shadow-md"
                     key={collection.collectionId}
                   >
-                    <Typography className="leading-[100%]" variant="small">
-                      {collection.collectionName}
-                    </Typography>
-                    {/* <Button className="ml-auto display:none" variant="destructive">
-                      <Trash2 />
-                    </Button> */}
+                    <div className="flex w-full items-center justify-between">
+                      <div className="flex-grow overflow-hidden overflow-ellipsis">
+                        <Typography variant="small" className="truncate">
+                          {collection.collectionName}
+                        </Typography>
+                      </div>
+
+                      <div className="ml-2">
+                        <Button variant="destructive">
+                          <Trash2 />
+                        </Button>
+                      </div>
+                    </div>
                   </Card>
                 ))}
               <NewCollectionForm />
