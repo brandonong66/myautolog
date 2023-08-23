@@ -53,6 +53,7 @@ import CustomCell from "../../../components/DataTable/CustomCell"
 import { DataTablePagination } from "../../../components/DataTable/DataTablePagination"
 import { DataTableViewOptions } from "../../../components/DataTable/DataTableViewOptions"
 import NewOrderForm from "./NewOrderForm"
+import ConfirmedDelete from "../../../components/ConfirmedDelete"
 
 interface OrdersTableProps {
   className?: string
@@ -369,40 +370,8 @@ function OrdersTable({ className }: OrdersTableProps) {
                           <TableRow>
                             <TableCell colSpan={columns.length}>
                               <OrderSubtable items={rowItems} />
-                              <div className="flex justify-end">
-                                <AlertDialog>
-                                  <AlertDialogTrigger asChild={true}>
-                                    <Button variant="destructive">
-                                      Delete
-                                    </Button>
-                                  </AlertDialogTrigger>
-                                  <AlertDialogContent>
-                                    <AlertDialogHeader>
-                                      <AlertDialogTitle>
-                                        Are you absolutely sure?
-                                      </AlertDialogTitle>
-                                      <AlertDialogDescription>
-                                        This action cannot be undone. This will
-                                        permanently delete this order and all of
-                                        its items.
-                                      </AlertDialogDescription>
-                                    </AlertDialogHeader>
-                                    <AlertDialogFooter>
-                                      <AlertDialogCancel>
-                                        Cancel
-                                      </AlertDialogCancel>
-                                      <AlertDialogAction
-                                        className="bg-destructive hover:bg-destructive"
-                                        onClick={() => {
-                                          delOrder(row.getValue("storeOrderId"))
-                                        }}
-                                      >
-                                        Delete
-                                      </AlertDialogAction>
-                                    </AlertDialogFooter>
-                                  </AlertDialogContent>
-                                </AlertDialog>
-                              </div>
+                              
+                              <ConfirmedDelete className="float-right" onConfirm={()=>delOrder(row.getValue("storeOrderId"))}/>
                             </TableCell>
                           </TableRow>
                         ) : null}

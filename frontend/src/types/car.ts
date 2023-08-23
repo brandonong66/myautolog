@@ -1,7 +1,7 @@
 export type CarType = {
     carId: number
     userLabel: string
-    year: string
+    year: number
     make: string
     model: string
     color: string

@@ -63,10 +63,12 @@ CREATE TABLE Collection(
 
 CREATE TABLE `Resource`(
 	resourceId integer primary key auto_increment,
+    collectionId integer,
     resourceName varchar(32) not null,
     resourceBody varchar(4096),
     userId integer not null,
-    FOREIGN KEY (userId) REFERENCES User(userId)
+    FOREIGN KEY (userId) REFERENCES User(userId),
+    FOREIGN KEY (collectionId) REFERENCES Collection(collectionId)
 );
     
 

@@ -14,9 +14,13 @@ function Card({
   title,
   titleVariant,
   topRight,
+  ...props
 }: CardProps) {
   return (
-    <div className={cn("rounded-lg bg-white p-4 drop-shadow", className)}>
+    <div
+      className={cn("rounded-lg bg-white p-4 shadow-xl", className)}
+      {...props}
+    >
       <div>
         {title && !titleVariant && (
           <div className="mb-2 border-l-8 border-primary pl-4">
@@ -38,7 +42,7 @@ function Card({
             <Typography variant="h4">{title}</Typography>
           </div>
         )}
-        <div className="ml-auto">{topRight}</div>
+        {topRight && <div className="ml-auto">{topRight}</div>}
       </div>
       {children}
     </div>
