@@ -4,6 +4,7 @@ interface CardProps {
   title?: string
   titleVariant?: string
   className?: string
+  onClick?: () => void
 }
 import Typography from "./ui/typography"
 import { cn } from "../lib/utils"
@@ -14,11 +15,13 @@ function Card({
   title,
   titleVariant,
   topRight,
+  onClick,
   ...props
 }: CardProps) {
   return (
     <div
       className={cn("rounded-lg bg-white p-4 shadow-xl", className)}
+      onClick={onClick}
       {...props}
     >
       <div>

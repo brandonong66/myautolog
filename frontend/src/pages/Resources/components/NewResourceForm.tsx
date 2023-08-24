@@ -51,14 +51,17 @@ function NewResourceForm({
   async function onSubmit(values: z.infer<typeof resourceSchema>) {
     console.log(values)
     createResource(values)
-      .then((_) => window.location.reload())
+      .then(() => window.location.reload())
       .catch((err) => console.log(err))
   }
 
-  const watchCollectionId = form.watch("collectionId")
-  useEffect(() => {
-    console.log(watchCollectionId)
-  }, [watchCollectionId])
+useEffect(() => {
+    form.reset({
+      collectionId: currentCollectionId,
+      resourceName: "",
+      resourceBody: "",
+    });
+  }, [currentCollectionId, form.reset, form]);
 
   return (
     <>

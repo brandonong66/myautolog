@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react"
 
 // components
-import { Button } from "../../components/ui/button"
 import Card from "../../components/Card"
 import PageLayout from "../../components/PageLayout"
 import { ScrollArea } from "../../components/ui/scroll-area"
@@ -52,7 +51,7 @@ function ResourcesPage() {
                     className={
                       "mx-[4px] flex hover:drop-shadow-md" +
                       (currentCollectionId === collection.collectionId
-                        ? "border-2 border-2 border-primary"
+                        ? " border-2 border-primary"
                         : "")
                     }
                     onClick={() =>
