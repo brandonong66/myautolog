@@ -15,16 +15,16 @@ function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(validateToken())
   return (
     <div className="transition-width group fixed z-50 flex h-screen w-16 flex-col gap-4 bg-primary py-4 duration-200 ease-in-out hover:w-48">
-      <NavLink text="Home" href="/" icon={<Home />} />
-      <NavLink text="Expenses" href="/expenses" icon={<DollarSign />} />
+      <NavLink text="MYAUTOLOG" href="/" icon={<Home />} />
+      <NavLink text="EXPENSES" href="/expenses" icon={<DollarSign />} />
 
-      <NavLink text="Resources" href="/resources" icon={<Folders />} />
-      <NavLink text="Tasks" href="/tasks" icon={<ListChecks />} />
-      <NavLink text="Garage" href="/garage" icon={<Warehouse />} />
+      <NavLink text="RESOURCES" href="/resources" icon={<Folders />} />
+      <NavLink text="TASKS" href="/tasks" icon={<ListChecks />} />
+      <NavLink text="GARAGE" href="/garage" icon={<Warehouse />} />
       {isLoggedIn ? (
-        <NavLink text="Logout" href="" icon={<LogOut />} onClick={logout}/>
+        <NavLink text="LOGOUT" href="" icon={<LogOut />} onClick={logout}/>
       ) : (
-        <NavLink text="Login" href="/login" icon={<LogIn />} />
+        <NavLink text="LOGIN" href="/login" icon={<LogIn />} />
       )}
     </div>
   )

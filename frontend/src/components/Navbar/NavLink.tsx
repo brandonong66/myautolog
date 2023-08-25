@@ -10,7 +10,7 @@ interface NavLinkProps {
 function NavLink({ text, href, icon, onClick }: NavLinkProps) {
   return (
     <a href={href} className="ml-3 last:mt-auto" onClick={onClick}>
-      <div className="flex w-full items-center p-2 text-primary-foreground hover:text-secondary-foreground">
+      <div className="flex w-full items-center p-2 text-primary-100 hover:text-primary-900">
         <div>{icon}</div>
         <div className="hidden pl-4 group-hover:flex">{text}</div>
       </div>

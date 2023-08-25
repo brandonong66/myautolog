@@ -13,6 +13,48 @@ export default {
       },
     },
     extend: {
+      // colors: {
+      //   border: "hsl(var(--border))",
+      //   input: "hsl(var(--input))",
+      //   ring: "hsl(var(--ring))",
+      //   // background: "hsl(var(--background))",
+      //   background: "#f8f9fa",
+      //   foreground: "hsl(var(--foreground))",
+      //   primary: {
+      //     // DEFAULT: "hsl(var(--primary))",
+      //     DEFAULT: "#283DA1",
+      //     foreground: "hsl(var(--primary-foreground))",
+      //   },
+      //   secondary: {
+      //     DEFAULT: "hsl(var(--secondary))",
+      //     foreground: "hsl(var(--secondary-foreground))",
+      //   },
+      //   accent: {
+      //     // DEFAULT: "hsl(var(--accent))",
+      //     DEFAULT: "#8B3C9A",
+      //     foreground: "hsl(var(--accent-foreground))",
+      //   },
+      //   destructive: {
+      //     DEFAULT: "hsl(var(--destructive))",
+      //     foreground: "hsl(var(--destructive-foreground))",
+      //   },
+      //   success: {
+      //     DEFAULT: "hsl(var(--success))",
+      //     foreground: "hsl(var(--success-foreground))",
+      //   },
+      //   muted: {
+      //     DEFAULT: "hsl(var(--muted))",
+      //     foreground: "hsl(var(--muted-foreground))",
+      //   },
+      //   popover: {
+      //     DEFAULT: "hsl(var(--popover))",
+      //     foreground: "hsl(var(--popover-foreground))",
+      //   },
+      //   card: {
+      //     DEFAULT: "hsl(var(--card))",
+      //     foreground: "hsl(var(--card-foreground))",
+      //   },
+      // },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -23,7 +65,10 @@ export default {
         primary: {
           // DEFAULT: "hsl(var(--primary))",
           DEFAULT: "#283DA1",
-          foreground: "hsl(var(--primary-foreground))",
+          100: "#C2CDFF",
+          300: "#687CDB",
+          700: "#0C1A5A",
+          900: "#000727",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
@@ -31,8 +76,11 @@ export default {
         },
         accent: {
           // DEFAULT: "hsl(var(--accent))",
-          DEFAULT: "#8B3C9A",
-          foreground: "hsl(var(--accent-foreground))",
+          DEFAULT: "#A17D28",
+          100: "#F4E8CA",
+          300: "#CEB782",
+          700: "#75560F",
+          900: "#2C1E00",
         },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",

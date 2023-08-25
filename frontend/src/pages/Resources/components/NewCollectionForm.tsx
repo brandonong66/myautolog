@@ -47,7 +47,7 @@ function NewCollectionForm() {
     <>
       {!showForm ? (
         <div className="flex justify-center">
-          <Button onClick={() => setShowForm(true)}>
+          <Button variant="accent" onClick={() => setShowForm(true)}>
             <Plus />
           </Button>
         </div>
