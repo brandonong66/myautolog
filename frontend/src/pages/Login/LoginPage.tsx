@@ -1,9 +1,15 @@
-
+// components
 import LoginSignupBox from "./LoginSignupBox"
+
+// css
+import "./LoginPage.css"
+
 function LoginPage() {
   return (
-    <div className="grid place-items-center min-h-screen">
-      <LoginSignupBox />
+    <div className="login-bg">
+      <div className="grid min-h-screen place-items-center max-w-3xl bg-white overflow-auto">
+        <LoginSignupBox />
+      </div>
     </div>
   )
 }

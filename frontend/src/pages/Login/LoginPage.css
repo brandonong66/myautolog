@@ -1,0 +1,10 @@
+.login-bg {
+  background-image: url("../../assets/login-bg.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  position: absolute;
+  z-index: -1;
+}

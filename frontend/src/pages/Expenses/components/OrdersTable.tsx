@@ -100,7 +100,7 @@ function OrdersTable({ className }: OrdersTableProps) {
                 className="pr-3"
                 {...{
                   onClick: () => row.toggleExpanded(),
-                  style: { cursor: "pointer" },
+                  style: { cursor: "default" },
                 }}
               >
                 {row.getIsExpanded() ? <ChevronDown /> : <ChevronRight />}

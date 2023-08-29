@@ -1,3 +1,4 @@
+import { cn } from "../../lib/utils"
 interface typographyProps {
   variant:
     | "h1"
@@ -41,9 +42,7 @@ function Typography({ variant, children, className }: typographyProps) {
           {children}
         </h4>
       )}
-      {variant === "p" && (
-        <p className="">{children}</p>
-      )}
+      {variant === "p" && <p className={cn("", className)}>{children}</p>}
       {variant === "blockquote" && (
         <blockquote className="mt-6 border-l-2 pl-6 italic">
           {children}
