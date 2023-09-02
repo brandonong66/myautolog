@@ -223,7 +223,7 @@ export async function getTopSources(): Promise<BarData> {
   }
 }
 
-function getRandomColor() {
+export function getRandomColor() {
   const num = Math.round(0xffffff * Math.random())
   const r = num >> 16
   const g = (num >> 8) & 255

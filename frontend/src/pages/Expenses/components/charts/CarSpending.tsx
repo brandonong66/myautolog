@@ -3,6 +3,8 @@ import { useEffect, useState } from "react"
 //functions
 import { getCarSpending } from "../../../../lib/statsFunctions"
 import { cn } from "../../../../lib/utils"
+import { getRandomColor } from "../../../../lib/statsFunctions"
+
 //types
 import { DoughnutData } from "../../../../types/stats"
 
@@ -35,29 +37,49 @@ const options = {
   },
 }
 
+// sample data
+const cars = ["E30 M3", "FD RX7", "S197 Mustang"]
+const backgroundColors = cars.map(() => getRandomColor())
+const borderColors = cars.map(() => "rgb(0,0,0)")
+const data = cars.map(() => parseFloat((Math.random() * 3000).toFixed(2)))
+const sampleData: DoughnutData = {
+  labels: cars,
+  datasets: [
+    {
+      backgroundColor: backgroundColors,
+      borderColor: borderColors,
+      borderWidth: 1,
+      data: data,
+      label: "Car Spending",
+    },
+  ],
+}
+
 function CarSpending({ className }: { className?: string }) {
-  const [carSpendingDoughnut, setCarSpendingDoughnut] = useState<DoughnutData>()
+  const [carSpending, setCarSpending] = useState<DoughnutData>()
 
   useEffect(() => {
     getCarSpending().then((data) => {
-      setCarSpendingDoughnut(data)
+      setCarSpending(data)
     })
   }, [])
 
   return (
     <Card title="car" className={cn("flex flex-col", className)}>
-      <div className="grid grid-cols-2 flex-grow pb-4">
-        {carSpendingDoughnut && (
-          <div >
-            <Doughnut data={carSpendingDoughnut} options={options.dougnut} />
-          </div>
-        )}
+      <div className="grid flex-grow grid-cols-2 pb-4">
+        <div>
+          <Doughnut
+            data={carSpending ? carSpending : sampleData}
+            options={options.dougnut}
+          />
+        </div>
 
-        {carSpendingDoughnut && (
-          <div >
-            <Bar data={carSpendingDoughnut} options={options.bar} />
-          </div>
-        )}
+        <div>
+          <Bar
+            data={carSpending ? carSpending : sampleData}
+            options={options.bar}
+          />
+        </div>
       </div>
     </Card>
   )

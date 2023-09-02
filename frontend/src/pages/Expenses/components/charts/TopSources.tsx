@@ -23,7 +23,7 @@ const options = {
   maintianAspectRatio: false,
   plugins: {
     legend: {
-      position: "top" as const,
+      display: false,
     },
   },
 }
@@ -31,9 +31,30 @@ const options = {
 // functions
 import { getTopSources } from "../../../../lib/statsFunctions"
 import { cn } from "../../../../lib/utils"
+import { getRandomColor } from "../../../../lib/statsFunctions"
 
 // typers
 import { BarData } from "../../../../types/stats"
+
+// sample data
+const sources = ["fcpeuro", "ebay", "rockauto", "marketplace"]
+const backgroundColors = sources.map(() => getRandomColor())
+const borderColors = sources.map(() => "rgb(0,0,0)")
+const moneySpent = sources.map(() =>
+  parseFloat((Math.random() * 3000).toFixed(2))
+)
+const sampleData: BarData = {
+  labels: sources,
+  datasets: [
+    {
+      backgroundColor: backgroundColors,
+      borderColor: borderColors,
+      borderWidth: 1,
+      data: moneySpent,
+      label: "top sources",
+    },
+  ],
+}
 
 function TopSources({ className }: { className?: string }) {
   const [topSources, setTopSources] = useState<BarData>()
@@ -41,16 +62,17 @@ function TopSources({ className }: { className?: string }) {
   useEffect(() => {
     getTopSources().then((data) => {
       setTopSources(data)
-      console.log(data)
     })
   }, [])
   return (
     <Card title="top sources" className={cn("flex flex-col ", className)}>
-      {topSources && (
-        <div className="grid flex-grow">
-          <Bar className="my-auto" options={options} data={topSources} />
-        </div>
-      )}
+      <div className="grid flex-grow">
+        <Bar
+          className="my-auto"
+          options={options}
+          data={topSources ? topSources : sampleData}
+        />
+      </div>
     </Card>
   )
 }
