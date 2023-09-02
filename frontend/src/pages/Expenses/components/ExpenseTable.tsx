@@ -1,12 +1,19 @@
 import { useEffect, useState } from "react"
+
+// components
+import Card from "../../../components/Card"
+import CustomCell from "../../../components/DataTable/CustomCell"
 import { DataTable } from "../../../components/DataTable/DataTable"
 import { DataTableColumnHeader } from "../../../components/DataTable/DataTableColumnHeader"
-import { getExpenses } from "../../../lib/expenseFunctions"
-import { ColumnDef } from "@tanstack/react-table"
-import Card from "../../../components/Card"
-import { cn } from "../../../lib/utils"
-import CustomCell from "../../../components/DataTable/CustomCell"
 
+// functions
+import { getExpenses } from "../../../lib/expenseFunctions"
+import { cn } from "../../../lib/utils"
+
+import { ColumnDef } from "@tanstack/react-table"
+
+// sample data
+import { sampleAllItems } from "../data/sampleData"
 //define columns
 type expenseData = {
   storeOrderId: string
@@ -206,7 +213,7 @@ interface expenseTableProps {
   className?: string
 }
 function ExpenseTable({ className }: expenseTableProps) {
-  const [data, setData] = useState<expenseData[]>([])
+  const [data, setData] = useState<expenseData[]>(sampleAllItems)
   useEffect(() => {
     getExpenses()
       .then((data) => {
@@ -219,7 +226,7 @@ function ExpenseTable({ className }: expenseTableProps) {
 
   return (
     <div className={cn("w-[90rem]", className)}>
-      <Card title="Items">
+      <Card title="all items">
         <DataTable
           columns={columns}
           data={data}

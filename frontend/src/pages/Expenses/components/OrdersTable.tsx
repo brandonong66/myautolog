@@ -11,7 +11,6 @@ import { getAllOrderItems, getOrders } from "../../../lib/expenseFunctions"
 import { deleteOrder } from "../../../lib/expenseFunctions"
 
 // Components
-import { Button } from "../../../components/ui/button"
 import Card from "../../../components/Card"
 import { Input } from "../../../components/ui/input"
 import {
@@ -22,18 +21,10 @@ import {
   TableHeader,
   TableRow,
 } from "../../../components/ui/table"
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "../../../components/ui/alert-dialog"
 import OrderSubtable from "./OrderSubtable"
+
+// sampel data
+import { sampleOrders, sampleOrderItems } from "../data/sampleData"
 
 // Table Components
 import { DataTableColumnHeader } from "../../../components/DataTable/DataTableColumnHeader"
@@ -52,7 +43,6 @@ import {
 import CustomCell from "../../../components/DataTable/CustomCell"
 import { DataTablePagination } from "../../../components/DataTable/DataTablePagination"
 import { DataTableViewOptions } from "../../../components/DataTable/DataTableViewOptions"
-import NewOrderForm from "./NewOrderForm"
 import ConfirmedDelete from "../../../components/ConfirmedDelete"
 
 interface OrdersTableProps {
@@ -62,9 +52,15 @@ interface OrdersTableProps {
 interface allOrderItems {
   [storeOrderId: string]: ItemType2[]
 }
+
+
+
+
+
 function OrdersTable({ className }: OrdersTableProps) {
-  const [data, setData] = useState<OrderType[]>([])
-  const [allOrderItems, setAllOrderitems] = useState<allOrderItems>()
+  const [data, setData] = useState<OrderType[]>(sampleOrders)
+  const [allOrderItems, setAllOrderitems] =
+    useState<allOrderItems>(sampleOrderItems)
   const columns = useMemo<ColumnDef<OrderType>[]>(
     () => [
       {
@@ -291,6 +287,7 @@ function OrdersTable({ className }: OrdersTableProps) {
     getAllOrderItems()
       .then((res) => {
         setAllOrderitems(res)
+        console.log(res)
       })
       .catch((err) => {
         console.log(err)
@@ -298,6 +295,7 @@ function OrdersTable({ className }: OrdersTableProps) {
     getOrders()
       .then((res) => {
         setData(res)
+        console.log(res)
       })
       .catch((err) => {
         console.log(err)
@@ -306,10 +304,7 @@ function OrdersTable({ className }: OrdersTableProps) {
 
   return (
     <div className={cn("min-w-[90rem]", className)}>
-      <Card
-        title="Orders"
-        
-      >
+      <Card title="orders">
         <div className="flex flex-col gap-4">
           <div className="flex justify-between">
             <div>
@@ -370,8 +365,13 @@ function OrdersTable({ className }: OrdersTableProps) {
                           <TableRow>
                             <TableCell colSpan={columns.length}>
                               <OrderSubtable items={rowItems} />
-                              
-                              <ConfirmedDelete className="float-right" onConfirm={()=>delOrder(row.getValue("storeOrderId"))}/>
+
+                              <ConfirmedDelete
+                                className="float-right"
+                                onConfirm={() =>
+                                  delOrder(row.getValue("storeOrderId"))
+                                }
+                              />
                             </TableCell>
                           </TableRow>
                         ) : null}
