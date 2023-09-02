@@ -1,14 +1,15 @@
 import axios from "axios"
 import {
+  BarData,
+  DoughnutData,
   MonthlySpendingType,
-  MonthlySpendingFormatted,
+  LineData,
   CarSpendingType,
-  CarSpendingFormatted,
   CategorySpending,
-  CategorySpendingFormatted,
+  TopSource,
 } from "../types/stats"
 
-export async function getMonthlySpending(): Promise<MonthlySpendingFormatted> {
+export async function getMonthlySpending(): Promise<LineData> {
   try {
     const response = await axios.get(
       import.meta.env.VITE_APP_MY_API + "/stats/monthlySpending",
@@ -16,6 +17,7 @@ export async function getMonthlySpending(): Promise<MonthlySpendingFormatted> {
         withCredentials: true,
       }
     )
+
     return formatMonthlySpending(response.data)
   } catch (error: any) {
     if (error.response) {
@@ -43,22 +45,19 @@ const months = [
   "December",
 ]
 
-function formatMonthlySpending(
-  data: MonthlySpendingType
-): MonthlySpendingFormatted {
+// formats data for chartJS line chart component
+function formatMonthlySpending(data: MonthlySpendingType): LineData {
   const years = Object.keys(data)
   const datasets = years.map((year: string) => {
+    const color = getRandomColor()
     const monthlySpendingCurrentYear = data[year]
     return {
       label: year,
       data: months.map((month) => monthlySpendingCurrentYear[month]),
-      backgroundColor: (function () {
-        const num = Math.round(0xffffff * Math.random())
-        const r = num >> 16
-        const g = (num >> 8) & 255
-        const b = num & 255
-        return "rgb(" + r + ", " + g + ", " + b + ")"
-      })(),
+      borderColor: color,
+      backgroundColor: color,
+      fill: false,
+      tension: 0.1,
     }
   })
   return {
@@ -67,7 +66,7 @@ function formatMonthlySpending(
   }
 }
 
-export async function getCarSpending(): Promise<CarSpendingFormatted> {
+export async function getCarSpending(): Promise<DoughnutData> {
   try {
     const response = await axios.get(
       import.meta.env.VITE_APP_MY_API + "/stats/carSpending",
@@ -87,7 +86,7 @@ export async function getCarSpending(): Promise<CarSpendingFormatted> {
   }
 }
 
-function formatCarSpending(data: CarSpendingType[]): CarSpendingFormatted {
+function formatCarSpending(data: CarSpendingType[]): DoughnutData {
   const labels = data.map((carSpending: CarSpendingType) => {
     return carSpending.userLabel
   })
@@ -101,8 +100,12 @@ function formatCarSpending(data: CarSpendingType[]): CarSpendingFormatted {
       const r = num >> 16
       const g = (num >> 8) & 255
       const b = num & 255
-      return "rgb(" + r + ", " + g + ", " + b + ")"
+      return "rgba(" + r + ", " + g + ", " + b + ", 0.7)"
     })()
+  })
+
+  const borderColor = data.map(() => {
+    return "rgb(0,0,0)"
   })
 
   return {
@@ -112,14 +115,14 @@ function formatCarSpending(data: CarSpendingType[]): CarSpendingFormatted {
         label: title,
         data: spending_data,
         backgroundColor: backgroundColor,
-        borderColor: backgroundColor,
+        borderColor: borderColor,
         borderWidth: 1,
       },
     ],
   }
 }
 
-export async function getCategorySpending(): Promise<CategorySpendingFormatted> {
+export async function getCategorySpending(): Promise<DoughnutData> {
   try {
     const response = await axios.get(
       import.meta.env.VITE_APP_MY_API + "/stats/categorySpending",
@@ -139,9 +142,7 @@ export async function getCategorySpending(): Promise<CategorySpendingFormatted> 
   }
 }
 
-function formatCategorySpending(
-  data: CategorySpending[]
-): CarSpendingFormatted {
+function formatCategorySpending(data: CategorySpending[]): DoughnutData {
   const labels = data.map((categorySpending: CategorySpending) => {
     return categorySpending.category
   })
@@ -155,8 +156,12 @@ function formatCategorySpending(
       const r = num >> 16
       const g = (num >> 8) & 255
       const b = num & 255
-      return "rgb(" + r + ", " + g + ", " + b + ")"
+      return "rgb(" + r + ", " + g + ", " + b + ", 0.7)"
     })()
+  })
+
+  const borderColor = data.map(() => {
+    return "rgb(0,0,0)"
   })
 
   return {
@@ -166,9 +171,62 @@ function formatCategorySpending(
         label: title,
         data: spending_data,
         backgroundColor: backgroundColor,
-        borderColor: backgroundColor,
+        borderColor: borderColor,
         borderWidth: 1,
       },
     ],
   }
+}
+
+export async function getTopSources(): Promise<BarData> {
+  try {
+    const response = await axios.get(
+      import.meta.env.VITE_APP_MY_API + "/stats/topSources",
+      {
+        withCredentials: true,
+      }
+    )
+
+    const topSources: TopSource[] = response.data
+
+    const labels = topSources.map((topSource: TopSource) => {
+      return topSource.source
+    })
+
+    const backgroundColors = topSources.map(() => getRandomColor())
+    const borderColors = topSources.map(() => "rgb(0,0,0)")
+
+    const datasets = [
+      {
+        label: "Top Sources",
+        data: topSources.map((topSource: TopSource) => {
+          return topSource.totalSpent
+        }),
+        backgroundColor: backgroundColors,
+        borderColor: borderColors,
+        borderWidth: 1,
+      },
+    ]
+
+    return {
+      labels: labels,
+      datasets: datasets,
+    }
+  } catch (error: any) {
+    if (error.response) {
+      throw new Error(error.response.data.error || "An error occurred")
+    } else {
+      throw new Error(
+        "Unable to connect to the server. Please try again later."
+      )
+    }
+  }
+}
+
+function getRandomColor() {
+  const num = Math.round(0xffffff * Math.random())
+  const r = num >> 16
+  const g = (num >> 8) & 255
+  const b = num & 255
+  return "rgba(" + r + ", " + g + ", " + b + ", 0.7)"
 }

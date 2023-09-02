@@ -4,7 +4,7 @@ import { useLocation } from "react-router-dom"
 
 // components
 import Typography from "../ui/typography"
-import { Button } from "../ui/button"
+import * as HoverCard from "@radix-ui/react-hover-card"
 
 // functions
 import { validateToken, logout } from "../../lib/authFunctions"
@@ -27,60 +27,42 @@ function Navbar() {
   }
 
   return (
-    <header className="space flex justify-between px-8 py-6">
-      <a className="text-primary" href="/">
+    <header
+      className={
+        "space flex justify-between px-8 py-6 " +
+        (isHomePage ? "" : "bg-primary")
+      }
+    >
+      <a className={isHomePage ? "text-primary" : "text-primary-100"} href="/">
         <Typography variant="h3">myautolog</Typography>
       </a>
+
       <nav>
         <ul className="flex gap-4">
           <li className="inline-block ">
-            <a
-              className={isHomePage ? "text-primary-100" : "text-foreground"}
-              href="/expenses"
-            >
+            <a className="text-primary-100" href="/expenses">
               expenses
             </a>
           </li>
           <li className="inline-block ">
-            <a
-              className={isHomePage ? "text-primary-100" : "text-foreground"}
-              href="/resources"
-            >
+            <a className="text-primary-100" href="/resources">
               resources
             </a>
           </li>
+
           <li className="inline-block ">
-            <a
-              className={isHomePage ? "text-primary-100" : "text-foreground"}
-              href="/tasks"
-            >
-              tasks
-            </a>
-          </li>
-          <li className="inline-block ">
-            <a
-              className={isHomePage ? "text-primary-100" : "text-foreground"}
-              href="/garage"
-            >
+            <a className="text-primary-100" href="/garage">
               garage
             </a>
           </li>
         </ul>
       </nav>
       {isLoggedIn ? (
-        <a
-          className={isHomePage ? "text-primary-100" : "text-foreground"}
-          href=""
-          onClick={logout}
-
-        >
+        <a className="text-primary-100" href="" onClick={logout}>
           logout
         </a>
       ) : (
-        <a
-          className={isHomePage ? "text-primary-100" : "text-foreground"}
-          href="/login"
-        >
+        <a className="text-primary-100" href="/login">
           login
         </a>
       )}

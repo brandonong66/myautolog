@@ -6,14 +6,12 @@ import Analytics from "./components/Analytics"
 
 function ExpensesPage() {
   return (
-    <PageLayout title="Expenses">
-      <div className="flex flex-col items-center gap-4">
-        <Analytics />
-        <NewOrderForm />
-        <OrdersTable />
-        <ExpenseTable />
-      </div>
-    </PageLayout>
+    <div className="flex flex-col items-center gap-4 mt-8">
+      <Analytics />
+      <NewOrderForm />
+      <OrdersTable />
+      <ExpenseTable />
+    </div>
   )
 }
 

@@ -20,6 +20,10 @@
 
 .hero-content-text-box {
   margin: auto;
+  width: 500px;
 }
 .hero-content-box {
+  margin: 100px 70px 0;
+  border: 2px dashed #000000;
+  border-radius: 10px;
 }

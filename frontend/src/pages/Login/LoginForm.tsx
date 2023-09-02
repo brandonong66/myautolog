@@ -79,7 +79,7 @@ export default function LoginForm() {
           )}
         />
         <div className="flex">
-          <Button type="submit" className="ml-auto">
+          <Button className="ml-auto" type="submit" variant="accent">
             Login
           </Button>
         </div>

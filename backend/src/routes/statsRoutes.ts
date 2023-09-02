@@ -125,4 +125,23 @@ router.get(
     }
   }
 )
+
+router.get("/topSources", authenticateToken, async (req: AuthenticatedRequest, res) => {
+  try {
+    if (!req.userId) {
+      res.status(422).json({ error: "bad login token" })
+    } else {
+      const query =
+        "SELECT `source`, SUM(totalPrice) as totalSpent FROM `Order` WHERE userId = ? GROUP BY `source` ORDER BY totalSpent DESC LIMIT 3;"
+      const queryValues = [req.userId]
+      const [queryResult, _]: [RowDataPacket[], FieldPacket[]] =
+        await dbConnectionPool.query(query, queryValues)
+
+      res.json(queryResult)
+    }
+  } catch (error) {
+    console.error(error.message)
+    res.status(500).json({ error: "Internal Server Error" })
+  }
+})
 module.exports = router

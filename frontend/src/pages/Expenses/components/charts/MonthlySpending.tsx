@@ -1,22 +1,41 @@
 import { useEffect, useState } from "react"
+
+// chart components
 import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
-  BarElement,
+  PointElement,
+  LineElement,
   Title,
   Tooltip,
   Legend,
 } from "chart.js"
-import { Bar } from "react-chartjs-2"
+import { Line } from "react-chartjs-2"
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
+// components
+import Card from "../../../../components/Card"
 
+// functions
 import { getMonthlySpending } from "../../../../lib/statsFunctions"
-import { MonthlySpendingFormatted } from "../../../../types/stats"
+import { cn } from "../../../../lib/utils"
 
+// types
+import { LineData } from "../../../../types/stats"
+
+// chart setup
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+)
 export const options = {
   responsive: true,
+  maintainAspectRatio: false,
   plugins: {
     legend: {
       position: "top" as const,
@@ -28,9 +47,8 @@ export const options = {
   },
 }
 
-function MonthlySpending() {
-  const [monthlySpending, setMonthlySpending] =
-    useState<MonthlySpendingFormatted>()
+function MonthlySpending({ className }: { className?: string }) {
+  const [monthlySpending, setMonthlySpending] = useState<LineData>()
 
   useEffect(() => {
     getMonthlySpending().then((data) => {
@@ -38,7 +56,13 @@ function MonthlySpending() {
     })
   }, [])
   return (
-    <>{monthlySpending && <Bar options={options} data={monthlySpending} />}</>
+    <Card title="monthly spending" className={cn("flex flex-col", className)}>
+      {monthlySpending && (
+        <div className="flex-grow">
+          <Line options={options} data={monthlySpending} />
+        </div>
+      )}
+    </Card>
   )
 }
 

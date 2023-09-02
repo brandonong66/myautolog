@@ -1,0 +1,24 @@
+.analytics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: 300px 300px;
+  min-width: 90rem;
+  gap: 1rem;
+}
+
+.analytics-item:first-child {
+  grid-column: 1/4;
+  grid-row: span 1;
+}
+.analytics-item:nth-child(2) {
+  grid-column: span 1;
+  grid-row: span 1;
+}
+.analytics-item:nth-child(3) {
+  grid-column: span 2;
+  grid-row: span 1;
+}
+.analytics-item:last-child {
+  grid-column: span 2;
+  grid-row: span 1;
+}

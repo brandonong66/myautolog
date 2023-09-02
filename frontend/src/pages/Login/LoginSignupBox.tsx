@@ -6,7 +6,6 @@ import {
 } from "../../components/ui/tabs"
 import LoginForm from "./LoginForm"
 import SignupForm from "./SignupForm"
-import Card from "../../components/Card"
 
 function LoginSignupBox() {
   return (

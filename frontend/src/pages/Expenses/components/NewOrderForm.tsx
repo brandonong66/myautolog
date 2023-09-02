@@ -228,6 +228,7 @@ function NewOrderForm({ className }: NewOrderFormProps) {
         <Button
           className=""
           onClick={() => setShowForm(true)}
+          variant="accent"
         >
           New Order
         </Button>

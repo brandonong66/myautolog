@@ -106,7 +106,7 @@ export default function SignupForm() {
           )}
         />
         <div className="flex">
-          <Button type="submit" className="ml-auto">
+          <Button className="ml-auto" variant="accent" type="submit" >
             Sign Up
           </Button>
         </div>

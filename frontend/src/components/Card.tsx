@@ -24,29 +24,28 @@ function Card({
       onClick={onClick}
       {...props}
     >
-      <div>
-        {title && !titleVariant && (
-          <div className="mb-2 border-l-8 border-primary pl-4">
-            <Typography variant="h2">{title}</Typography>
-          </div>
-        )}
-        {title && titleVariant === "h2" && (
-          <div className="mb-2 border-l-8 border-secondary pl-4">
-            <Typography variant="h3">{title}</Typography>
-          </div>
-        )}
-        {title && titleVariant === "h3" && (
-          <div className="mb-2 border-l-8 border-secondary pl-4">
-            <Typography variant="h3">{title}</Typography>
-          </div>
-        )}
-        {title && titleVariant === "h4" && (
-          <div className="mb-2 border-l-8 border-secondary pl-4">
-            <Typography variant="h4">{title}</Typography>
-          </div>
-        )}
-        {topRight && <div className="ml-auto">{topRight}</div>}
-      </div>
+      {title && !titleVariant && (
+        <div className="mb-2 border-l-8 border-primary pl-4">
+          <Typography variant="h2">{title}</Typography>
+        </div>
+      )}
+      {title && titleVariant === "h2" && (
+        <div className="mb-2 border-l-8 border-secondary pl-4">
+          <Typography variant="h3">{title}</Typography>
+        </div>
+      )}
+      {title && titleVariant === "h3" && (
+        <div className="mb-2 border-l-8 border-secondary pl-4">
+          <Typography variant="h3">{title}</Typography>
+        </div>
+      )}
+      {title && titleVariant === "h4" && (
+        <div className="mb-2 border-l-8 border-secondary pl-4">
+          <Typography variant="h4">{title}</Typography>
+        </div>
+      )}
+      {topRight && <div className="ml-auto">{topRight}</div>}
+
       {children}
     </div>
   )

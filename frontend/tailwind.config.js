@@ -60,7 +60,7 @@ export default {
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         // background: "hsl(var(--background))",
-        background: "#f8f9fa",
+        background: "#e3e3e3",
         foreground: "hsl(var(--foreground))",
         primary: {
           // DEFAULT: "hsl(var(--primary))",
