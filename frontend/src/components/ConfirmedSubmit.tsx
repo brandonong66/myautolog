@@ -20,7 +20,7 @@ function ConfirmedDelete({
       <Button className="mr-2" onClick={onCancel} variant="outline">
         <X />
       </Button>
-      <Button onClick={onConfirm}>
+      <Button className="text-white" onClick={onConfirm}>
         <Check />
       </Button>
     </div>

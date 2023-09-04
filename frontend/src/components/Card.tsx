@@ -20,32 +20,36 @@ function Card({
 }: CardProps) {
   return (
     <div
-      className={cn("rounded-lg bg-white p-4 shadow-xl", className)}
+      className={cn(
+        "rounded-lg border-2 border-slate-300 bg-white p-4 shadow-xl",
+        className
+      )}
       onClick={onClick}
       {...props}
     >
-      {title && !titleVariant && (
-        <div className="mb-2 border-l-8 border-primary pl-4">
-          <Typography variant="h2">{title}</Typography>
-        </div>
-      )}
-      {title && titleVariant === "h2" && (
-        <div className="mb-2 border-l-8 border-secondary pl-4">
-          <Typography variant="h3">{title}</Typography>
-        </div>
-      )}
-      {title && titleVariant === "h3" && (
-        <div className="mb-2 border-l-8 border-secondary pl-4">
-          <Typography variant="h3">{title}</Typography>
-        </div>
-      )}
-      {title && titleVariant === "h4" && (
-        <div className="mb-2 border-l-8 border-secondary pl-4">
-          <Typography variant="h4">{title}</Typography>
-        </div>
-      )}
-      {topRight && <div className="ml-auto">{topRight}</div>}
-
+      <div className="grid grid-cols-[1fr,max-content]">
+        {title && (!titleVariant || titleVariant === "h1") && (
+          <div className="mb-2 border-l-8 border-primary pl-4">
+            <Typography variant="h2">{title}</Typography>
+          </div>
+        )}
+        {title && titleVariant === "h2" && (
+          <div className="mb-2 border-l-8 border-primary-300 pl-4">
+            <Typography variant="h3">{title}</Typography>
+          </div>
+        )}
+        {title && titleVariant === "h3" && (
+          <div className="border-primary-200 mb-2 border-l-8 pl-4">
+            <Typography variant="h3">{title}</Typography>
+          </div>
+        )}
+        {title && titleVariant === "h4" && (
+          <div className="mb-2 border-l-8 border-primary-100 pl-4">
+            <Typography variant="h4">{title}</Typography>
+          </div>
+        )}
+        {topRight && <div className="ml-auto">{topRight}</div>}
+      </div>
       {children}
     </div>
   )

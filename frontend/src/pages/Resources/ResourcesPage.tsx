@@ -2,18 +2,19 @@ import { useEffect, useState } from "react"
 
 // components
 import Card from "../../components/Card"
-import PageLayout from "../../components/PageLayout"
 import { ScrollArea } from "../../components/ui/scroll-area"
-import ConfirmedDelete from "../../components/ConfirmedDelete"
-import Typography from "../../components/ui/typography"
+import ResourceCard from "./components/ResourceCard"
+import CollectionCard from "./components/CollectionCard"
 
 // functions
 import {
-  deleteCollection,
-  deleteResource,
   getAllResources,
   getCollections,
 } from "../../lib/resourceFunctions"
+
+
+// sample data
+import { sampleCollections, sampleResources } from "./data/sampleData"
 
 // types
 import { CollectionType, ResourceType } from "../../types/resources"
@@ -25,9 +26,10 @@ import NewResourceForm from "./components/NewResourceForm"
 import "./ResourcesPage.css"
 
 function ResourcesPage() {
-  const [collections, setCollections] = useState<CollectionType[]>([])
-  const [resources, setResources] = useState<ResourceType[]>([])
-  const [currentCollectionId, setCurrentCollectionId] = useState<number>()
+  const [collections, setCollections] =
+    useState<CollectionType[]>(sampleCollections)
+  const [resources, setResources] = useState<ResourceType[]>(sampleResources)
+  const [currentCollectionId, setCurrentCollectionId] = useState<number>(-1)
 
   useEffect(() => {
     getCollections().then((res) => {
@@ -36,92 +38,52 @@ function ResourcesPage() {
     })
     getAllResources().then((res) => {
       setResources(res)
+      console.log(res)
     })
   }, [])
 
   return (
-    <PageLayout title="Resources">
-      <div className="flex justify-center gap-4">
-        <Card title="Collections" className="w-[25rem]">
-          <ScrollArea className="h-[70vh]">
-            <div className="flex flex-col gap-3">
-              {collections &&
-                collections.map((collection) => (
-                  <Card
-                    className={
-                      "mx-[4px] flex hover:drop-shadow-md" +
-                      (currentCollectionId === collection.collectionId
-                        ? " border-2 border-primary"
-                        : "")
-                    }
-                    onClick={() =>
-                      setCurrentCollectionId(collection.collectionId)
-                    }
-                    key={collection.collectionId}
-                  >
-                    <div className="flex w-full items-center justify-between">
-                      <div className="flex-grow overflow-hidden overflow-ellipsis">
-                        <Typography variant="small" className="truncate">
-                          {collection.collectionName}
-                        </Typography>
-                      </div>
-
-                      <div className="ml-2">
-                        <ConfirmedDelete
-                          onConfirm={() =>
-                            deleteCollection(collection.collectionId).then(() =>
-                              window.location.reload()
-                            )
-                          }
-                        />
-                      </div>
-                    </div>
-                  </Card>
-                ))}
-              <NewCollectionForm />
-            </div>
-          </ScrollArea>
-        </Card>
-        <Card title="Resources" className="w-[90rem]">
-          <ScrollArea className="h-[70vh] p-3">
-            <div className="flex flex-col gap-3 ">
-              {resources &&
-                resources.map(
-                  (resource) =>
-                    resource.collectionId === currentCollectionId && (
-                      <Card
-                        className="mx-[4px]  hover:drop-shadow-md"
-                        key={resource.resourceId}
-                      >
-                        <div>
-                          <Typography variant="h4" className="text-center">
-                            {resource.resourceName}
-                          </Typography>
-                        </div>
-                        <div>
-                          <Typography variant="small">
-                            {resource.resourceBody}
-                          </Typography>
-                        </div>
-                        <ConfirmedDelete
-                          className="float-right"
-                          onConfirm={() =>
-                            deleteResource(resource.resourceId).then(() =>
-                              window.location.reload()
-                            )
-                          }
-                        />
-                      </Card>
-                    )
-                )}
-              {currentCollectionId && (
-                <NewResourceForm currentCollectionId={currentCollectionId} />
+    <div className="mt-8 flex justify-center gap-4">
+      <Card title="collections" className="w-[25rem]">
+        <ScrollArea className="h-[70vh]">
+          <div className="flex flex-col gap-3">
+            {collections &&
+              collections.map((collection) => (
+                <CollectionCard
+                  className="hover:cursor-pointer"
+                  collection={collection}
+                  currentCollectionId={currentCollectionId}
+                  onClick={() =>
+                    setCurrentCollectionId(collection.collectionId)
+                  }
+                  key={collection.collectionId}
+                />
+              ))}
+            <NewCollectionForm />
+          </div>
+        </ScrollArea>
+      </Card>
+      <Card title="resources" className="w-[90rem]">
+        <ScrollArea className="h-[70vh] p-3">
+          <div className="flex flex-col gap-3 ">
+            {resources &&
+              resources.map(
+                (resource) =>
+                  resource.collectionId === currentCollectionId && (
+                    <ResourceCard
+                      currentCollectionId={currentCollectionId}
+                      resource={resource}
+                      key={resource.resourceId}
+                    />
+                  )
               )}
-            </div>
-          </ScrollArea>
-        </Card>
-      </div>
-    </PageLayout>
+            {currentCollectionId && (
+              <NewResourceForm currentCollectionId={currentCollectionId} />
+            )}
+          </div>
+        </ScrollArea>
+      </Card>
+    </div>
   )
 }
 

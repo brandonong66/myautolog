@@ -77,7 +77,7 @@ useEffect(() => {
                     <FormControl>
                       <Input
                         {...field}
-                        type="number"
+                        type="hidden"
                         value={currentCollectionId}
                       />
                     </FormControl>

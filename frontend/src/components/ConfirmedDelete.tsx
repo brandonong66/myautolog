@@ -16,26 +16,26 @@ function ConfirmedDelete({
 }) {
   const [confirmDelete, setConfirmDelete] = useState(false)
   return (
-    <>
+    <div className={cn("my-2", className)}>
       {confirmDelete ? (
-        <div className={cn("", className)}>
-          <Button className="mr-2" onClick={() => setConfirmDelete(false)} variant="outline">
+        <div>
+          <Button
+            className="mr-2"
+            onClick={() => setConfirmDelete(false)}
+            variant="outline"
+          >
             <X />
           </Button>
-          <Button  onClick={onConfirm} variant="destructive">
+          <Button onClick={onConfirm} variant="destructive">
             <Check />
           </Button>
         </div>
       ) : (
-        <Button
-          className={cn("", className)}
-          variant="destructive"
-          onClick={() => setConfirmDelete(true)}
-        >
+        <Button variant="destructive" onClick={() => setConfirmDelete(true)}>
           <Trash2 />
         </Button>
       )}
-    </>
+    </div>
   )
 }
 

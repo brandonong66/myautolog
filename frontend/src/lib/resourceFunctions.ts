@@ -49,6 +49,32 @@ export async function createCollection(collectionName: string): Promise<void> {
   }
 }
 
+export async function updateCollection(
+  collection: CollectionType
+): Promise<void> {
+  try {
+    const response = await axios.put(
+      import.meta.env.VITE_APP_MY_API + "/resources/updateCollection",
+      {
+        collectionId: collection.collectionId,
+        collectionName: collection.collectionName,
+      },
+      {
+        withCredentials: true,
+      }
+    )
+    return response.data
+  } catch (error: any) {
+    if (error.response) {
+      throw new Error(error.response.data.error || "An error occurred")
+    } else {
+      throw new Error(
+        "Unable to connect to the server. Please try again later."
+      )
+    }
+  }
+}
+
 export async function deleteCollection(collectionId: number): Promise<void> {
   try {
     const response = await axios.delete(
@@ -99,6 +125,32 @@ export async function createResource(
     const response = await axios.post(
       import.meta.env.VITE_APP_MY_API + "/resources/createResource",
       {
+        collectionId: resource.collectionId,
+        resourceName: resource.resourceName,
+        resourceBody: resource.resourceBody,
+      },
+      {
+        withCredentials: true,
+      }
+    )
+    return response.data
+  } catch (error: any) {
+    if (error.response) {
+      throw new Error(error.response.data.error || "An error occurred")
+    } else {
+      throw new Error(
+        "Unable to connect to the server. Please try again later."
+      )
+    }
+  }
+}
+
+export async function updateResource(resource: ResourceType): Promise<void> {
+  try {
+    const response = await axios.put(
+      import.meta.env.VITE_APP_MY_API + "/resources/updateResource",
+      {
+        resourceId: resource.resourceId,
         collectionId: resource.collectionId,
         resourceName: resource.resourceName,
         resourceBody: resource.resourceBody,
