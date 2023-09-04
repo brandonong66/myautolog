@@ -1,19 +1,13 @@
+import { useState } from "react"
+
+// components
 import Card from "../../../components/Card"
 import Typography from "../../../components/ui/typography"
 import { Button } from "../../../components/ui/button"
-import { useState } from "react"
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "../../../components/ui/alert-dialog"
+import ConfirmedDelete from "../../../components/ConfirmedDelete"
+import ConfirmedSubmit from "../../../components/ConfirmedSubmit"
 
+// form components
 import { Input } from "../../../components/ui/input"
 import {
   Form,
@@ -27,7 +21,12 @@ import * as z from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Textarea } from "../../../components/ui/textarea"
-import { updateCar } from "../../../lib/carFunctions"
+
+// functions
+import { deleteCar, updateCar } from "../../../lib/carFunctions"
+
+// icons
+import { Pencil } from "lucide-react"
 
 interface Car {
   carId: number
@@ -86,8 +85,8 @@ function CarCard({ car }: { car: Car }) {
   }
 
   return (
-    <Card title={car.userLabel} className="group max-w-[40rem]">
-      <div >
+    <Card title={car.userLabel} className="group w-[40rem]">
+      <div>
         {!edit ? (
           <>
             <div className="flex">
@@ -142,90 +141,87 @@ function CarCard({ car }: { car: Car }) {
                     </FormItem>
                   )}
                 />
-                <div className="flex gap-4">
-                  <div className="flex-col gap-4">
-                    <FormField
-                      control={form.control}
-                      name="year"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Year</FormLabel>
-                          <FormControl>
-                            <Input {...field} type="number" />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                <div className="grid grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="year"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Year</FormLabel>
+                        <FormControl>
+                          <Input {...field} type="number" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-                    <FormField
-                      control={form.control}
-                      name="make"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Make</FormLabel>
-                          <FormControl>
-                            <Input {...field} type="text" />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="model"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Model</FormLabel>
-                          <FormControl>
-                            <Input {...field} type="text" />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <div className="flex-col gap-4">
-                    <FormField
-                      control={form.control}
-                      name="color"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Color</FormLabel>
-                          <FormControl>
-                            <Input {...field} type="text" />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="vin"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>VIN</FormLabel>
-                          <FormControl>
-                            <Input {...field} type="text" />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="licensePlate"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>License Plate</FormLabel>
-                          <FormControl>
-                            <Input {...field} type="text" />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
+                  <FormField
+                    control={form.control}
+                    name="make"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Make</FormLabel>
+                        <FormControl>
+                          <Input {...field} type="text" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="model"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Model</FormLabel>
+                        <FormControl>
+                          <Input {...field} type="text" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="color"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Color</FormLabel>
+                        <FormControl>
+                          <Input {...field} type="text" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="vin"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>VIN</FormLabel>
+                        <FormControl>
+                          <Input {...field} type="text" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="licensePlate"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>License Plate</FormLabel>
+                        <FormControl>
+                          <Input {...field} type="text" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 </div>
                 <FormField
                   control={form.control}
@@ -240,34 +236,19 @@ function CarCard({ car }: { car: Car }) {
                     </FormItem>
                   )}
                 />
-                <div className="flex gap-4">
-                  <AlertDialog>
-                    <AlertDialogTrigger className="mr-auto" asChild>
-                      <Button variant="destructive">Delete</Button>
-                    </AlertDialogTrigger> 
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>
-                          Are you absolutely sure?
-                        </AlertDialogTitle>
-                        <AlertDialogDescription>
-                          This action cannot be undone. This will permanently
-                          delete this car and all its data.
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction asChild>
-                          <Button variant="destructive">Continue</Button>
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
+                <div className="grid grid-cols-2">
+                  <ConfirmedDelete
+                    className="my-0"
+                    onConfirm={() => {
+                      deleteCar(car.carId).then(() => window.location.reload())
+                    }}
+                  />
 
-                  <Button variant="ghost" onClick={() => setEdit(false)}>
-                    Cancel
-                  </Button>
-                  <Button type="submit">Save</Button>
+                  <ConfirmedSubmit
+                    className="my-0 ml-auto"
+                    onCancel={() => setEdit(false)}
+                    onConfirm={form.handleSubmit(onSubmit)}
+                  />
                 </div>
               </form>
             </Form>
@@ -276,8 +257,12 @@ function CarCard({ car }: { car: Car }) {
 
         {!edit && (
           <div className=" mt-2 flex gap-2">
-            <Button className=" ml-auto" onClick={() => setEdit(true)}>
-              edit
+            <Button
+              className="ml-auto"
+              onClick={() => setEdit(true)}
+              variant="accent"
+            >
+              <Pencil />
             </Button>
           </div>
         )}

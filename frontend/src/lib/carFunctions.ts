@@ -1,7 +1,6 @@
 import axios from "axios"
 import { CarType } from "../types/car"
 
-
 export async function getCars(): Promise<CarType[]> {
   return new Promise((resolve, reject) => {
     axios
@@ -74,4 +73,25 @@ export function updateCar(params: CarType) {
         }
       })
   })
+}
+
+export async function deleteCar(carId: number): Promise<any> {
+  try {
+    const response = await axios.delete(
+      import.meta.env.VITE_APP_MY_API + "/car/delete",
+      {
+        withCredentials: true,
+        params: { carId: carId },
+      }
+    )
+    return response.data
+  } catch (error: any) {
+    if (error.response) {
+      throw new Error(error.response.data.error || "An error occurred")
+    } else {
+      throw new Error(
+        "Unable to connect to the server. Please try again later."
+      )
+    }
+  }
 }

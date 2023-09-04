@@ -15,7 +15,6 @@ import AddCarForm from "./AddCarForm"
 // types
 import { CarType } from "../../../types/car"
 
-
 function CarList() {
   const [cars, setCars] = useState<CarType[]>([])
   const [edit, setEdit] = useState(false)
@@ -39,7 +38,11 @@ function CarList() {
       {edit ? (
         <AddCarForm onCancel={() => setEdit(false)} />
       ) : (
-        <Button className="m-auto" onClick={() => setEdit(true)}>
+        <Button
+          className="m-auto"
+          onClick={() => setEdit(true)}
+          variant="accent"
+        >
           <Plus />
         </Button>
       )}

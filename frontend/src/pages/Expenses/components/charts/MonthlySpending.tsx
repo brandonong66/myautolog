@@ -82,7 +82,7 @@ const sampleData: LineData = {
 }
 
 function MonthlySpending({ className }: { className?: string }) {
-  const [monthlySpending, setMonthlySpending] = useState<LineData>()
+  const [monthlySpending, setMonthlySpending] = useState<LineData>(sampleData)
 
   useEffect(() => {
     getMonthlySpending().then((data) => {
@@ -94,7 +94,7 @@ function MonthlySpending({ className }: { className?: string }) {
       <div className="flex-grow">
         <Line
           options={options}
-          data={monthlySpending ? monthlySpending : sampleData}
+          data={monthlySpending}
         />
       </div>
     </Card>

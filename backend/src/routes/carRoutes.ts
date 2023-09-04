@@ -19,8 +19,7 @@ router.get(
 
         // remove "None" car
         // let cars = rows.filter((car) => car.userLabel !== "None")
-     
-        
+
         return res.json(rows)
       }
     } catch (error) {
@@ -103,6 +102,28 @@ router.put(
         console.error(error.message)
         res.status(500).json({ error: "Internal Server Error" })
       }
+    }
+  }
+)
+
+router.delete(
+  "/delete",
+  authenticateToken,
+  async (req: AuthenticatedRequest, res) => {
+    try {
+      if (!req.userId) {
+        res.status(422).json({ error: "bad login token" })
+      } else if (!req.query.carId) {
+        res.status(422).json({ error: "Missing carId" })
+      } else {
+        const query = "DELETE FROM Car WHERE carId = ? AND userId = ?"
+        const queryValues = [req.query.carId, req.userId]
+        const [rows, fields] = await dbConnectionPool.query(query, queryValues)
+        return res.json({ message: "Car deleted" })
+      }
+    } catch (error) {
+      console.error(error.message)
+      res.status(500).json({ error: "Internal Server Error" })
     }
   }
 )

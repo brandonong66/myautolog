@@ -1,7 +1,15 @@
+import { useState } from "react"
+
+// components
+import { AlertDestructive } from "../../../components/ui/alertdestructive"
+import { Button } from "../../../components/ui/button"
+import Card from "../../../components/Card"
+import ConfirmedSubmit from "../../../components/ConfirmedSubmit"
+
+// form components
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
 import { useForm } from "react-hook-form"
-import { Button } from "../../../components/ui/button"
 import {
   Form,
   FormControl,
@@ -12,10 +20,9 @@ import {
 } from "../../../components/ui/form"
 import { Input } from "../../../components/ui/input"
 import { Textarea } from "../../../components/ui/textarea"
-import Card from "../../../components/Card"
+
+// functions
 import { addCar } from "../../../lib/carFunctions"
-import { AlertDestructive } from "../../../components/ui/alertdestructive"
-import { useState } from "react"
 
 interface AddCarFormProps {
   onCancel: () => void
@@ -185,11 +192,12 @@ function AddCarForm({ onCancel }: AddCarFormProps) {
               </FormItem>
             )}
           />
-          <div className="flex justify-between">
-            <Button variant="destructive" onClick={onCancel}>
-              Cancel
-            </Button>
-            <Button type="submit">Submit</Button>
+          <div className="flex">
+            <ConfirmedSubmit
+              className="ml-auto my-0"
+              onConfirm={form.handleSubmit(onSubmit)}
+              onCancel={onCancel}
+            />
           </div>
         </form>
       </Form>
