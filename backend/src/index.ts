@@ -10,13 +10,12 @@ const expenseRoutes = require("./routes/expenseRoutes")
 const statsRoutes = require("./routes/statsRoutes")
 const resourceRoutes = require("./routes/resourceRoutes")
 
+const PORT = process.env.PORT || 3001
 var app = express()
 var cors = require("cors")
 
 var corsOptions = {
-  origin: [
-    process.env.WEBSERVER_HOST,
-  ],
+  origin: [process.env.WEBSERVER_HOST],
   optionsSuccessStatus: 200,
   credentials: true,
 }
@@ -34,6 +33,6 @@ app.use("/expense", expenseRoutes)
 app.use("/stats", statsRoutes)
 app.use("/resources", resourceRoutes)
 
-app.listen(3001, function () {
-  console.log("Server running on port 3001")
+app.listen(PORT, function () {
+  console.log("Server running on port " + PORT)
 })
