@@ -14,6 +14,7 @@ import { Bar, Doughnut } from "react-chartjs-2"
 
 // components
 import Card from "../../../../components/Card"
+import { useIsLoggedIn } from "../../../../hooks/useIsLoggedIn"
 
 ChartJS.register(ArcElement, Tooltip, Legend)
 const options = {
@@ -65,11 +66,13 @@ const sampleData: DoughnutData = {
 
 function CategorySpending({ className }: { className?: string }) {
   const [categorySpending, setCategorySpending] = useState<DoughnutData>()
-
+  const isLoggedIn = useIsLoggedIn()
   useEffect(() => {
-    getCategorySpending().then((data) => {
-      setCategorySpending(data)
-    })
+    if (isLoggedIn) {
+      getCategorySpending().then((data) => {
+        setCategorySpending(data)
+      })
+    }
   }, [])
 
   return (

@@ -35,6 +35,7 @@ import { getRandomColor } from "../../../../lib/statsFunctions"
 
 // typers
 import { BarData } from "../../../../types/stats"
+import { useIsLoggedIn } from "../../../../hooks/useIsLoggedIn"
 
 // sample data
 const sources = ["fcpeuro", "ebay", "rockauto", "marketplace"]
@@ -58,11 +59,13 @@ const sampleData: BarData = {
 
 function TopSources({ className }: { className?: string }) {
   const [topSources, setTopSources] = useState<BarData>()
-
+  const isLoggedIn = useIsLoggedIn()
   useEffect(() => {
-    getTopSources().then((data) => {
-      setTopSources(data)
-    })
+    if (isLoggedIn) {
+      getTopSources().then((data) => {
+        setTopSources(data)
+      })
+    }
   }, [])
   return (
     <Card title="top sources" className={cn("flex flex-col ", className)}>

@@ -14,6 +14,7 @@ import { ColumnDef } from "@tanstack/react-table"
 
 // sample data
 import { sampleAllItems } from "../data/sampleData"
+import { useIsLoggedIn } from "../../../hooks/useIsLoggedIn"
 //define columns
 type expenseData = {
   storeOrderId: string
@@ -214,14 +215,17 @@ interface expenseTableProps {
 }
 function ExpenseTable({ className }: expenseTableProps) {
   const [data, setData] = useState<expenseData[]>(sampleAllItems)
+  const isLoggedIn = useIsLoggedIn()
   useEffect(() => {
-    getExpenses()
-      .then((data) => {
-        setData(data)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
+    if (isLoggedIn) {
+      getExpenses()
+        .then((data) => {
+          setData(data)
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    }
   }, [])
 
   return (

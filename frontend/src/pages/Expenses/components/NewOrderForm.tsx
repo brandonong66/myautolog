@@ -39,6 +39,7 @@ import { Plus, Trash2 } from "lucide-react"
 
 // types
 import { CarType } from "../../../types/car"
+import { useIsLoggedIn } from "../../../hooks/useIsLoggedIn"
 
 const itemSchema = z.object({
   itemName: z.string().nonempty({ message: "Item name required" }),
@@ -216,14 +217,17 @@ function NewOrderForm({ className }: NewOrderFormProps) {
     form,
   ]) //stringify necessary for watching an update to an array item field but not the array itself i.e. a new item is added to the array
 
+  const isLoggedIn = useIsLoggedIn()
   useEffect(() => {
-    getCars()
-      .then((res) => {
-        setCars(res)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
+    if (isLoggedIn) {
+      getCars()
+        .then((res) => {
+          setCars(res)
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    }
   }, [])
 
   return (
