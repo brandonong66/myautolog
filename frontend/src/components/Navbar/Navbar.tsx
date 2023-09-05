@@ -11,7 +11,7 @@ import "./Navbar.css"
 import { validateToken, logout } from "../../lib/authFunctions"
 
 function Navbar() {
-  const [isLoggedIn, setIsLoggedIn] = useState(validateToken())
+  const [isLoggedIn, ] = useState(validateToken())
   const location = useLocation()
 
   const isHomePage = location.pathname === "/"

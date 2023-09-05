@@ -338,7 +338,10 @@ function OrdersTable({ className }: OrdersTableProps) {
                 {table.getRowModel().rows?.length ? (
                   table.getRowModel().rows.map((row) => {
                     const soi: string = row.getValue("storeOrderId")
-                    const rowItems = allOrderItems ? allOrderItems[soi] : null
+                    let rowItems: ItemType2[] = []
+                    {
+                      allOrderItems && (rowItems = allOrderItems[soi])
+                    }
 
                     return (
                       <Fragment key={row.id}>

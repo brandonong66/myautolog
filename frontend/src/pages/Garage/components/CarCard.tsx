@@ -76,7 +76,7 @@ function CarCard({ car }: { car: Car }) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     updateCar(values)
-      .then((res) => {
+      .then(() => {
         window.location.reload()
       })
       .catch((err) => {

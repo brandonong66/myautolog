@@ -39,9 +39,6 @@ export default function LoginForm() {
     const { authenticateUser } = await import("../../lib/authFunctions")
     console.log(values)
     authenticateUser(values)
-      .then((res) => {
-        // window.location.assign("/")
-      })
       .catch((err) => {
         setLoginError(err.error)
         console.log(err)

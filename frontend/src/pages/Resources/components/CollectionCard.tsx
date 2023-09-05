@@ -26,7 +26,7 @@ import { deleteCollection } from "../../../lib/resourceFunctions"
 import { updateCollection } from "../../../lib/resourceFunctions"
 
 // icons
-import { Pencil, Play } from "lucide-react"
+import { Pencil} from "lucide-react"
 
 // types
 import { CollectionType } from "../../../types/resources"
@@ -45,6 +45,7 @@ function CollectionCard({
   className?: string
   collection: CollectionType
   currentCollectionId: number
+  onClick? : () => void
 }) {
   const [edit, setEdit] = useState(false)
   const form = useForm<z.infer<typeof collectionSchema>>({

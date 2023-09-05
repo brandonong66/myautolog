@@ -132,7 +132,7 @@ function NewOrderForm({ className }: NewOrderFormProps) {
     }
     const items = values.items
     submitOrder(orderInfo, items)
-      .then((res) => {
+      .then(() => {
         setFormMessage({
           type: "success",
           message: "Order submitted successfully",
@@ -186,8 +186,8 @@ function NewOrderForm({ className }: NewOrderFormProps) {
       typeof watchShippingPrice === "string"
         ? parseFloat(watchShippingPrice)
         : watchShippingPrice
-    const parsedOrderTax =
-      typeof newOrderTax === "string" ? parseFloat(newOrderTax) : newOrderTax
+    // const parsedOrderTax =
+    //   typeof newOrderTax === "string" ? parseFloat(newOrderTax) : newOrderTax
 
     const parsedWatchTotal =
       typeof watchTotalPrice === "string"

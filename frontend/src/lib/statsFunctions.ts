@@ -50,6 +50,7 @@ function formatMonthlySpending(data: MonthlySpendingType): LineData {
   const years = Object.keys(data)
   const datasets = years.map((year: string) => {
     const color = getRandomColor()
+    // @ts-ignore
     const monthlySpendingCurrentYear = data[year]
     return {
       label: year,

@@ -3,10 +3,6 @@ import { useMemo, useState } from "react"
 // types
 import { ItemType2 } from "../../../types/expenses"
 
-// components
-import { Button } from "../../../components/ui/button"
-import { ArrowUpDown } from "lucide-react"
-
 // table components
 import {
   ColumnDef,
@@ -17,7 +13,6 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table"
-import { DataTableColumnHeader } from "../../../components/DataTable/DataTableColumnHeader"
 import CustomCell from "../../../components/DataTable/CustomCell"
 import { ColumnHeaderToggle } from "../../../components/DataTable/ColumnHeaderToggle"
 
@@ -36,7 +31,7 @@ function OrderSubtable({
   items,
 }: {
   className?: string
-  items: ItemType2[] | null
+  items: ItemType2[]
 }) {
   const columns = useMemo<ColumnDef<ItemType2>[]>(
     () => [

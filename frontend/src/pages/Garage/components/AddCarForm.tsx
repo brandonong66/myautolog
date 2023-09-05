@@ -2,7 +2,6 @@ import { useState } from "react"
 
 // components
 import { AlertDestructive } from "../../../components/ui/alertdestructive"
-import { Button } from "../../../components/ui/button"
 import Card from "../../../components/Card"
 import ConfirmedSubmit from "../../../components/ConfirmedSubmit"
 
