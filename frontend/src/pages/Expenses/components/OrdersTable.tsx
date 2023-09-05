@@ -23,7 +23,7 @@ import {
 } from "../../../components/ui/table"
 import OrderSubtable from "./OrderSubtable"
 
-// sampel data
+// sample data
 import { sampleOrders, sampleOrderItems } from "../data/sampleData"
 
 // Table Components

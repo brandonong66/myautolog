@@ -1,6 +1,7 @@
 // components
 import Typography from "../../components/ui/typography"
-import { Button } from "../../components/ui/button"
+import ExampleChart from "./components/ExampleChart"
+import ExampleTable from "./components/ExampleTable"
 
 // css
 import "./HomePage.css"
@@ -8,7 +9,7 @@ import "./HomePage.css"
 function HomePage() {
   return (
     <div className="hero-bg ">
-      <div className="hero-content-container h-[50vh] min-h-[500px] w-full text-primary-100">
+      <div className="hero-content-container h-[50vh] min-h-[500px] w-full my-auto">
         <div className="hero-content-text-box">
           <Typography className="text-foreground" variant="h1">
             <span className="text-primary">Log</span> each step of your
@@ -28,7 +29,12 @@ function HomePage() {
           </div>
         </div>
 
-        <div className="hero-content-box"></div>
+        <div className="grid place-items-center">
+          <div>
+            <ExampleTable className="relative w-[800px]  drop-shadow-2xl" />
+            <ExampleChart className="relative left-40 top-[-100px] w-[800px] drop-shadow-2xl" />
+          </div>
+        </div>
       </div>
     </div>
   )

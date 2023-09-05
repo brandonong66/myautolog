@@ -43,7 +43,7 @@ function ResourcesPage() {
   }, [])
 
   return (
-    <div className="mt-8 flex justify-center gap-4">
+    <div className="m-8 flex justify-center gap-4">
       <Card title="collections" className="w-[25rem]">
         <ScrollArea className="h-[70vh] mt-2 p-2">
           <div className="flex flex-col gap-3">

@@ -14,7 +14,7 @@ export function authenticateUser(params: userParams) {
       })
       .then((response) => {
         resolve(response.data)
-        window.location.href = "/"
+        window.location.href = "/expenses"
       })
       .catch((error) => {
         if (error.response) {

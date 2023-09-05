@@ -6,8 +6,8 @@ import logRequests from "../middleware/logRequests"
 
 const router = express.Router()
 
-const JWT_EXPIRE_TIME = "1h"
-const COOKIE_EXPIRE_TIME = 60 * 60 * 1000 // 60 * 60 * 1000 = 1 hr
+const JWT_EXPIRE_TIME = "24h"
+const COOKIE_EXPIRE_TIME = 24 * 60 * 60 * 1000 // 24 * 60 * 60 * 1000 = 24 hrs
 
 router.post("/login", logRequests, async (req, res) => {
   try {

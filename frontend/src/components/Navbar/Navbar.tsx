@@ -15,7 +15,8 @@ function Navbar() {
   const location = useLocation()
 
   const isHomePage = location.pathname === "/"
-  const isLoginPage = location.pathname === "/login" || location.pathname === "/signup"
+  const isLoginPage =
+    location.pathname === "/login" || location.pathname === "/signup"
 
   if (isLoginPage) {
     return (
