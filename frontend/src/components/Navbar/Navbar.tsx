@@ -4,7 +4,8 @@ import { useLocation } from "react-router-dom"
 
 // components
 import Typography from "../ui/typography"
-import * as HoverCard from "@radix-ui/react-hover-card"
+
+import "./Navbar.css"
 
 // functions
 import { validateToken, logout } from "../../lib/authFunctions"
@@ -14,11 +15,11 @@ function Navbar() {
   const location = useLocation()
 
   const isHomePage = location.pathname === "/"
-  const isLoginPage = location.pathname === "/login"
+  const isLoginPage = location.pathname === "/login" || location.pathname === "/signup"
 
   if (isLoginPage) {
     return (
-      <header className="space flex justify-between px-8 py-6">
+      <header className="flex items-center justify-between px-8 pb-6 pt-5">
         <a className="text-primary" href="/">
           <Typography variant="h3">myautolog</Typography>
         </a>
@@ -29,7 +30,7 @@ function Navbar() {
   return (
     <header
       className={
-        "space flex justify-between px-8 py-6 " +
+        "flex items-center justify-between px-8 pb-6 pt-5 " +
         (isHomePage ? "" : "bg-primary")
       }
     >
@@ -40,29 +41,29 @@ function Navbar() {
       <nav>
         <ul className="flex gap-4">
           <li className="inline-block ">
-            <a className="text-primary-100" href="/expenses">
+            <a className="nav-link text-primary-100" href="/expenses">
               expenses
             </a>
           </li>
           <li className="inline-block ">
-            <a className="text-primary-100" href="/resources">
+            <a className="nav-link text-primary-100" href="/resources">
               resources
             </a>
           </li>
 
           <li className="inline-block ">
-            <a className="text-primary-100" href="/garage">
+            <a className="nav-link text-primary-100" href="/garage">
               garage
             </a>
           </li>
         </ul>
       </nav>
       {isLoggedIn ? (
-        <a className="text-primary-100" href="" onClick={logout}>
+        <a className="nav-link text-primary-100" href="" onClick={logout}>
           logout
         </a>
       ) : (
-        <a className="text-primary-100" href="/login">
+        <a className="nav-link text-primary-100" href="/login">
           login
         </a>
       )}

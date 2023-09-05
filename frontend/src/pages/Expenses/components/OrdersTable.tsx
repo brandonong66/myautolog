@@ -53,10 +53,6 @@ interface allOrderItems {
   [storeOrderId: string]: ItemType2[]
 }
 
-
-
-
-
 function OrdersTable({ className }: OrdersTableProps) {
   const [data, setData] = useState<OrderType[]>(sampleOrders)
   const [allOrderItems, setAllOrderitems] =
@@ -287,7 +283,6 @@ function OrdersTable({ className }: OrdersTableProps) {
     getAllOrderItems()
       .then((res) => {
         setAllOrderitems(res)
-        console.log(res)
       })
       .catch((err) => {
         console.log(err)
@@ -295,7 +290,6 @@ function OrdersTable({ className }: OrdersTableProps) {
     getOrders()
       .then((res) => {
         setData(res)
-        console.log(res)
       })
       .catch((err) => {
         console.log(err)

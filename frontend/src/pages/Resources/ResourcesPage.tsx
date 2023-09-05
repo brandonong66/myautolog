@@ -45,7 +45,7 @@ function ResourcesPage() {
   return (
     <div className="mt-8 flex justify-center gap-4">
       <Card title="collections" className="w-[25rem]">
-        <ScrollArea className="h-[70vh]">
+        <ScrollArea className="h-[70vh] mt-2 p-2">
           <div className="flex flex-col gap-3">
             {collections &&
               collections.map((collection) => (
@@ -64,7 +64,7 @@ function ResourcesPage() {
         </ScrollArea>
       </Card>
       <Card title="resources" className="w-[90rem]">
-        <ScrollArea className="h-[70vh] p-3">
+        <ScrollArea className="h-[70vh] mt-2 p-2">
           <div className="flex flex-col gap-3 ">
             {resources &&
               resources.map(

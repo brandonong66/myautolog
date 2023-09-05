@@ -75,7 +75,7 @@ router.post(
     ]
 
     const itemsQuery =
-      "INSERT INTO Item (orderId, carId, itemName, itemBrand, partNumber, notes, category, price, itemTax, quantity) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"
+      "INSERT INTO Item (userId, orderId, carId, itemName, itemBrand, partNumber, notes, category, price, itemTax, quantity) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"
 
     const connection = await dbConnectionPool.getConnection()
 
@@ -88,6 +88,7 @@ router.post(
 
       const itemsPromises = req.body.items.map((item) => {
         return connection.query(itemsQuery, [
+          req.userId,
           lastInsertId,
           item.carId == 0 ? null : item.carId,
           item.itemName,

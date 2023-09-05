@@ -7,9 +7,9 @@ import {
 import LoginForm from "./LoginForm"
 import SignupForm from "./SignupForm"
 
-function LoginSignupBox() {
+function LoginSignupBox({ initialTab }: { initialTab: "login" | "signup" }) {
   return (
-    <Tabs defaultValue="login" className="w-[400px]">
+    <Tabs defaultValue={initialTab} className="w-[400px]">
       <TabsList className="w-full">
         <TabsTrigger value="login" className="w-[50%]">
           Login

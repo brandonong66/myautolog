@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { Alert } from "../../../components/ui/alert"
 import { Button } from "../../../components/ui/button"
 import Card from "../../../components/Card"
+import ConfirmedSubmit from "../../../components/ConfirmedSubmit"
 import { Separator } from "../../../components/ui/separator"
 
 // form components
@@ -32,6 +33,9 @@ import {
 import { cn } from "../../../lib/utils"
 import { getCars } from "../../../lib/carFunctions"
 import { submitOrder } from "../../../lib/expenseFunctions"
+
+// icons
+import { Plus, Trash2 } from "lucide-react"
 
 // types
 import { CarType } from "../../../types/car"
@@ -225,16 +229,12 @@ function NewOrderForm({ className }: NewOrderFormProps) {
   return (
     <>
       {!showForm && (
-        <Button
-          className=""
-          onClick={() => setShowForm(true)}
-          variant="accent"
-        >
+        <Button className="" onClick={() => setShowForm(true)} variant="accent">
           New Order
         </Button>
       )}
       {showForm && (
-        <Card title="New Order" className={cn("w-[90rem]", className)}>
+        <Card title="new order" className={cn("w-[90rem]", className)}>
           {formMessage && (
             <Alert variant={formMessage.type} className="mb-4">
               {formMessage.message}
@@ -290,12 +290,6 @@ function NewOrderForm({ className }: NewOrderFormProps) {
                   label="* Order Date"
                   className="w-[200px]"
                 />
-                {/* <DateInput
-              control={form.control}
-              name="expectedArrivalDate"
-              label="Expected Arrival Date"
-              className="w-[200px]"
-            /> */}
                 <Separator orientation="vertical" />
                 <FormField
                   control={form.control}
@@ -369,7 +363,7 @@ function NewOrderForm({ className }: NewOrderFormProps) {
                 {fields.map((item, index) => (
                   <Card
                     key={item.id}
-                    title={"Item " + (index + 1)}
+                    title={"item " + (index + 1)}
                     titleVariant="h3"
                     topRight={
                       <Button
@@ -378,7 +372,7 @@ function NewOrderForm({ className }: NewOrderFormProps) {
                         }}
                         variant="destructive"
                       >
-                        delete
+                        <Trash2 />
                       </Button>
                     }
                   >
@@ -581,19 +575,17 @@ function NewOrderForm({ className }: NewOrderFormProps) {
                       category: "Other",
                     })
                   }}
+                  variant="accent"
                 >
-                  Add Item
+                  <Plus />
                 </Button>
               </div>
               <div className="flex">
-                <Button
-                  className="ml-auto mr-3 bg-background hover:bg-background/90"
-                  variant="outline"
-                  onClick={() => setShowForm(false)}
-                >
-                  Cancel
-                </Button>
-                <Button type="submit">Submit</Button>
+                <ConfirmedSubmit
+                  className="my-0 ml-auto"
+                  onCancel={() => setShowForm(false)}
+                  onConfirm={form.handleSubmit(onSubmit)}
+                />
               </div>
             </form>
           </Form>
