@@ -33,30 +33,24 @@ router.get(
         res.status(422).json({ error: "bad login token" })
       } else {
         const query =
-          "select orderId, orderDate, totalPrice from `Order` where userId = ? order by orderDate asc;"
+          "select orderId, orderDate, totalPrice from `Order` where userId = ?  AND (YEAR(orderDate) = YEAR(CURDATE()) OR YEAR(orderDate) = YEAR(CURDATE()) - 1) order by orderDate asc;"
         const queryValues = [req.userId]
         const [queryResult, _]: [RowDataPacket[], FieldPacket[]] =
           await dbConnectionPool.query(query, queryValues)
 
         let monthlySpending: MonthlySpendingType = {}
 
-        // step 1: get the year of first order (oldest)
-        const firstOrderYear = new Date(queryResult[0].orderDate).getFullYear()
+        const currentYear = new Date().getFullYear()
 
-        // step 2: get the year of last order (newest)
-        const lastOrderYear = new Date(
-          queryResult[queryResult.length - 1].orderDate
-        ).getFullYear()
-
-        // step 3: initialize monthlySpending object with all years and months
-        for (let y = firstOrderYear; y <= lastOrderYear; y++) {
+        // step 1: initialize monthlySpending object with all years and months
+        for (let y = currentYear - 1; y <= currentYear; y++) {
           monthlySpending[y] = {}
           for (let m = 0; m < MONTHS.length; m++) {
             monthlySpending[y][MONTHS[m]] = 0
           }
         }
 
-        // step 3: iterate through queryResult and add totalPrice to monthlySpending
+        // step 2: iterate through queryResult and add totalPrice to monthlySpending
         for (let i = 0; i < queryResult.length; i++) {
           const order = queryResult[i]
           const orderDate = new Date(order.orderDate)
@@ -64,11 +58,14 @@ router.get(
           const orderMonth = MONTHS[orderDate.getMonth()]
           const orderTotalPrice = order.totalPrice
 
-          monthlySpending[orderYear] = {
-            ...monthlySpending[orderYear],
-            [orderMonth]:
-              (monthlySpending[orderYear]?.[orderMonth] || 0) + orderTotalPrice,
-          }
+          // only want this year and last year
+          if (orderYear === currentYear || orderYear === currentYear - 1)
+            monthlySpending[orderYear] = {
+              ...monthlySpending[orderYear],
+              [orderMonth]:
+                (monthlySpending[orderYear]?.[orderMonth] || 0) +
+                orderTotalPrice,
+            }
         }
 
         res.json(monthlySpending)
@@ -126,22 +123,26 @@ router.get(
   }
 )
 
-router.get("/topSources", authenticateToken, async (req: AuthenticatedRequest, res) => {
-  try {
-    if (!req.userId) {
-      res.status(422).json({ error: "bad login token" })
-    } else {
-      const query =
-        "SELECT `source`, SUM(totalPrice) as totalSpent FROM `Order` WHERE userId = ? GROUP BY `source` ORDER BY totalSpent DESC LIMIT 3;"
-      const queryValues = [req.userId]
-      const [queryResult, _]: [RowDataPacket[], FieldPacket[]] =
-        await dbConnectionPool.query(query, queryValues)
+router.get(
+  "/topSources",
+  authenticateToken,
+  async (req: AuthenticatedRequest, res) => {
+    try {
+      if (!req.userId) {
+        res.status(422).json({ error: "bad login token" })
+      } else {
+        const query =
+          "SELECT `source`, SUM(totalPrice) as totalSpent FROM `Order` WHERE userId = ? GROUP BY `source` ORDER BY totalSpent DESC LIMIT 3;"
+        const queryValues = [req.userId]
+        const [queryResult, _]: [RowDataPacket[], FieldPacket[]] =
+          await dbConnectionPool.query(query, queryValues)
 
-      res.json(queryResult)
+        res.json(queryResult)
+      }
+    } catch (error) {
+      console.error(error.message)
+      res.status(500).json({ error: "Internal Server Error" })
     }
-  } catch (error) {
-    console.error(error.message)
-    res.status(500).json({ error: "Internal Server Error" })
   }
-})
+)
 module.exports = router

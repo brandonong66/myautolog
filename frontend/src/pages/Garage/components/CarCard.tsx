@@ -155,13 +155,38 @@ function CarCard({ car }: { car: Car }) {
                       </FormItem>
                     )}
                   />
-
+                  <FormField
+                    control={form.control}
+                    name="color"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Color</FormLabel>
+                        <FormControl>
+                          <Input {...field} type="text" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                   <FormField
                     control={form.control}
                     name="make"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Make</FormLabel>
+                        <FormControl>
+                          <Input {...field} type="text" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="vin"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>VIN</FormLabel>
                         <FormControl>
                           <Input {...field} type="text" />
                         </FormControl>
@@ -183,32 +208,6 @@ function CarCard({ car }: { car: Car }) {
                     )}
                   />
 
-                  <FormField
-                    control={form.control}
-                    name="color"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Color</FormLabel>
-                        <FormControl>
-                          <Input {...field} type="text" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="vin"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>VIN</FormLabel>
-                        <FormControl>
-                          <Input {...field} type="text" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
                   <FormField
                     control={form.control}
                     name="licensePlate"
@@ -258,9 +257,9 @@ function CarCard({ car }: { car: Car }) {
         {!edit && (
           <div className=" mt-2 flex gap-2">
             <Button
-              className="ml-auto"
+              className="ml-auto invisible group-hover:visible"
               onClick={() => setEdit(true)}
-              variant="accent"
+              variant="outline"
             >
               <Pencil />
             </Button>
