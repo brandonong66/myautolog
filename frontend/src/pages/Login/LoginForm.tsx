@@ -37,7 +37,6 @@ export default function LoginForm() {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     const { authenticateUser } = await import("../../lib/authFunctions")
-    console.log(values)
     authenticateUser(values)
       .catch((err) => {
         setLoginError(err.error)

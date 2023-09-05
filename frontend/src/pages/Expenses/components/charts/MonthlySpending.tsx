@@ -87,7 +87,6 @@ function MonthlySpending({ className }: { className?: string }) {
   useEffect(() => {
     getMonthlySpending().then((data) => {
       setMonthlySpending(data)
-      console.log(data)
     })
   }, [])
   return (

@@ -38,7 +38,6 @@ function ResourcesPage() {
     })
     getAllResources().then((res) => {
       setResources(res)
-      console.log(res)
     })
   }, [])
 

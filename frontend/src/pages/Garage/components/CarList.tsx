@@ -27,7 +27,6 @@ function CarList() {
     getCars()
       .then((cars) => {
         setCars(cars)
-        console.log(cars)
       })
       .catch((error) => {
         console.log(error)

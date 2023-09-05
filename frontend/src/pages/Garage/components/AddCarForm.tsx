@@ -65,10 +65,8 @@ function AddCarForm({ onCancel }: AddCarFormProps) {
   })
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values)
     addCar(values)
-      .then((res) => {
-        console.log(res)
+      .then(() => {
         window.location.reload()
       })
       .catch((err) => {

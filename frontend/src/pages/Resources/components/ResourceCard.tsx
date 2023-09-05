@@ -60,7 +60,6 @@ function ResourceCard({
   })
 
   async function onSubmit(values: z.infer<typeof resourceSchema>) {
-    console.log(values)
     updateResource(values)
       .then(() => window.location.reload())
       .catch((err) => console.log(err))

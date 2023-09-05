@@ -47,18 +47,15 @@ export default function SignupForm() {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     registerUser(values)
-      .then((res) => {
+      .then(() => {
         setEmailError(undefined)
         setSuccess(true)
-        console.log(res)
       })
       .catch((err) => {
         setSuccess(false)
         setEmailError(err.error)
         console.log(err)
       })
-
-    console.log(values)
   }
 
   return (
@@ -106,7 +103,7 @@ export default function SignupForm() {
           )}
         />
         <div className="flex">
-          <Button className="ml-auto" variant="accent" type="submit" >
+          <Button className="ml-auto" variant="accent" type="submit">
             Sign Up
           </Button>
         </div>

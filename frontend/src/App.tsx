@@ -1,4 +1,3 @@
-import { useEffect } from "react"
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 
 // pages
@@ -15,10 +14,6 @@ import Navbar from "./components/Navbar/Navbar"
 import "./App.css"
 
 function App() {
-  useEffect(() => {
-    document.title = "myautolog"
-  }, [])
-
   return (
     <Router>
       <div className="App">
