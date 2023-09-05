@@ -42,6 +42,7 @@ export function validateToken() {
 
     //if expired, logout
     if (!isValid) {
+      alert("Your session has expired. Logging you out...")
       logout()
     }
 

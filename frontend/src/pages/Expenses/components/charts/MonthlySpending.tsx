@@ -23,6 +23,7 @@ import { getRandomColor } from "../../../../lib/statsFunctions"
 
 // types
 import { LineData } from "../../../../types/stats"
+import { useIsLoggedIn } from "../../../../hooks/useIsLoggedIn"
 
 // chart setup
 ChartJS.register(
@@ -83,11 +84,13 @@ const sampleData: LineData = {
 
 function MonthlySpending({ className }: { className?: string }) {
   const [monthlySpending, setMonthlySpending] = useState<LineData>()
-
+  const isLoggedIn = useIsLoggedIn()
   useEffect(() => {
-    getMonthlySpending().then((data) => {
-      setMonthlySpending(data)
-    })
+    if (isLoggedIn) {
+      getMonthlySpending().then((data) => {
+        setMonthlySpending(data)
+      })
+    }
   }, [])
   return (
     <Card title="monthly spending" className={cn("flex flex-col", className)}>

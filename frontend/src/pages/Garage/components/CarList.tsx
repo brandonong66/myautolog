@@ -18,19 +18,22 @@ import { sampleCars } from "./sampledata"
 
 // types
 import { CarType } from "../../../types/car"
+import { useIsLoggedIn } from "../../../hooks/useIsLoggedIn"
 
 function CarList() {
   const [cars, setCars] = useState<CarType[]>(sampleCars)
   const [edit, setEdit] = useState(false)
-
+  const isLoggedIn = useIsLoggedIn()
   useEffect(() => {
-    getCars()
-      .then((cars) => {
-        setCars(cars)
-      })
-      .catch((error) => {
-        console.log(error)
-      })
+    if (isLoggedIn) {
+      getCars()
+        .then((cars) => {
+          setCars(cars)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    }
   }, [])
 
   return (

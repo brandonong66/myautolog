@@ -44,6 +44,7 @@ import CustomCell from "../../../components/DataTable/CustomCell"
 import { DataTablePagination } from "../../../components/DataTable/DataTablePagination"
 import { DataTableViewOptions } from "../../../components/DataTable/DataTableViewOptions"
 import ConfirmedDelete from "../../../components/ConfirmedDelete"
+import { useIsLoggedIn } from "../../../hooks/useIsLoggedIn"
 
 interface OrdersTableProps {
   className?: string
@@ -54,6 +55,7 @@ interface allOrderItems {
 }
 
 function OrdersTable({ className }: OrdersTableProps) {
+  const isLoggedIn = useIsLoggedIn()
   const [data, setData] = useState<OrderType[]>(sampleOrders)
   const [allOrderItems, setAllOrderitems] =
     useState<allOrderItems>(sampleOrderItems)
@@ -248,7 +250,6 @@ function OrdersTable({ className }: OrdersTableProps) {
   )
   const [sorting, setSorting] = useState<SortingState>([])
   const [expanded, setExpanded] = useState<ExpandedState>({})
-
   const [globalFilter, setGlobalFilter] = useState("")
 
   const table = useReactTable({
@@ -280,20 +281,22 @@ function OrdersTable({ className }: OrdersTableProps) {
   }
 
   useEffect(() => {
-    getAllOrderItems()
-      .then((res) => {
-        setAllOrderitems(res)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-    getOrders()
-      .then((res) => {
-        setData(res)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
+    if (isLoggedIn) {
+      getAllOrderItems()
+        .then((res) => {
+          setAllOrderitems(res)
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+      getOrders()
+        .then((res) => {
+          setData(res)
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    }
   }, [])
 
   return (
