@@ -46,7 +46,7 @@ router.post("/login", logRequests, async (req, res) => {
         res.cookie("authToken", authToken, {
           httpOnly: true,
           secure: true,
-          sameSite: "lax",
+          sameSite: "strict",
           expires: new Date(Date.now() + COOKIE_EXPIRE_TIME),
         })
 
@@ -57,7 +57,7 @@ router.post("/login", logRequests, async (req, res) => {
         res.cookie("clientAuthToken", clientAuthToken, {
           httpOnly: false,
           secure: true,
-          sameSite: "lax",
+          sameSite: "strict",
           expires: new Date(Date.now() + COOKIE_EXPIRE_TIME),
         })
         console.log(authToken)

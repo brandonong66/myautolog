@@ -234,7 +234,7 @@ router.get(
 
           return res.json(orderItems)
         } else {
-          throw new Error("Order items not found")
+          return res.json([])
         }
       } else {
         throw new Error("Unexpected return type from database query")

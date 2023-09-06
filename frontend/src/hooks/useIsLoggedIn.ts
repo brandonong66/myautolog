@@ -1,10 +1,7 @@
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { validateToken } from "../lib/authFunctions"
 
 export function useIsLoggedIn() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
-  useEffect(() => {
-    setIsLoggedIn(validateToken())
-  }, [])
+  const [isLoggedIn] = useState(validateToken())
   return isLoggedIn
 }
