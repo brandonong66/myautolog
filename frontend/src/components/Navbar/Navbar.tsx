@@ -64,7 +64,7 @@ function Navbar() {
           className="nav-link text-primary-100"
           href="#"
           onClick={(e) => {
-            e.preventDefault
+            e.preventDefault()
             logout()
           }}
         >
