@@ -47,6 +47,7 @@ router.post("/login", logRequests, async (req, res) => {
           httpOnly: true,
           secure: true,
           sameSite: "none",
+          domain: '.myautolog.io',
           expires: new Date(Date.now() + COOKIE_EXPIRE_TIME),
         })
 
@@ -58,6 +59,7 @@ router.post("/login", logRequests, async (req, res) => {
           httpOnly: false,
           secure: true,
           sameSite: "none",
+          domain: '.myautolog.io',
           expires: new Date(Date.now() + COOKIE_EXPIRE_TIME),
         })
         console.log(authToken)
