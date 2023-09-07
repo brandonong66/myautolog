@@ -60,7 +60,7 @@ function Navbar() {
         </ul>
       </nav>
       {isLoggedIn ? (
-        <a className="nav-link text-primary-100" href="" onClick={logout}>
+        <a className="nav-link text-primary-100" href="#" onClick={logout}>
           logout
         </a>
       ) : (
