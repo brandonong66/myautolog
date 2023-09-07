@@ -62,6 +62,7 @@ export function logout() {
       )
       .then((response) => {
         resolve(response.data)
+        window.location.href = "/"
       })
       .catch((error) => {
         if (error.response) {

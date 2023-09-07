@@ -47,7 +47,7 @@ router.post("/login", logRequests, async (req, res) => {
           httpOnly: true,
           secure: true,
           sameSite: "strict",
-          domain: ".myautolog.io",
+          domain: '.myautolog.io',
           expires: new Date(Date.now() + COOKIE_EXPIRE_TIME),
         })
 
@@ -59,7 +59,7 @@ router.post("/login", logRequests, async (req, res) => {
           httpOnly: false,
           secure: true,
           sameSite: "strict",
-          domain: ".myautolog.io",
+          domain: '.myautolog.io',
           expires: new Date(Date.now() + COOKIE_EXPIRE_TIME),
         })
         console.log(authToken)
@@ -84,7 +84,7 @@ router.post("/logout", async (req, res) => {
       expires: new Date(0),
       httpOnly: true,
       secure: true,
-      domain: ".myautolog.io",
+      domain: '.myautolog.io',
       sameSite: "strict",
     })
 
@@ -92,10 +92,10 @@ router.post("/logout", async (req, res) => {
       expires: new Date(0),
       httpOnly: false,
       secure: true,
-      domain: ".myautolog.io",
+      domain: '.myautolog.io',
       sameSite: "strict",
     })
-    res.redirect(302, "https://myautolog.io")
+    res.json({ message: "Logout successful" })
   } catch (error) {
     console.log(error)
     console.error(error.message)
