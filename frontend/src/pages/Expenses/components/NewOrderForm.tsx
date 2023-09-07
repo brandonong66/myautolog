@@ -246,7 +246,7 @@ function NewOrderForm({ className }: NewOrderFormProps) {
           )}
 
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="">
+            <form className="">
               <div className="flex gap-4">
                 <FormField
                   control={form.control}
@@ -566,19 +566,21 @@ function NewOrderForm({ className }: NewOrderFormProps) {
               <div className="mt-4 flex">
                 <Button
                   className="m-auto"
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.preventDefault()
                     append({
                       itemName: "",
                       itemBrand: "",
                       partNumber: "",
                       notes: "",
-                      carId: cars[0].carId,
+                      carId: cars[0]? cars[0].carId : 0,
                       price: 0,
                       itemTax: 0,
                       quantity: 1,
                       category: "Other",
                     })
                   }}
+ 
                   variant="accent"
                 >
                   <Plus />
