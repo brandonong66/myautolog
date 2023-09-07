@@ -62,9 +62,9 @@ function Navbar() {
       {isLoggedIn ? (
         <a
           className="nav-link text-primary-100"
-          href=""
+          href="#"
           onClick={(e) => {
-            e.preventDefault
+            e.preventDefault()
             logout()
           }}
         >
