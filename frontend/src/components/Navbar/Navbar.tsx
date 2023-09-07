@@ -11,7 +11,7 @@ import "./Navbar.css"
 import { validateToken, logout } from "../../lib/authFunctions"
 
 function Navbar() {
-  const [isLoggedIn, ] = useState(validateToken())
+  const [isLoggedIn] = useState(validateToken())
   const location = useLocation()
 
   const isHomePage = location.pathname === "/"
@@ -60,7 +60,14 @@ function Navbar() {
         </ul>
       </nav>
       {isLoggedIn ? (
-        <a className="nav-link text-primary-100" href="#" onClick={logout}>
+        <a
+          className="nav-link text-primary-100"
+          href="#"
+          onClick={(e) => {
+            e.preventDefault
+            logout()
+          }}
+        >
           logout
         </a>
       ) : (
